@@ -1,12 +1,15 @@
 import numpy as np
 import pandas as pd
 import networkx as nx
-from AuxFunc import AuxFunc
 from pf_main_func import inv_uty_cal, beta_ini_cal, biclustr_admm
-from GENetLib.basis_mat import bspline_mat
+from GENetLib.fda_func import bspline_mat
+from scipy.linalg import solve
+
+from AuxFunc import AuxFunc
 
 
-def pf_bifunc(data, nknots, order, gamma1, gamma2, theta, tau, max_iter, eps_abs, eps_rel):
+def pf_bifunc(data, nknots, order, gamma1, gamma2, opt = False, theta = 1, tau = 3, 
+              max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3):
     
     # Data process
     data.iloc[:, 0] = data.iloc[:, 0].astype('int')
@@ -60,40 +63,113 @@ def pf_bifunc(data, nknots, order, gamma1, gamma2, theta, tau, max_iter, eps_abs
         Y_sublist = [np.array(sample[sample['id'] == j]['y']) for j in range(q)]
         Y_list.append(Y_sublist)
     
-    # ADMM algorithm
-    inv_UTY_result = inv_uty_cal(spline_list, Y_list, D_d, n, q, p, gamma1, theta)
-    Beta_ini = beta_ini_cal(spline_list, Y_list, D_d, n, q, p, gamma1)
-    result = biclustr_admm(inv_UTY_result, data_list, Y_list, D_d, Beta_ini, n, q, p, 
-                           gamma1, gamma2, theta, tau, max_iter, eps_abs, eps_rel)
+    # Whether to optimal parameters
+    if opt == False:
+        
+        # ADMM algorithm
+        inv_UTY_result = inv_uty_cal(spline_list, Y_list, D_d, n, q, p, gamma1, theta)
+        Beta_ini = beta_ini_cal(spline_list, Y_list, D_d, n, q, p, gamma1)
+        result = biclustr_admm(inv_UTY_result, data_list, Y_list, D_d, Beta_ini, n, q, p, 
+                               gamma1, gamma2, theta, tau, max_iter, eps_abs, eps_rel)
+        
+        # Clustering
+        Ad_final_sam = AuxFunc(n = n, V = result['V1']).create_adjacency() # Row clustering membership
+        G_final_sam = nx.from_numpy_array(Ad_final_sam)
+        cls_final_sam = list(nx.connected_components(G_final_sam))
+        Ad_final_fea = AuxFunc(n = q, V = result['V2']).create_adjacency() # Column clustering membership
+        G_final_fea = nx.from_numpy_array(Ad_final_fea)
+        cls_final_fea = list(nx.connected_components(G_final_fea))
+        result.update({'nknots':nknots,
+                       'order':order,
+                       'sample cluster':cls_final_sam, 
+                       'feature cluster':cls_final_fea,
+                       'gamma1':gamma1,
+                       'gamma2':gamma2})
+        return result
     
-    # Clustering
-    Ad_final_sam = AuxFunc(n = n, V = result['V1']).create_adjacency() # Row clustering membership
-    G_final_sam = nx.from_numpy_array(Ad_final_sam)
-    cls_final_sam = list(nx.connected_components(G_final_sam))
-    Ad_final_fea = AuxFunc(n =  q, V = result['V2']).create_adjacency() # Column clustering membership
-    G_final_fea = nx.from_numpy_array(Ad_final_fea)
-    cls_final_fea = list(nx.connected_components(G_final_fea))
-    result.update({'nknots':nknots,
-                   'order':order,
-                   'sample cluster':cls_final_sam, 
-                   'feature cluster':cls_final_fea})
-    return result
+    elif opt == True:
+        
+        # Calculate BIC to find the best gamma1 and gamma2
+        # Optimal gamma1
+        bic_value_1 = np.zeros(len(gamma1))
+        bic_mat = np.zeros((n, q))
+        for l in range(len(gamma1)):
+            Beta_ini = beta_ini_cal(spline_list, Y_list, D_d, n, q, p, gamma1[l])
+            Beta_mat = np.reshape(Beta_ini, (p * q, n), order='F')
+            for i in range(n):
+                for j in range(q):
+                    y_hat = np.dot(spline_list[i][j], Beta_mat[(j * p):(j + 1) * p, i])
+                    n_1 = spline_list[i][j].shape[0]
+                    df_1 = np.trace(np.dot(spline_list[i][j], solve(np.dot(spline_list[i][j].T, spline_list[i][j]) + gamma1[l] * D_d, spline_list[i][j].T)))
+                    bic_mat[i, j] = np.log(np.sum((Y_list[i][j] - y_hat) ** 2) / n_1) + np.log(n_1) * df_1 / n_1
+            bic_value_1[l] = np.sum(bic_mat)
+        opt_gamma1 = gamma1[np.argmin(bic_value_1)]
+        inv_UTY_result = inv_uty_cal(spline_list, Y_list, D_d, n, q, p, gamma1 = opt_gamma1, theta = theta)
+        Beta_ini = beta_ini_cal(spline_list, Y_list, D_d, n, q, p, gamma1 = opt_gamma1)
+    
+        # Optimal gamma2
+        bic_value_2 = np.zeros(len(gamma2))
+        for l in range(len(gamma2)):
+            result = biclustr_admm(inv_UTY_result, data_list, Y_list, D_d, Beta_ini, n, q, p, 
+                                   gamma1 = opt_gamma1, gamma2 = gamma2[l], theta = theta, tau = tau, 
+                                   max_iter = max_iter, eps_abs = eps_abs, eps_rel = eps_rel)
+            
+            # Clustering
+            Ad_final_sam = AuxFunc(n = n, V = result['V1']).create_adjacency()
+            G_final_sam = nx.from_numpy_array(Ad_final_sam)
+            cls_final_sam = list(nx.connected_components(G_final_sam))
+            Ad_final_fea = AuxFunc(n = q, V = result['V2']).create_adjacency()
+            G_final_fea = nx.from_numpy_array(Ad_final_fea)
+            cls_final_fea = list(nx.connected_components(G_final_fea))
+            vstacked_data  = [np.vstack(sublist).flatten()[:, np.newaxis] for sublist in result['Beta']]
+            Beta_mat = np.column_stack(vstacked_data)
+            Beta_list = [[Beta_mat[(j * p):(j + 1) * p, i] for j in range(q)] for i in range(n)]
+            Y_hat_list = [np.concatenate([np.dot(spline_list[i][j], Beta_list[i][j]) for j in range(q)]) for i in range(n)]
+            Y_hat = np.concatenate(Y_hat_list)
+            Y_real = [np.concatenate(Y_list[i]) for i in range(n)]
+            Y = np.concatenate(Y_real)
+            df_mat = np.zeros((n, q))
+            for i in range(n):
+                for j in range(q):
+                    df_mat[i, j] = np.trace(np.dot(spline_list[i][j], solve(np.dot(spline_list[i][j].T, spline_list[i][j]) + opt_gamma1 * D_d, spline_list[i][j].T)))
+            df = len(cls_final_sam) * len(cls_final_fea) * np.sum(df_mat)/(n * q)
+            bic_value_2[l] = np.log(np.sum((Y - Y_hat) ** 2) / (n * q)) + (np.log(n * q) / (n * q)) * df
+        opt_gamma2 = gamma2[np.argmin(bic_value_2)]
+        result = biclustr_admm(inv_UTY_result, data_list, Y_list, D_d, Beta_ini, 
+                               n, q, p, gamma1=opt_gamma1, gamma2=opt_gamma2, theta = theta, 
+                               tau = tau, max_iter = max_iter, eps_abs = eps_abs, eps_rel = eps_rel)
+        Ad_final_sam = AuxFunc(n = n, V = result['V1']).create_adjacency()
+        G_final_sam = nx.from_numpy_array(Ad_final_sam)
+        cls_final_sam = list(nx.connected_components(G_final_sam))
+        Ad_final_fea = AuxFunc(n = q, V = result['V2']).create_adjacency()
+        G_final_fea = nx.from_numpy_array(Ad_final_fea)
+        cls_final_fea = list(nx.connected_components(G_final_fea))
+        result.update({'nknots':nknots,
+                       'order':order,
+                       'sample cluster':cls_final_sam, 
+                       'feature cluster':cls_final_fea,
+                       'opt_gamma1':opt_gamma1,
+                       'opt_gamma2':opt_gamma2})
+        return result
+
+    else:
+        print('Please enter True or False')    
+
 
 
 '''
 # Test
 from simulation_data import pf_sim_data
-pf_simdata = pf_sim_data(n = 30, TT = 10, nknots = 3, order = 3, seed = 123)['data']
+pf_simdata = pf_sim_data(n = 30, T = 10, nknots = 3, order = 3, seed = 123)['data']
 pf_result = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = 0.023, gamma2 = 3, 
                       theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
 '''
-
 
 '''
 # Input same data with R
 import os
 censored_sample_list = []
-directory = "C:/Users/YYBG-WANG/Desktop/科研/4.Biclustering_python/对照数据/censored_sample"
+directory = "C:/Users/YYBG-WANG/Desktop/科研/4.双聚类(Biclustering)python包/对照数据/censored_sample"
 csv_files = [f for f in os.listdir(directory) if f.endswith('.csv') and f.startswith('censored_sample_list')]
 csv_files.sort(key=lambda x: int(x.split('censored_sample_list')[1].split('.csv')[0]))
 for csv_file in csv_files:
@@ -117,3 +193,10 @@ for sample in censored_sample_list:
     Y_list.append(Y_sublist)
 '''
 
+'''
+gamma1 = np.round(np.linspace(0.0001, 0.01, num=100), decimals=4)
+gamma2 = np.round(np.arange(2, 6.5, 0.5), decimals=1)
+from simulation_data import pf_sim_data
+pf_simdata = pf_sim_data(n = 30, T = 10, nknots = 3, order = 3, seed = 1)['data']
+opt_pf_result = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = gamma1, gamma2 = gamma2, opt = True)
+'''
