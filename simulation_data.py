@@ -1,11 +1,16 @@
 import numpy as np
 import pandas as pd
-from scipy.stats import multivariate_normal
+import matplotlib.pyplot as plt
+from scipy.stats import multivariate_normal, norm
+from pathlib import Path
+from GENetLib.fda_func import bspline_mat
+from GENetLib.fda_func import create_bspline_basis
+from GENetLib.fda_func import fd
+from GENetLib.fda_func import eval_fd
+
 from AuxFunc import AuxFunc
-from GENetLib.basis_mat import bspline_mat
 
 
-# Generate simulation data for pf_bifunc
 def pf_sim_data(n, T, nknots, order, seed = 123):
     np.random.seed(seed)
     q = 9
@@ -164,7 +169,6 @@ def pf_sim_data(n, T, nknots, order, seed = 123):
             'location': t,
             'feature cluster': [set(range(0,3)), set(range(3,6)), set(range(6,9))],
             'sample cluster': [set(range(0,int(n/3))), set(range(int(n/3),int(n/3*2))), set(range(int(n/3*2),n))]}
-
 '''
 pf_simdata = pf_sim_data(n = 30, T = 10, nknots = 3, order = 3, seed = 123)
 '''
@@ -172,63 +176,264 @@ pf_simdata = pf_sim_data(n = 30, T = 10, nknots = 3, order = 3, seed = 123)
 
 def local_sim_data(n, T, sigma, seed = 123):
     np.random.seed(seed)
-    Times = np.linspace(0, 1, T)
-    class1 = np.arange(2*n//5)
-    class2 = np.arange(2*n//5, 7*n//10)
-    class3 = np.arange(7*n//10, n)
-    setpoint1, setpoint2, setpoint3 = 0.2, 0.6, 1.0
-    times = [Times.copy() for _ in range(n)]
-    oridata_list = [None] * n
+    times = np.linspace(0, 1, T)
+    class1 = np.arange(n // 2)
+    class2 = np.arange(n // 2, n)
+    setpoint1 = 0.6
+    setpoint2 = 1
     mu = np.zeros(T)
     rho1 = 0.3
     sig = np.zeros((T, T))
     for i1 in range(T):
         for i2 in range(T):
-            sig[i1, i2] = sigma**2 * rho1**abs(i1 - i2)
-    
-    # Generate 3 clusters
+            sig[i1, i2] = sigma ** 2 * (rho1 ** abs(i1 - i2))
+    oridata_list = []
     for i in range(n):
-        times[i] = Times
         if i in class1:
             c1 = np.zeros(T)
             for l in range(T):
-                if Times[l] >= 0 and Times[l] <= setpoint1:
-                    c1[l] = 1 + 1.5 * np.sin(np.pi * (Times[l] - 0) / (setpoint1 - 0))
-                elif Times[l] <= setpoint2:
-                    c1[l] = 1
+                if times[l] >= setpoint1 and times[l] <= setpoint2:
+                    c1[l] = 1 + np.sin(2 * np.pi * (times[l] - setpoint1) / (setpoint2 - setpoint1))
                 else:
-                    c1[l] = 1 - 1.5 * np.sin(np.pi * (Times[l] - setpoint2) / (setpoint3 - setpoint2))
+                    c1[l] = 1
             epsilon = multivariate_normal.rvs(mean=mu, cov=sig)
-            oridata_list[i] = c1 + epsilon
+            oridata_list.append(c1 + epsilon)
         elif i in class2:
             c2 = np.zeros(T)
             for l in range(T):
-                if Times[l] >= 0 and Times[l] <= setpoint1:
-                    c2[l] = 1 + 1.5 * np.sin(np.pi * (Times[l] - 0) / (setpoint1 - 0))
-                elif Times[l] <= setpoint2:
-                    c2[l] = 1 - 1.5 * np.sin(np.pi * (Times[l] - setpoint1) / (setpoint2 - setpoint1))
+                if times[l] >= setpoint1 and times[l] <= setpoint2:
+                    c2[l] = 1 - np.sin(2 * np.pi * (times[l] - setpoint1) / (setpoint2 - setpoint1))
                 else:
                     c2[l] = 1
             epsilon = multivariate_normal.rvs(mean=mu, cov=sig)
-            oridata_list[i] = c2 + epsilon
-        elif i in class3:
-            c3 = np.zeros(T)
-            for l in range(T):
-                if Times[l] >= 0 and Times[l] <= setpoint1:
-                    c3[l] = 1 + 1.5 * np.sin(np.pi * (Times[l] - 0) / (setpoint1 - 0))
-                elif Times[l] <= setpoint2:
-                    c3[l] = 1 - 1.5 * np.sin(np.pi * (Times[l] - setpoint1) / (setpoint2 - setpoint1))
-                else:
-                    c3[l] = 1 + 1.5 * np.sin(np.pi * (Times[l] - setpoint2) / (setpoint3 - setpoint2))
-            epsilon = multivariate_normal.rvs(mean=mu, cov=sig)
-            oridata_list[i] = c3 + epsilon
-            
-    # Return result        
-    return {'data': oridata_list,
+            oridata_list.append(c2 + epsilon)
+    data = pd.DataFrame(np.column_stack(oridata_list))
+    return {'data': data,
             'location': times,
-            'sample cluster': [set(class1), set(class2), set(class3)]}
-
+            'sample cluster': [set(class1), set(class2)]}
 '''
-local_simdata = local_sim_data(n = 100, T = 100, sigma = 0.5, seed = 42)
+local_simdata = local_sim_data(n = 100, T = 100, sigma = 0.75, seed = 42)
+'''
+
+
+def cc_sim_data():
+    current_file_path = Path(__file__).resolve()
+    current_dir = current_file_path.parent
+    data_path = current_dir / 'simulation_data' / 'cc_sim_data.csv'
+    ccdata = pd.read_csv(data_path)
+    data_dict = {group: matrix.drop(columns=["Matrix"]).values.tolist() 
+                 for group, matrix in ccdata.groupby("Matrix")}
+    sorted_keys = sorted([int(key.replace("Matrix", "")) - 1 for key in data_dict.keys()])
+    sorted_values = [data_dict[f"Matrix{key + 1}"] for key in sorted_keys]
+    cc_data = np.array(sorted_values)
+    cc_data = np.transpose(cc_data, (1, 2, 0))
+    return cc_data
+'''
+cc_simdata = cc_sim_data()
+'''
+
+
+def lbm_sim_data(n = 100, p = 100, t = 30, bivariate = False, noise = None, seed = 111):
+    np.random.seed(seed)
+    long_ = t
+    x = np.linspace(0, 1, long_)
+    K = 4
+    L = 3
+    A = np.sin(4 * np.pi * x)
+    B = 0.75 - 0.5 * ((x > 0.7) & (x < 0.9)).astype(float)
+    C = norm.pdf(x, loc=0.2, scale=0.02)
+    C = C / C.max() if C.max() != 0 else C
+    D = np.sin(10 * np.pi * x)
+    fun = np.vstack([A, B, C, D])
+    if bivariate:
+        A2 = np.cos(4 * np.pi * x)
+        B2 = 0.75 - 0.5 * ((x > 0.2) & (x < 0.4)).astype(float)
+        C2 = norm.pdf(x, loc=0.2, scale=0.05)
+        C2 = C2 / C2.max() if C2.max() != 0 else C2
+        D2 = np.cos(10 * np.pi * x)
+        fun2 = np.vstack([A2, B2, C2, D2])
+    noise = 0 if bivariate else 0.1 / 3
+    mu = np.full((K, L, 4), noise)
+    mu[0, 0, 0] = 1 - 3 * noise;  mu[1, 0, 0] = 1 - 3 * noise;  mu[2, 0, 1] = 1 - 3 * noise;  mu[3, 0, 3] = 1 - 3 * noise
+    mu[0, 1, 1] = 1 - 3 * noise;  mu[1, 1, 1] = 1 - 3 * noise;  mu[2, 1, 2] = 1 - 3 * noise;  mu[3, 1, 0] = 1 - 3 * noise
+    mu[0, 2, 2] = 1 - 3 * noise;  mu[1, 2, 3] = 1 - 3 * noise;  mu[2, 2, 0] = 1 - 3 * noise;  mu[3, 2, 3] = 1 - 3 * noise
+    props_rows = np.array([0.2, 0.4, 0.1, 0.3])
+    counts_rows = (n * props_rows).astype(int)
+    diff_n = n - counts_rows.sum()
+    counts_rows[-1] += diff_n
+    Z = np.concatenate([np.full(cnt, i + 1) for i, cnt in enumerate(counts_rows)])
+    props_cols = np.array([0.4, 0.3, 0.3])
+    counts_cols = (p * props_cols).astype(int)
+    diff_p = p - counts_cols.sum()
+    counts_cols[-1] += diff_p
+    W = np.concatenate([np.full(cnt, i + 1) for i, cnt in enumerate(counts_cols)])
+    if bivariate:
+        X = np.full((n, p, long_), np.nan)
+        X2 = np.full((n, p, long_), np.nan)
+    else:
+        X = np.full((n, p, long_), np.nan)
+    Y = np.full((n, p), np.nan)
+    for k in range(K):
+        for l in range(L):
+            rows_idx = np.where(Z == (k + 1))[0]
+            cols_idx = np.where(W == (l + 1))[0]
+            n_rows = len(rows_idx)
+            n_cols = len(cols_idx)
+            nkl = n_rows * n_cols
+            if nkl == 0:
+                continue
+            pvals = mu[k, l, :].copy()
+            if pvals.sum() > 0:
+                pvals = pvals / pvals.sum()
+            else:
+                pvals = np.full(4, 0.25)
+            draws = np.random.multinomial(1, pvals, size=nkl)
+            tkl = np.argmax(draws, axis=1)
+            noise_block = np.random.normal(0, 0.3, size=(nkl, long_))
+            signal_block = fun[tkl, :] + noise_block
+            block_data = signal_block.reshape((n_rows, n_cols, long_), order='F')
+            X[np.ix_(rows_idx, cols_idx)] = block_data
+            if bivariate:
+                noise_block2 = np.random.normal(0, 0.3, size=(nkl, long_))
+                signal_block2 = fun2[tkl, :] + noise_block2
+                block_data2 = signal_block2.reshape((n_rows, n_cols, long_), order='F')
+                X2[np.ix_(rows_idx, cols_idx)] = block_data2
+            Y_block = tkl.reshape((n_rows, n_cols), order='F')
+            Y[np.ix_(rows_idx, cols_idx)] = Y_block
+    perm_rows = np.random.permutation(n)
+    perm_cols = np.random.permutation(p)
+    Z = Z[perm_rows]
+    W = W[perm_cols]
+    if bivariate:
+        X = X[np.ix_(perm_rows, perm_cols)]
+        X2 = X2[np.ix_(perm_rows, perm_cols)]
+    else:
+        X = X[np.ix_(perm_rows, perm_cols)]
+    Y = Y[np.ix_(perm_rows, perm_cols)]
+    if bivariate:
+        return {"data1": X, "data2": X2, "row_clust": Z - 1, "col_clust": W - 1}
+    else:
+        return {"data": X, "row_clust": Z - 1, "col_clust": W - 1}
+'''
+lbm_simdata = lbm_sim_data()
+'''
+
+
+def sas_sim_data(scenario, n_i = 50, nbasis = 30, length_tot = 50, var_e = 1,
+                 var_b = 1, seed = 123):
+    grid = list(np.linspace(0, 1, length_tot))
+    domain = [0, 1]
+    X_basis = create_bspline_basis(domain, norder=4, nbasis=nbasis)
+    mean_list = []
+    
+    # Generate data by scenario
+    if scenario == 0:
+        part = nbasis // 6
+        mean1 = np.concatenate((np.repeat(1.5, part), np.repeat(0, nbasis - part)))
+        mean2 = np.concatenate((np.repeat(-1.5, part), np.repeat(0, nbasis - part)))
+        mean_list = [mean1, mean2]
+        clus_true = np.repeat(np.arange(1, 3), n_i)
+    elif scenario == 1:
+        part = nbasis // 6
+        mean1 = np.concatenate((np.repeat(3, part),
+                                np.repeat(1.5, part),
+                                np.repeat(0, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean2 = np.concatenate((np.repeat(0, part),
+                                np.repeat(1.5, part),
+                                np.repeat(0, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean3 = np.concatenate((np.repeat(0, part),
+                                np.repeat(-1.5, part),
+                                np.repeat(0, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean_list = [mean1, mean2, mean3]
+        clus_true = np.repeat(np.arange(1, 4), n_i)
+    elif scenario == 2:
+        part = nbasis // 6
+        mean1 = np.concatenate((np.repeat(1.5, part),
+                                np.repeat(3, part),
+                                np.repeat(1.5, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean2 = np.concatenate((np.repeat(1.5, part),
+                                np.repeat(0, part),
+                                np.repeat(1.5, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean3 = np.concatenate((np.repeat(-1.5, part),
+                                np.repeat(0, part),
+                                np.repeat(-1.5, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean4 = np.concatenate((np.repeat(-1.5, part),
+                                np.repeat(-3, part),
+                                np.repeat(-1.5, part),
+                                np.repeat(0, nbasis - 3 * part)))
+        mean_list = [mean1, mean2, mean3, mean4]
+        clus_true = np.repeat(np.arange(1, 5), n_i)
+    else:
+        raise ValueError("Unknown scenario")
+    mu_coef = np.transpose(np.vstack(mean_list))
+    mu_fd = fd(mu_coef, X_basis)
+    cov_mat = np.eye(nbasis) * var_b
+    if len(mean_list) == 1:
+        X_coef = np.transpose(multivariate_normal(mean_list[0], cov_mat).rvs(size=n_i))
+    else:
+        X_coef = np.transpose(multivariate_normal(mean_list[0], cov_mat).rvs(size=n_i))
+        for ii in range(1, len(mean_list)):
+            X_coef = np.concatenate((X_coef, np.transpose(multivariate_normal(mean_list[ii], cov_mat).rvs(size=n_i))), axis=1) 
+    X_fd = fd(X_coef, X_basis)
+    X = eval_fd(grid, X_fd)
+    noise = np.random.normal(0, np.sqrt(var_e), size=X.shape)
+    X = X + noise
+    return {
+        "X": X,
+        "X_fd": X_fd,
+        "mu_fd": mu_fd,
+        "grid": grid,
+        "clus": clus_true}
+'''
+sas_simdata = sas_sim_data(0, n_i = 20,var_e = 1,var_b = 0.25)
+'''
+
+
+def sparse_sim_data(n, x, paramC, plot = False):
+    a = 3
+    bpert = 0.5
+    temp = a - 4 * (1 - x) * paramC / (1 - paramC)
+    temp[x <= paramC] = (a - 4 * x)[x <= paramC]
+    temp2 = np.full_like(x, bpert)
+    temp2[x > paramC] = (bpert * (1 - x) / (1 - paramC))[x > paramC]
+    fx = np.array([(np.random.normal(3, 0.5) * np.sin(np.random.normal(2, 0.25) * np.pi * x) + np.random.normal(3, 0.5)) * (np.random.normal(3, 0.5) - 4 * x) + np.random.normal(0, 0.5) for _ in range(n)]).T
+    fx2 = np.array([(np.random.normal(3, 0.5) * np.sin(np.random.normal(2, 0.25) * np.pi * x) + np.random.normal(3, 0.5)) * temp + temp2 for _ in range(n)]).T
+    data = np.hstack((fx, fx2))
+    part_vera = np.concatenate((np.repeat(1, n), np.repeat(2, n)))
+    if plot:
+        plt.plot(x, data, linestyle='solid')
+        plt.title("Set of synthetic data")
+        plt.show()
+    return {'data':data,
+            'cluster':part_vera}
+'''
+sparse_simdata = sparse_sim_data(n = 10, x =  np.linspace(0, 1, 100), paramC = 2)
+'''
+
+
+def cvx_sim_data():
+    current_file_path = Path(__file__).resolve()
+    current_dir = current_file_path.parent
+    data_path = current_dir / 'simulation_data' / 'cvx_sim_data.csv'
+    cvx_data = pd.read_csv(data_path)
+    return cvx_data
+'''
+cvx_simdata = cvx_sim_data()
+'''
+
+def ssvd_sim_data():
+    current_file_path = Path(__file__).resolve()
+    current_dir = current_file_path.parent
+    data_path = current_dir / 'simulation_data' / 'ssvd_sim_data.csv'
+    ssvd_data = pd.read_csv(data_path).values
+    return ssvd_data
+'''
+ssvd_simdata = ssvd_sim_data()
 '''
 
