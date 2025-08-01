@@ -1,0 +1,5 @@
+include BiFuncLib/__init__.py
+include BiFuncLib/LICENSE.txt
+include BiFuncLib/requirements.txt
+include BiFuncLib/README.md
+global-exclude __pycache__
