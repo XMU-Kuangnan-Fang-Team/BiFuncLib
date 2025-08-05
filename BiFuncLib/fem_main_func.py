@@ -96,7 +96,7 @@ def fstep(fd, T, lambda_):
             enet.fit(x_predict, G)
             coef = enet.coef_
             Utilde[:, i] = coef / np.sqrt(np.sum(np.square(coef)))
-        U = svd(Utilde)[0]
+        U = svd(Utilde, full_matrices=False)[0]
     return U
 
 
