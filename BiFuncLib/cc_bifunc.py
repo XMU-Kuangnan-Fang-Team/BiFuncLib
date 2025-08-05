@@ -156,7 +156,7 @@ def cc_bifunc(data, delta, theta = 1, template_type = 'mean', number = 100,
     return result
 
 
-def cc_bifunc_cv(fun_mat, delta_list, theta = 1.5, template_type = 'mean', number = 100,
+def cc_bifunc_cv(data, delta_list, theta = 1.5, template_type = 'mean', number = 100,
                  alpha = 0, beta = 0, const_alpha = False, const_beta = False,
                  shift_alignment = False, shift_max = 0.1, max_iter_align = 100, plot = True):
 
@@ -169,7 +169,7 @@ def cc_bifunc_cv(fun_mat, delta_list, theta = 1.5, template_type = 'mean', numbe
     
     # Optimize delta
     for d in delta_list:
-        res_fun = cc_bifunc(fun_mat, delta = d, template_type = template_type,
+        res_fun = cc_bifunc(data, delta = d, template_type = template_type,
                             theta = theta, number = number, alpha = alpha, beta = beta,
                             const_alpha = const_alpha, const_beta = const_beta, 
                             shift_alignment = shift_alignment,
@@ -178,16 +178,16 @@ def cc_bifunc_cv(fun_mat, delta_list, theta = 1.5, template_type = 'mean', numbe
             Htot_all_mean_list.append(np.nan)
             Htot_sum_list.append(np.nan)
             num_clust_list.append(0)
-            not_assigned_list.append(fun_mat.shape[0] * fun_mat.shape[1])
+            not_assigned_list.append(data.shape[0] * data.shape[1])
         elif res_fun['Number'] == 1:
             row_mask = res_fun['RowxNumber']
             col_mask = res_fun['NumberxCol']
-            fun_mat_cl = fun_mat[row_mask, :, :][:, col_mask, :]
+            fun_mat_cl = data[row_mask, :, :][:, col_mask, :]
             dist_mat = evaluate_mat_dist(fun_mat_cl, template_type, alpha, beta, 
                                          const_alpha, const_beta, shift_alignment, 
                                          shift_max, max_iter_align)
             H_cl = ccscore_fun(dist_mat)
-            total_elements = fun_mat.shape[0] * fun_mat.shape[1]
+            total_elements = data.shape[0] * data.shape[1]
             assigned_elements = fun_mat_cl.shape[0] * fun_mat_cl.shape[1]
             not_assigned_list.append(total_elements - assigned_elements)
             Htot_d = np.mean(H_cl)
@@ -197,14 +197,14 @@ def cc_bifunc_cv(fun_mat, delta_list, theta = 1.5, template_type = 'mean', numbe
         elif res_fun['Number'] > 1:
             num_clust_list.append(res_fun['Number'])
             H_cl = []
-            total_elements = fun_mat.shape[0] * fun_mat.shape[1]
+            total_elements = data.shape[0] * data.shape[1]
             for cl in range(res_fun['Number']):
                 row_mask = res_fun['RowxNumber'][:, cl]
                 col_mask = res_fun['NumberxCol'][cl, :]
                 rows_idx = np.where(row_mask)[0]
                 cols_idx = np.where(col_mask)[0]
-                submatrix = fun_mat[np.ix_(rows_idx, cols_idx, np.arange(fun_mat.shape[0]))]
-                final_shape = (len(rows_idx), len(cols_idx), fun_mat.shape[0])
+                submatrix = data[np.ix_(rows_idx, cols_idx, np.arange(data.shape[0]))]
+                final_shape = (len(rows_idx), len(cols_idx), data.shape[0])
                 fun_mat_cl = submatrix.reshape(final_shape)
                 dist_mat = evaluate_mat_dist(fun_mat_cl, template_type, alpha, beta, 
                                              const_alpha, const_beta, shift_alignment,
