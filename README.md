@@ -17,7 +17,8 @@ Our package provides biclustering methods for both functional and scalar data (m
 
 For functional data, in standard biclustering, each sample contains multiple functions, and the algorithm jointly clusters both samples and these functions across the entire dataset. In contrast, local clustering assumes only one function per sample; it segments that single function into local pieces and then performs biclustering on the resulting sub-functions.
 
-Thus, this package is capable of handling a variety of biclustering methods, by category:
+## Methods
+This package is capable of handling a variety of biclustering methods, by category:
 ### Functional data (biclustering)
 - FunFEM (EM algorithm)
 - FunLBM (Latent Block Model)
