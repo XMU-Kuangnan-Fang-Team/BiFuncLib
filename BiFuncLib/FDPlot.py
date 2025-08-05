@@ -83,7 +83,7 @@ class FDPlot:
         plt.show()
 
     # Plot functions in cc_bifunc
-    def cc_fdplot(self, fun_mat, only_mean = False, aligned = False, warping = False):
+    def cc_fdplot(self, data, only_mean = False, aligned = False, warping = False):
         res = self.result
         params = res["Parameter"]
         alpha = params["alpha"][0]
@@ -109,7 +109,7 @@ class FDPlot:
             "#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854",
             "#FFD92F", "#E5C494", "#B3B3B3"
         ]
-        x_y = np.zeros((fun_mat.shape[0], fun_mat.shape[1]))
+        x_y = np.zeros((data.shape[0], data.shape[1]))
         if res['Number'] == 1:
             rowx = np.array(res['RowxNumber'])
             numberx = np.array(res['NumberxCol'])
@@ -153,7 +153,7 @@ class FDPlot:
             if res['Number'] == 1:
                 row_idx = np.where(np.array(res['RowxNumber']) == True)[0]
                 col_idx = np.where(np.array(res['NumberxCol']) == True)[0]
-                clust_cl = fun_mat[np.ix_(row_idx, col_idx, np.arange(fun_mat.shape[2]))]
+                clust_cl = data[np.ix_(row_idx, col_idx, np.arange(data.shape[2]))]
                 res_aligned = warping_function_plot(
                     res, clust_cl, template_type, 
                     alpha, beta, const_alpha, const_beta, 
@@ -180,7 +180,7 @@ class FDPlot:
                     cluster_label = cl + 1
                     row_idx = np.where(np.array(res['RowxNumber'])[:, cl] == True)[0]
                     col_idx = np.where(np.array(res['NumberxCol'])[cl, :] == True)[0]
-                    clust_cl = fun_mat[np.ix_(row_idx, col_idx, np.arange(fun_mat.shape[2]))]
+                    clust_cl = data[np.ix_(row_idx, col_idx, np.arange(data.shape[2]))]
                     res_aligned = warping_function_plot(
                         res, clust_cl, template_type, 
                         alpha, beta, const_alpha, const_beta, 
@@ -241,8 +241,8 @@ class FDPlot:
                     plot_single_cluster(fun_aligned_melt, cl, "Aligned Functions")
 
         else:
-            n, m, p = fun_mat.shape
-            fun_plot = np.vstack([fun_mat[j, :, :] for j in range(n)])
+            n, m, p = data.shape
+            fun_plot = np.vstack([data[j, :, :] for j in range(n)])
             df_fun = pd.DataFrame(fun_plot, columns=["X" + str(i) for i in range(1, p+1)])
             df_fun["obs"] = np.repeat(["ROW " + str(i) for i in range(1, n+1)], m)
             df_fun["var"] = np.tile(["COL " + str(j) for j in range(1, m+1)], n)
@@ -276,7 +276,7 @@ class FDPlot:
             if res['Number'] == 1:
                 row_idx = np.where(np.array(res['RowxNumber']) == True)[0]
                 col_idx = np.where(np.array(res['NumberxCol']) == True)[0]
-                clust_cl = fun_mat[np.ix_(row_idx, col_idx, np.arange(p))]
+                clust_cl = data[np.ix_(row_idx, col_idx, np.arange(p))]
                 if template_type == "mean":
                     new_fun_cl = template_evaluation(clust_cl, alpha, beta, const_alpha, const_beta)
                 elif template_type == "medoid":
@@ -292,7 +292,7 @@ class FDPlot:
                 for cl in range(res['Number']):
                     row_idx = np.where(np.array(res['RowxNumber'])[:, cl] == True)[0]
                     col_idx = np.where(np.array(res['NumberxCol'])[cl, :] == True)[0]
-                    clust_cl = fun_mat[np.ix_(row_idx, col_idx, np.arange(p))]
+                    clust_cl = data[np.ix_(row_idx, col_idx, np.arange(p))]
                     if template_type == "mean":
                         new_fun_cl = template_evaluation(clust_cl, alpha, beta, const_alpha, const_beta)
                     elif template_type == "medoid":
@@ -326,6 +326,30 @@ class FDPlot:
                     if cl == 0:
                         continue
                     plot_single_cluster(data_frame_cl[data_frame_cl["cluster"] == cl], cl, "Functional Data")
+
+    # Plot functions in fem_bifunc
+    def fem_fdplot(self, data, fdobj):
+        res = self.result
+        for i in range(res['K']):
+            idx  = np.argmax(res['P'][:, i])
+            plt.figure(figsize=(8, 4))
+            plt.plot(np.array(data['data'])[idx].T, linestyle='-', linewidth=2, color=f'C{i}')
+            x_ticks = np.arange(5, 182, 6)
+            plt.xticks(x_ticks, [data['dates'][j] for j in x_ticks], rotation=90)
+            plt.ylim(0, 1)
+            plt.title(f"Cluster {i+1} - {data['names'][idx]}")
+            plt.tight_layout()
+            plt.show()
+        projected_data = np.dot(fdobj['coefs'].T, res['U'])
+        plt.figure(figsize=(8, 6))
+        scatter = plt.scatter(np.array(projected_data[:, 0]), np.array(projected_data[:, 1]), c=res['cls'],
+                              cmap='tab10', s=50)
+        plt.title("Discriminative space")
+        plt.xlabel("Component 1")
+        plt.ylabel("Component 2")
+        plt.colorbar(scatter, label='Class')
+        plt.grid(True)
+        plt.show()
 
     # Plot functions in lbm_bifunc
     def lbm_fdplot(self, types = 'blocks'):

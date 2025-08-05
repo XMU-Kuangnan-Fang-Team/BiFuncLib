@@ -224,6 +224,27 @@ def cc_sim_data():
     return cc_data
 
 
+def fem_sim_data():
+    current_file_path = Path(__file__).resolve()
+    current_dir = current_file_path.parent
+    data_path1 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_data.csv'
+    data_path2 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_position.csv'
+    data_path3 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_bonus.csv'
+    data_path4 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_names.csv'
+    data_path5 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_dates.csv'
+    df_data = pd.read_csv(data_path1)
+    df_pos = pd.read_csv(data_path2)
+    df_bonus = pd.read_csv(data_path3).values.ravel().tolist()
+    df_names = pd.read_csv(data_path4).values.ravel().tolist()
+    df_dates = pd.read_csv(data_path5).values.ravel().tolist()
+    velib = {'data':df_data,
+             'pos':df_pos,
+             'dates':df_dates,
+             'bonus':df_bonus,
+             'names':df_names}
+    return velib
+
+
 def lbm_sim_data(n = 100, p = 100, t = 30, bivariate = False, noise = None, seed = 111):
     np.random.seed(seed)
     long_ = t
