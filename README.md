@@ -46,23 +46,16 @@ We provide a web-based documentation which introduces the meaning of function pa
 This package has been uploaded to PyPI with previous versions, and the web page is available at
 [PyPI package](https://pypi.org/project/genetlib/). Users can also check [releases](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/releases) to get historical versions.
 
-## Features
-``GENetLib`` has the following features:
-- **Comprehensiveness**: Supports a variety of input and output formats, enabling the construction of comprehensive neural network models for G-E interaction analysis.
-- **Flexibility**: Offers a multitude of parameters allowing users to build models flexibly according to their specific needs.
-- **Functional data compatibility**: Implements methods for functional data analysis (FDA) in Python, facilitating the processing of functional data with Python.
-- **Scalability**: New methods for G-E interaction analysis via deep learning can be easily integrated into the system.
-
 ## Installation
 It is recommended to use ``pip`` for installation:
 ```c
-pip install GENetLib
+pip install BiFuncLib
 ```
 To get further information about installation and independencies, please move to [installation instructions](https://genetlib.readthedocs.io/en/latest/installation.html).
 
 ## Quick Start
-We start with the two basic functions ``scalar_ge`` and ``func_ge``.
-### scalar_ge
+Below are individual usage examples for each method, including computational results and plots (where applicable).
+### FunFEM
 ``scalar_ge`` performs G-E interaction analysis via deep leanring when the input is scalar data.
 ```Python
 from GENetLib.sim_data import sim_data_scalar
@@ -78,22 +71,7 @@ scalar_ge_res = scalar_ge(y = scalar_survival_linear['y'], G = scalar_survival_l
                           learning_rate1 = 0.06, learning_rate2 = 0.035, lambda1 = None, lambda2 = 0.09, Lambda = 0.1,
                           threshold = 0.01, split_type = 0, ratio = [7, 3], important_feature = True, plot = True)
 ```
-### func_ge
-``func_ge`` performs G-E interaction analysis via deep leanring when the input is functional data.
-```Python
-from GENetLib.sim_data import sim_data_func
-from GENetLib.func_ge import func_ge
 
-# Get example data where input is densely measured functional data and output is survival data
-func_continuous = sim_data_func(n = 1500, m = 30, ytype = 'Continuous', seed = 123)
-
-# Set up the FuncGE model
-func_ge_res = func_ge(y = func_continuous['y'], X = func_continuous['X'], location = func_continuous['location'],
-                      Z = func_continuous['Z'], ytype = 'Continuous', btype = 'Bspline', num_hidden_layers = 2,
-                      nodes_hidden_layer = [100,10], num_epochs = 50, learning_rate1 = 0.02, learning_rate2 = 0.035,
-                      nbasis1 = 5, params1 = 4, lambda1 = None, lambda2 = 0.01, Lambda = 0.01, Bsplines = 5,
-                      norder1 = 4, split_type = 1, ratio = [3, 1, 1], plot_res = True)
-```
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
 
 ## Reference
