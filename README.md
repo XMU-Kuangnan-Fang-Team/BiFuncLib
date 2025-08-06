@@ -56,21 +56,59 @@ To get further information about installation and independencies, please move to
 ## Quick Start
 Below are individual usage examples for each method, including computational results and plots (where applicable).
 ### FunFEM
-``scalar_ge`` performs G-E interaction analysis via deep leanring when the input is scalar data.
+``fem_bifunc`` performs FunFEM algorithm which allows to cluster functional data by modeling the curves within a common and discriminative functional subspace.
 ```Python
-from GENetLib.sim_data import sim_data_scalar
-from GENetLib.scalar_ge import scalar_ge
-
-# Get example data where input is scalar data and output is survival data
-scalar_survival_linear = sim_data_scalar(rho_G = 0.25, rho_E = 0.3, dim_G = 500, dim_E = 5, n = 1500,
-                                         dim_E_Sparse = 2, ytype = 'Survival', n_inter = 30)
-
-# Set up the ScalerGE model
-scalar_ge_res = scalar_ge(y = scalar_survival_linear['y'], G = scalar_survival_linear['G'], E = scalar_survival_linear['E'],
-                          ytype = 'Survival',num_hidden_layers = 2, nodes_hidden_layer = [1000, 100], num_epochs = 100,
-                          learning_rate1 = 0.06, learning_rate2 = 0.035, lambda1 = None, lambda2 = 0.09, Lambda = 0.1,
-                          threshold = 0.01, split_type = 0, ratio = [7, 3], important_feature = True, plot = True)
+from BiFuncLib.fem_bifunc import fem_bifunc
+from BiFuncLib.simulation_data import fem_sim_data
+from BiFuncLib.BsplineFunc import BsplineFunc
+from GENetLib.fda_func import create_fourier_basis
+basis = create_fourier_basis((0, 181), nbasis=25)
+time_grid = np.arange(1, 182).tolist()
+fem_simdata = fem_sim_data()
+fdobj = BsplineFunc(basis).smooth_basis(time_grid, np.array(fem_simdata['data'].T))['fd']
+fem_res = fem_bifunc(fdobj, K=[6], model=['AkjBk'], init='kmeans', lambda_=0, disp=True)
+FDPlot(fem_res).fem_fdplot(fem_simdata, fdobj)
 ```
+### FunLBM
+`lbm_bifunc` performs FunLBM algorithm which is a model-based co-clustering method for large-scale functional data that simultaneously clusters rows and columns by fitting a latent block model where each block is represented by a low-dimensional functional subspace.
+```python
+from BiFuncLib.simulation_data import lbm_sim_data
+from BiFuncLib.lbm_bifunc import lbm_bifunc
+from BiFuncLib.lbm_main_func import ari
+lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
+data1 = lbm_simdata1['data']
+lbm_res = lbm_bifunc(data1, K=4, L=3)
+FDPlot(lbm_res).lbm_fdplot('proportions')
+print(ari(lbm_res['col_clust'],lbm_simdata1['col_clust']))
+print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
+```
+### FunCC
+`cc_bifunc` performs FunCC, a non-parametric, non-exhaustive functional bi-clustering algorithm that extends the Cheng–Church framework; it simultaneously identifies row–column subsets of curves by minimizing an H-score and optionally aligns them with domain shifts, all without distributional assumptions. 
+
+`cc_bifunc_cv` provides a function for finding the best tunning.
+
+```python
+from BiFuncLib.simulation_data import cc_sim_data
+from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
+delta_list = np.linspace(0.1, 20, num = 21)
+fun_mat = cc_sim_data()
+cc_result_cv = cc_bifunc_cv(fun_mat, delta_list = delta_list, alpha = 1, beta = 0, const_alpha = True)
+cc_result = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = False)
+FDPlot(cc_result).cc_fdplot(fun_mat, only_mean = True, aligned = False, warping = False)
+```
+
+### FunPF
+`pf_bifunc` performs FunPF, which is a penalized-fusion biclustering approach for functional data that combines a smoothness penalty for curve estimation with a fusion penalty on coefficient differences, enabling simultaneous and consistent identification of row and column clusters without assuming any generative model.
+```python
+from BiFuncLib.pf_bifunc import pf_bifunc
+from BiFuncLib.simulation_data import pf_sim_data
+pf_simdata = pf_sim_data(n = 60, T = 10, nknots = 3, order = 3, seed = 123)['data']
+pf_result = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = 0.023, gamma2 = 3, 
+                      theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
+FDPlot(pf_result).pf_fdplot()
+```
+
+
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
 
