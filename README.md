@@ -55,6 +55,7 @@ To get further information about installation and independencies, please move to
 
 ## Quick Start
 Below are individual usage examples for each method, including computational results and plots (where applicable).
+
 ### FunFEM
 ``fem_bifunc`` performs FunFEM algorithm which allows to cluster functional data by modeling the curves within a common and discriminative functional subspace.
 ```Python
@@ -82,11 +83,11 @@ FDPlot(lbm_res).lbm_fdplot('proportions')
 print(ari(lbm_res['col_clust'],lbm_simdata1['col_clust']))
 print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
 ```
+
 ### FunCC
 `cc_bifunc` performs FunCC, a non-parametric, non-exhaustive functional bi-clustering algorithm that extends the Cheng–Church framework; it simultaneously identifies row–column subsets of curves by minimizing an H-score and optionally aligns them with domain shifts, all without distributional assumptions. 
 
 `cc_bifunc_cv` provides a function for finding the best tunning.
-
 ```python
 from BiFuncLib.simulation_data import cc_sim_data
 from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
@@ -107,6 +108,8 @@ pf_result = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = 0.023, gamma2 
                       theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
 FDPlot(pf_result).pf_fdplot()
 ```
+
+### FunSparse
 
 
 
