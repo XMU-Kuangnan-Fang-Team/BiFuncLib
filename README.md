@@ -87,7 +87,7 @@ print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
 ### FunCC
 `cc_bifunc` performs FunCC, a non-parametric, non-exhaustive functional bi-clustering algorithm that extends the Cheng–Church framework; it simultaneously identifies row–column subsets of curves by minimizing an H-score and optionally aligns them with domain shifts, all without distributional assumptions. 
 
-`cc_bifunc_cv` provides a function for finding the best tunning.
+`cc_bifunc_cv` provides a function for finding the best tunning delta.
 ```python
 from BiFuncLib.simulation_data import cc_sim_data
 from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
@@ -125,6 +125,27 @@ FDPlot(sparse_res).sparse_fdplot(x, sparse_simdata)
 ```
 
 ### FunSAS
+`sas_bifunc` performs FunSAS algorithm. FunSAS simultaneously clusters functional curves and pinpoints, via adaptive pairwise-fusion penalized likelihood, the specific time intervals where each pair of cluster mean curves actually differ, thereby delivering both accurate grouping and a sparse, interpretable map of informative regions.
+
+`sas_bifunc_cv` provides a function for finding the best tunning gamma.
+```python
+from BiFuncLib.simulation_data import sas_sim_data
+from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
+sas_simdata_0 = sas_sim_data(0, n_i = 20, var_e = 1, var_b = 0.25)
+sas_result = sas_bifunc(X = sas_simdata_0['X'], grid = sas_simdata_0['grid'],
+                        lambda_s = 1e-6, lambda_l = 10, G = 2, maxit = 5, q = 10)
+lambda_s_seq = 10 ** np.arange(-4, -2, dtype=float)
+lambda_l_seq = 10 ** np.arange(-1, 1, dtype=float)
+G_seq = [2, 3]
+sas_cv_result = sas_bifunc_cv(X = sas_simdata_0['X'], grid = sas_simdata_0['grid'],
+                              lambda_l_seq = lambda_l_seq, lambda_s_seq = lambda_s_seq,
+                              G_seq = G_seq, maxit = 20, K_fold = 2, q = 10)
+FDPlot(sas_result).sas_fdplot()
+FDPlot(sas_cv_result).sas_cvplot()
+```
+
+###FunLocal
+
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
 
