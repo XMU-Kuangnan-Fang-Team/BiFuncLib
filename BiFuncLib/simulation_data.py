@@ -401,23 +401,37 @@ def sas_sim_data(scenario, n_i = 50, nbasis = 30, length_tot = 50, var_e = 1,
         "clus": clus_true}
 
 
-def sparse_sim_data(n, x, paramC, plot = False):
-    a = 3
+def sparse_sim_data(n, x, paramC, plot=False):
+    x = np.asarray(x)
     bpert = 0.5
-    temp = a - 4 * (1 - x) * paramC / (1 - paramC)
-    temp[x <= paramC] = (a - 4 * x)[x <= paramC]
-    temp2 = np.full_like(x, bpert)
-    temp2[x > paramC] = (bpert * (1 - x) / (1 - paramC))[x > paramC]
-    fx = np.array([(np.random.normal(3, 0.5) * np.sin(np.random.normal(2, 0.25) * np.pi * x) + np.random.normal(3, 0.5)) * (np.random.normal(3, 0.5) - 4 * x) + np.random.normal(0, 0.5) for _ in range(n)]).T
-    fx2 = np.array([(np.random.normal(3, 0.5) * np.sin(np.random.normal(2, 0.25) * np.pi * x) + np.random.normal(3, 0.5)) * temp + temp2 for _ in range(n)]).T
+    fx = np.zeros((len(x), n))
+    for i in range(n):
+        a_i = np.random.normal(3, 0.5)
+        b_i = np.random.normal(0, 0.5)
+        c_i = np.random.normal(2, 0.25)
+        fx[:, i] = (c_i * np.sin(c_i * np.pi * x) + a_i) * (a_i - 4 * x) + b_i
+    fx2 = np.zeros((len(x), n))
+    for i in range(n):
+        a_i = np.random.normal(3, 0.5)
+        b_i = np.random.normal(bpert, 0.5)
+        c_i = np.random.normal(2, 0.25)
+        temp = a_i - 4 * (1 - x) * paramC / (1 - paramC)
+        mask1 = x <= paramC
+        temp[mask1] = a_i - 4 * x[mask1]
+        temp2 = np.full_like(x, bpert)
+        mask2 = x > paramC
+        temp2[mask2] = bpert * (1 - x[mask2]) / (1 - paramC)
+        fx2[:, i] = (c_i * np.sin(c_i * np.pi * x) + a_i) * temp + temp2
     data = np.hstack((fx, fx2))
-    part_vera = np.concatenate((np.repeat(1, n), np.repeat(2, n)))
+    clusters = np.hstack((np.ones(n, dtype=int),
+                          np.full(n, 2, dtype=int)))
     if plot:
-        plt.plot(x, data, linestyle='solid')
+        plt.plot(x, data, lw=0.8)
         plt.title("Set of synthetic data")
+        plt.xlabel("x")
+        plt.ylabel("y")
         plt.show()
-    return {'data':data,
-            'cluster':part_vera}
+    return {'data': data, 'cluster': clusters}
 
 
 def cvx_sim_data():
@@ -434,4 +448,5 @@ def ssvd_sim_data():
     data_path = current_dir / 'simulation_data' / 'ssvd_sim_data.csv'
     ssvd_data = pd.read_csv(data_path).values
     return ssvd_data
+
 
