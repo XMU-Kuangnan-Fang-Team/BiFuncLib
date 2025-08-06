@@ -144,7 +144,19 @@ FDPlot(sas_result).sas_fdplot()
 FDPlot(sas_cv_result).sas_cvplot()
 ```
 
-###FunLocal
+### FunLocal
+`local_bifunc` performs FunLocal, which simultaneously identifies data-driven subintervals and performs clustering within each, allowing functions to exhibit distinct grouping structures across different regions of their domain.
+```python
+from BiFuncLib.local_bifunc import local_bifunc
+from BiFuncLib.simulation_data import local_sim_data
+local_simdata = local_sim_data(n = 100, T = 100, sigma = 0.75, seed = 1)
+opt_res = local_bifunc(local_simdata['data'], local_simdata['location'],
+                       1.02e-5, 2, 0.3, opt=False)
+FDPlot(opt_res).local_individuals_fdplot()
+FDPlot(opt_res).local_center_fdplot()
+```
+
+
 
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
