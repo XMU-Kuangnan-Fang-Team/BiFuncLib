@@ -110,8 +110,21 @@ FDPlot(pf_result).pf_fdplot()
 ```
 
 ### FunSparse
+`sparse_bifunc` stands for FunSparse, an algorithm performs functional data grouping while simultaneously selecting the most discriminative curve regions via a hard-thresholded weighting function, yielding a concise and interpretable partition.
+```python
+from BiFuncLib.simulation_data import sparse_sim_data
+from BiFuncLib.sparse_bifunc import sparse_bifunc
+K = 2
+paramC = 0.7
+n = 100
+x = np.linspace(0, 1, 1000)
+sparse_simdata = sparse_sim_data(n, x, paramC)['data']
+part_vera = sparse_sim_data(n, x, paramC)['cluster']
+sparse_res = sparse_bifunc(sparse_simdata, x, K, true_clus = part_vera)
+FDPlot(sparse_res).sparse_fdplot(x, sparse_simdata)
+```
 
-
+### FunSAS
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
 
