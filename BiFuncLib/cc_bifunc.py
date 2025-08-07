@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from BiFuncLib.cc_main_func import bigcc_fun, evaluate_mat_dist, ccscore_fun
-from BiFuncLib.bimax import bimaxbiclust
+from BiFuncLib.bimax_biclus import bimax_biclus
 
 
 #  Functional Cheng and Church algorithm
@@ -106,19 +106,19 @@ def cc_bifunc(data, delta, theta = 1, template_type = 'mean', number = 100,
             y[k - 1, true_cols] = erg[1]
             xy = xy + np.outer(x[:, k - 1].astype(int), y[k - 1, :].astype(int))
             if only_one == 'False':
-                res = bimaxbiclust(1 - xy, minr=2, minc=2, number=100)
+                res = bimax_biclus(1 - xy, minr=2, minc=2, number=100)
             elif only_one == 'True':
-                res = bimaxbiclust(1 - xy, minr=1, minc=1, number=100)
+                res = bimax_biclus(1 - xy, minr=1, minc=1, number=100)
             elif only_one == 'True_alpha':
-                res = bimaxbiclust(1 - xy, minr=1, minc=2, number=100)
+                res = bimax_biclus(1 - xy, minr=1, minc=2, number=100)
             elif only_one == 'True_beta':
-                res = bimaxbiclust(1 - xy, minr=2, minc=1, number=100)
-            n_clust = res['Number']
+                res = bimax_biclus(1 - xy, minr=2, minc=1, number=100)
+            n_clust = res.Number
             cl = 1
             if n_clust == 0:
                 break
-            clus_row = res['RowxNumber']
-            clus_col = res['NumberxCol']
+            clus_row = res.RowxNumber
+            clus_col = res.NumberxCol
             d_rows = np.sum(clus_row, axis=0)
             d_cols = np.sum(clus_col, axis=1)
             dimensioni = d_rows * d_cols

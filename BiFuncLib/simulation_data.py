@@ -450,3 +450,10 @@ def ssvd_sim_data():
     return ssvd_data
 
 
+def bimax_sim_data():
+    current_file_path = Path(__file__).resolve()
+    current_dir = current_file_path.parent
+    data_path = current_dir / 'simulation_data' / 'bimax_sim_data.csv'
+    bimax_data = pd.read_csv(data_path).values
+    return bimax_data
+
