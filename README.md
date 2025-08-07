@@ -156,6 +156,8 @@ FDPlot(opt_res).local_individuals_fdplot()
 FDPlot(opt_res).local_center_fdplot()
 ```
 
+### Bimax
+`bimax_biclus` performs Bimax algorithm, 
 
 
 
