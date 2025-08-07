@@ -640,3 +640,4 @@ def biclust_smooth(X, clusters_row, clusters_col):
             Y[np.ix_(ix_row, ix_col)] = M[i, j]
     return Y
 
+
