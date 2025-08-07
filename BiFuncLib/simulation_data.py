@@ -9,6 +9,7 @@ from GENetLib.fda_func import fd
 from GENetLib.fda_func import eval_fd
 
 from BiFuncLib.AuxFunc import AuxFunc
+from BiFuncLib.BiclustResult import BiclustResult
 
 
 def pf_sim_data(n, T, nknots, order, seed = 123):
@@ -443,11 +444,21 @@ def cvx_sim_data():
 
 
 def ssvd_sim_data():
-    current_file_path = Path(__file__).resolve()
-    current_dir = current_file_path.parent
-    data_path = current_dir / 'simulation_data' / 'ssvd_sim_data.csv'
-    ssvd_data = pd.read_csv(data_path).values
-    return ssvd_data
+    u = np.array([10,9,8,7,6,5,4,3] + [2]*17 + [0]*75)
+    v = np.array([10,-10,8,-8,5,-5] + [3]*5 + [-3]*5 + [0]*34)
+    u = u/np.sqrt(np.sum(u**2))
+    v = v/np.sqrt(np.sum(v**2))
+    d = 50
+    ssvd_data = (d * np.outer(u, v)) + np.random.randn(100, 50)
+    params = {}
+    info = []
+    RowxNumber = np.zeros((100,1), dtype=bool)
+    NumberxCol = np.zeros((50,1), dtype=bool)
+    RowxNumber[u != 0, 0] = True
+    NumberxCol[v != 0, 0] = True
+    Number = 1
+    res_sim = BiclustResult(params, RowxNumber, NumberxCol, Number, info)
+    return {'data':ssvd_data,'res':res_sim}
 
 
 def bimax_sim_data():
