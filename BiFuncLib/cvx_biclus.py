@@ -38,7 +38,7 @@ def cvx_biclus_valid(data, phi, k, gamma, Lambda_row=None, Lambda_col=None, frac
             sns.clustermap(M, cmap="Blues", yticklabels=False, xticklabels=False)
             plt.show()
         elif smooth == False:
-            sns.clustermap(sol['U'][2], cmap="Blues", yticklabels=False, xticklabels=False)
+            sns.clustermap(data, cmap="Blues", yticklabels=False, xticklabels=False)
             plt.show()
     return sol 
     
@@ -59,4 +59,5 @@ def cvx_biclus_missing(data, phi, k, gamma, Lambda_row, Lambda_col, Theta,
         sns.clustermap(sol['U'], cmap="Blues", yticklabels=False, xticklabels=False)
         plt.show()
     return sol
+
 
