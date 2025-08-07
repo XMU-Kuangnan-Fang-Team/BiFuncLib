@@ -9,6 +9,8 @@ from copy import deepcopy
 from scipy.sparse.linalg import svds
 import gc
 
+from BifuncLib.BiclustResult import BiclustResult
+
 
 def thresh(z, delta, thredtype = 1, a = 3.7):
     z = np.asarray(z)
@@ -131,17 +133,6 @@ def ssvd(X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter
         u0 = u1
         v0 = v1
     return {"u": u1, "v": v1, "iter": iteration, "stop": stop}
-
-
-class BiclustResult:
-    def __init__(self, params, RowxNumber, NumberxCol, Number, info):
-        self.params = params
-        self.RowxNumber = RowxNumber
-        self.NumberxCol = NumberxCol.T
-        self.Number = Number
-        self.info = info
-        self.cluster_row_sizes = np.sum(RowxNumber, axis=0)
-        self.cluster_col_sizes = np.sum(NumberxCol, axis=0)
 
 
 def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
