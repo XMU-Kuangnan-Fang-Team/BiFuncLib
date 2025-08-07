@@ -604,7 +604,7 @@ def cobra_validate(X, E_row, E_col, w_row, w_col, gamma_seq, Lambda_row=None, La
                         (gam * np.array(w_row)), (gam * np.array(w_col)), ThetaV,
                         max_iter=max_iter, tol=tol, max_iter_inner=max_iter_inner,
                         tol_inner=tol_inner)
-        UHx[ig] = sol["U"].T
+        UHx[ig] = sol["U"]
         VrHx[ig] = sol["V_row"]
         VcHx[ig] = sol["V_col"]
         clusters_row = find_clusters(create_adjacency(sol["V_row"], E_row))
