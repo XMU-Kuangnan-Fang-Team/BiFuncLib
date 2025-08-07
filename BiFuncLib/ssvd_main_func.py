@@ -53,6 +53,57 @@ def jaccardmat(res1, res2):
         mat_df = pd.DataFrame([[0]])
     return mat_df
 
+def jaccardmat(res1, res2, mode=None):
+    def jaccard_sets(A, B):
+        intersection = A & B
+        denom = len(A) + len(B) - len(intersection)
+        return len(intersection) / denom if denom != 0 else 0
+    if mode == 'row':
+        if res1.Number > 0 and res2.Number > 0:
+            mat = np.zeros((res1.Number, res2.Number))
+            for i in range(res1.Number):
+                A = set(np.nonzero(res1.RowxNumber[:, i])[0])
+                for j in range(res2.Number):
+                    B = set(np.nonzero(res2.RowxNumber[:, j])[0])
+                    mat[i, j] = jaccard_sets(A, B)
+            rownames = [f"RowC{i+1}" for i in range(res1.Number)]
+            colnames = [f"RowC{j+1}" for j in range(res2.Number)]
+            return pd.DataFrame(mat, index=rownames, columns=colnames)
+        else:
+            return pd.DataFrame([[0]])
+    elif mode == 'column':
+        nclus1 = res1.NumberxCol.shape[0]
+        nclus2 = res2.NumberxCol.shape[0]
+        if nclus1 > 0 and nclus2 > 0:
+            mat = np.zeros((nclus1, nclus2))
+            for i in range(nclus1):
+                A = set(np.nonzero(res1.NumberxCol[i, :])[0])
+                for j in range(nclus2):
+                    B = set(np.nonzero(res2.NumberxCol[j, :])[0])
+                    mat[i, j] = jaccard_sets(A, B)
+            rownames = [f"ColC{i+1}" for i in range(nclus1)]
+            colnames = [f"ColC{j+1}" for j in range(nclus2)]
+            return pd.DataFrame(mat, index=rownames, columns=colnames)
+        else:
+            return pd.DataFrame([[0]])
+    else:
+        if res1.Number > 0 and res2.Number > 0:
+            mat = np.zeros((res1.Number, res2.Number))
+            for i in range(res1.Number):
+                for j in range(res2.Number):
+                    product1 = np.outer(res1.RowxNumber[:, i], res1.NumberxCol[i, :])
+                    product2 = np.outer(res2.RowxNumber[:, j], res2.NumberxCol[j, :])
+                    flat1 = np.ravel(product1 > 0, order='F')
+                    flat2 = np.ravel(product2 > 0, order='F')
+                    A = set(np.nonzero(flat1)[0])
+                    B = set(np.nonzero(flat2)[0])
+                    mat[i, j] = jaccard_sets(A, B)
+            rownames = [f"BC{i+1}" for i in range(res1.Number)]
+            colnames = [f"BC{j+1}" for j in range(res2.Number)]
+            return pd.DataFrame(mat, index=rownames, columns=colnames)
+        else:
+            return pd.DataFrame([[0]])
+
 
 def ssvd(X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter=100):
     X = deepcopy(X)

@@ -157,9 +157,67 @@ FDPlot(opt_res).local_center_fdplot()
 ```
 
 ### Bimax
-`bimax_biclus` performs Bimax algorithm, 
+`bimax_biclus` performs Bimax algorithm, which exhaustively finds all inclusion-maximal submatrices of 1s in a binarized data matrix without overlap.
+```python
+from BiFuncLib.bimax_biclus import bimax_biclus
+from BiFuncLib.simulation_data import bimax_sim_data
+bimax_simdata = bimax_sim_data()
+bimax_res = bimax_biclus(bimax_simdata, minr=4,minc=4,number=10)
+bcheatmap(bimax_simdata,bimax_res)
+```
 
+### SSVD
+`s4vd_biclus` performs SSVD algorithm, which simultaneously sparsifies the left and right singular vectors of an SVD layer to extract coherent row–column blocks (biclusters).
 
+Here, `ssvd_biclus` is the original algorithm, whereas `s4vd_biclus` is its cross-validated, hyper-parameter-tuned version; in practice, `s4vd_biclus` is recommended for modeling. The `jaccardmat` function is provided to measure similarity.
+
+```python
+from BiFuncLib.simulation_data import ssvd_sim_data
+from BiFuncLib.bcheatmap import bcheatmap
+from BiFuncLib.ssvd_main_func import jaccardmat
+from BiFuncLib.ssvd_biclus import s4vd_biclus, ssvd_biclus
+ssvd_simdata = ssvd_sim_data()
+data = ssvd_simdata['data']
+res_sim = ssvd_simdata['res']
+s4vd_res = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=False, nbiclust=1)
+print(jaccardmat(res_sim, s4vd_res, 'row'))
+print(jaccardmat(res_sim, s4vd_res, 'column'))
+bcheatmap(data, s4vd_res)
+res2_ssvd = ssvd_biclus(data,K=1)
+print(jaccardmat(res_sim, res2_ssvd))
+bcheatmap(data, res2_ssvd)
+```
+
+### CVX
+
+```python
+from BiFuncLib.simulation_data import cvx_sim_data
+from BiFuncLib.cvx_main_func import gkn_weights
+from BiFuncLib.cvx_biclus import cvx_biclus_valid, cvx_biclus_missing
+cvx_simdata = cvx_sim_data()
+X = cvx_simdata.copy()
+X = X - np.mean(np.mean(X))
+X = X / np.linalg.norm(X, 'fro')
+phi = 0.5; k = 5; data = X
+# Example 1
+nGamma = 5
+gammaSeq = 10 ** np.linspace(0, 3, nGamma)
+cvx_res1 = cvx_biclus_valid(data, phi, k, gammaSeq, plot_error = False)
+# Example 2
+wts = gkn_weights(X, phi=phi, k_row=k, k_col=k)
+E_row = wts["E_row"]
+E_col = wts["E_col"]
+gamma = 200
+m_row = E_row.shape[0]
+m_col = E_col.shape[0]
+np.random.seed(123)
+n = X.shape[1]
+p = X.shape[0]
+Lambda_row = np.random.randn(n, m_row)
+Lambda_col = np.random.randn(p, m_col)
+Theta = random.sample(range(1, n*p+1), math.floor(0.1 * n * p))
+cvx_res2 = cvx_biclus_missing(data, phi, k, gamma, Lambda_row, Lambda_col, Theta)
+```
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
 
