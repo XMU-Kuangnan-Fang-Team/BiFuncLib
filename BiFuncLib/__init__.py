@@ -2,13 +2,14 @@ from .simulation_data import pf_sim_data,local_sim_data,cc_sim_data,lbm_sim_data
 from .simulation_data import sas_sim_data,sparse_sim_data,cvx_sim_data,ssvd_sim_data
 from .BsplineFunc import BsplineFunc
 from .BiclustResult import BiclustResult
+from .bcheatmap import bcheatmap
 from .fem_bifunc import fem_bifunc
 from .sparse_main_func import FKMSparseClustering_permute, FKMSparseClustering, cer
 from .fem_main_func import fem_main_func
 from .AuxFunc import AuxFunc
 from .pf_main_func import inv_uty_cal, beta_ini_cal, biclustr_admm
 from .cvx_main_func import gkn_weights, cobra_validate, cobra_pod, biclust_smooth
-from .ssvd_main_func import ssvd_bc, s4vd, bcheatmap, jaccardmat
+from .ssvd_main_func import ssvd_bc, s4vd, jaccardmat
 from .cc_main_func import template_evaluation, medoid_evaluation, warping_function_plot
 from .bimax_biclus import bimax_biclus
 from .cc_main_func import bigcc_fun, evaluate_mat_dist, ccscore_fun

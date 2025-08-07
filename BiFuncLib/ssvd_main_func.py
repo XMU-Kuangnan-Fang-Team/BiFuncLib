@@ -1,9 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-import matplotlib as mpl
-from matplotlib.colors import LinearSegmentedColormap
 import math
 from copy import deepcopy
 from scipy.sparse.linalg import svds
