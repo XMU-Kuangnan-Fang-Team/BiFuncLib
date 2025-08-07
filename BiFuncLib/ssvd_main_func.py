@@ -9,7 +9,7 @@ from copy import deepcopy
 from scipy.sparse.linalg import svds
 import gc
 
-from BifuncLib.BiclustResult import BiclustResult
+from BiFuncLib.BiclustResult import BiclustResult
 
 
 def thresh(z, delta, thredtype = 1, a = 3.7):
@@ -853,4 +853,5 @@ def bcheatmap(X, res, cexR=1.5, cexC=1.25, axisR=False, axisC=True, heatcols=Non
     cb.ax.tick_params(labelsize=14)
     plt.tight_layout()
     plt.show()
+
 
