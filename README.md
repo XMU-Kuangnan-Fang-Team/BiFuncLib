@@ -80,8 +80,8 @@ lbm_simdata = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
 data = lbm_simdata['data']
 lbm_res = lbm_bifunc(data, K=4, L=3)
 FDPlot(lbm_res).lbm_fdplot('proportions')
-print(ari(lbm_res['col_clust'],lbm_simdata1['col_clust']))
-print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
+print(ari(lbm_res['col_clust'],lbm_simdata['col_clust']))
+print(ari(lbm_res['row_clust'],lbm_simdata['row_clust']))
 ```
 
 ### FunCC
