@@ -189,6 +189,9 @@ bcheatmap(data, res2_ssvd)
 ```
 
 ### CVX
+`cvx_biclus_valid` performs COBRA algorithm with validation, which is a convex biclusteRing algorithm designed to identify checkerboard patterns in data matrices by solving a convex optimization problem, offering stability, uniqueness, and interpretability in biclustering.
+
+`cvx_biclus_missing` handles data with missing values.
 
 ```python
 from BiFuncLib.simulation_data import cvx_sim_data
