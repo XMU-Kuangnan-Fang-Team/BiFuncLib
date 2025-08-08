@@ -76,9 +76,9 @@ FDPlot(fem_res).fem_fdplot(fem_simdata, fdobj)
 from BiFuncLib.simulation_data import lbm_sim_data
 from BiFuncLib.lbm_bifunc import lbm_bifunc
 from BiFuncLib.lbm_main_func import ari
-lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
-data1 = lbm_simdata1['data']
-lbm_res = lbm_bifunc(data1, K=4, L=3)
+lbm_simdata = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
+data = lbm_simdata['data']
+lbm_res = lbm_bifunc(data, K=4, L=3)
 FDPlot(lbm_res).lbm_fdplot('proportions')
 print(ari(lbm_res['col_clust'],lbm_simdata1['col_clust']))
 print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
