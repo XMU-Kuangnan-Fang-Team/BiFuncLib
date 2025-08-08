@@ -1,6 +1,7 @@
+<!--  
 <div align="center">
 <img src="image/overall_fig.png" alt="overall_fig.png" width="1000">
-</div>
+</div> -->
 
 [![pypi](https://img.shields.io/pypi/v/GENetLib?logo=Pypi)](https://pypi.org/project/GENetLib)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-lightblue.svg)
