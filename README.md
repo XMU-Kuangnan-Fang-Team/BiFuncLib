@@ -3,7 +3,7 @@
 <img src="image/overall_fig.png" alt="overall_fig.png" width="1000">
 </div> -->
 
-[![pypi](https://img.shields.io/pypi/v/GENetLib?logo=Pypi)](https://pypi.org/project/GENetLib)
+[![pypi](https://img.shields.io/pypi/v/BiFuncLib?logo=Pypi)](https://pypi.org/project/BiFuncLib)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-lightblue.svg)
 [![Build](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)
 [![codecov](https://codecov.io/github/XMU-Kuangnan-Fang-Team/GENetLib/graph/badge.svg?token=9J9QMN7L9Z)](https://codecov.io/github/XMU-Kuangnan-Fang-Team/BiFuncLib)
@@ -43,7 +43,7 @@ BiFuncLib unifies these approaches into a comprehensive and easily extensible bi
 </div>
 
 We provide a web-based documentation which introduces the meaning of function parameters, the usage of functions, detailed information about methods, and gives examples for each. The web page is available at
-[documentations](https://open-box.readthedocs.io/en/latest/).
+[documentations](https://bifunclib.readthedocs.io/en/latest/).
 This package has been uploaded to PyPI with previous versions, and the web page is available at
 [PyPI package](https://pypi.org/project/genetlib/). Users can also check [releases](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/releases) to get historical versions.
 
