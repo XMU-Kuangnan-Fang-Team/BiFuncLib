@@ -3,7 +3,7 @@
 <img src="image/overall_fig.png" alt="overall_fig.png" width="1000">
 </div> -->
 
-[![pypi](https://img.shields.io/pypi/v/GENetLib?logo=Pypi)](https://pypi.org/project/GENetLib)
+[![pypi](https://img.shields.io/pypi/v/BiFuncLib?logo=Pypi)](https://pypi.org/project/BiFuncLib)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-lightblue.svg)
 [![Build](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)
 [![codecov](https://codecov.io/github/XMU-Kuangnan-Fang-Team/GENetLib/graph/badge.svg?token=9J9QMN7L9Z)](https://codecov.io/github/XMU-Kuangnan-Fang-Team/BiFuncLib)
