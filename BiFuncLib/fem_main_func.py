@@ -141,8 +141,8 @@ def fem_main_func(fd, K, model='AkjBk', init='kmeans', lambda_=0, Tinit=None,
         plt.figure(figsize=(5, 3))
         plt.plot(Lobs[:i+2], 'r.')
         plt.tick_params(axis='both', labelsize=8)
-        plt.xlabel('iterations')
-        plt.ylabel('vraisemblance espace observe')
+        plt.xlabel('Iterations')
+        plt.ylabel('Log-likelihood (observed)')
         plt.show()
     cls_ = np.argmax(T, axis=1)
     crit = criteria(Lobs[i+1], T, prms, n)
@@ -270,5 +270,6 @@ def mstep(fd, U, T, model):
             bk = max(bk, 1e-3)
             D[k, d:, d:] = np.eye(p - d) * bk
     return {'K': K, 'p': p, 'mean': mu, 'my': m, 'prop': prop, 'D': D, 'model': model}
+
 
 
