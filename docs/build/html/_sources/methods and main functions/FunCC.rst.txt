@@ -1,10 +1,11 @@
-FunLBM
+FunFEM
 =========================
 
-.. _funlbm-label:
+.. _funfem-label:
 
 Method Description
 ------------------
+
 
 Usage of Functions
 ------------------
@@ -42,7 +43,7 @@ Example
 Plot function
 -------------
 
-FDPlot.lbm_fdplot
+FDPlot.fem_fdplot
 ~~~~~~~~~~~~~~~~~~
 
 Prameter

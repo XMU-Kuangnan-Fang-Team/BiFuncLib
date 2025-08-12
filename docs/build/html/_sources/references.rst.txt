@@ -1,3 +1,8 @@
+References
+============
+
+Here is a complete list of all references for the package and its documentation.
+
 Main References
 ----------------
 

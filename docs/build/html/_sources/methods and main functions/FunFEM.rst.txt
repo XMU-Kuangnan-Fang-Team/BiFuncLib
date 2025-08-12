@@ -29,33 +29,15 @@ The optimal number of clusters (K) and intrinsic dimensionality (d) are selected
 
 - Sparse Basis Selection
 
-Optionally, sparsity-inducing regularization (l\ :sub:`1` penalty) is applied to select the most discriminative basis functions (e.g., key time intervals or frequencies) for interpretability.
+Optionally, sparsity-inducing regularization (ℓ₁ penalty) is applied to select the most discriminative basis functions (e.g., key time intervals or frequencies) for interpretability.
 
 Usage of Functions
 ------------------
-This method provides three core functions: **fem_sim_data**, **fem_bifunc**, and **FDPlot.fem_fdplot**. Their respective usage is detailed below.
 
-- **fem_sim_data** generates simulated data.
 
-.. code-block:: python
-
-    fem_sim_data()
-
-- **fem_bifunc** performs model fitting.
-
-.. code-block:: python
-
-    fem_bifunc(fd, K = np.arange(2, 7), model = ['AkjBk'], crit = 'bic', init = 'kmeans', Tinit = (), maxit = 50, eps = 1e-6, disp = False, lambda_ = 0, graph = False)
-
-- **FDPlot.fem_fdplot** produces visualizations.
-
-.. code-block:: python
-
-    FDPlot(result).fem_fdplot(data, fdobj)
 
 Model function
 --------------
-In this section, we detail the parameters, output values and usage examples for each function. 
 
 fem_sim_data
 ~~~~~~~~~~~~~~~

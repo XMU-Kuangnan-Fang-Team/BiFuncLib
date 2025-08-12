@@ -30,7 +30,6 @@ The ways to contact us are provided in :ref:`contributing to BiFuncLib <contribu
 
    introduction
    installation
-   methods
-   main functions/main functions
+   methods and main functions/methods and main functions
    references
    contribution

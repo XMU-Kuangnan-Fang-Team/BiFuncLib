@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunLBM &mdash; BiFuncLib's documentation  documentation</title>
+
+    
+        
+        
+            <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+        
+            <link rel="stylesheet" type="text/css" href="../_static/css/main.css?v=fd6b4214" />
+        
+    
+
+    <script type="text/javascript" src="../_static/js/main.js"></script>
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+
+        
+            <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+            <script src="../_static/doctools.js?v=9bcbadda"></script>
+            <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+
+    
+        
+        <link rel="shortcut icon" href="../_static/img/favicon.ico"/>
+    
+            <link rel="index" title="Index" href="../genindex.html"/>
+            <link rel="search" title="Search" href="../search.html"/>
+            <link rel="next" title="FunFEM" href="FunCC.html"/>
+            <link rel="prev" title="FunFEM" href="FunFEM.html"/>
+
+    
+
+    
+</head>
+<body>
+
+
+    <header>
+        
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="../index.html">
+                            <img
+                                
+                                    src="../_static/img/logo.svg"
+                                
+                                alt="Logo"
+                                
+                                    style="height: 0em"
+                                
+                                />
+                            
+                                <p class="title is-3"
+                                
+                                >
+                                    BiFuncLib
+                                </p>
+                            
+                        </a>
+                        <!--<a role="button" class="navbar-burger burger" aria-label="menu"
+                           aria-expanded="false"
+                           data-target="navbarMenu">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>-->
+                    </div>
+
+                    
+                        <div id="navbarMenu" class="navbar-menu">
+                            <div class="navbar-end">
+                                <!--
+                                <a class="navbar-item" href="https://documatt.com">Documatt</a>
+                                <a class="navbar-item"
+                                   href="https://snippets.documatt.com">Snippets</a>
+                                <a class="navbar-item is-active" href="https://blog.documatt.com">Blog</a>
+                                -->
+                            </div>
+                        </div>
+                    
+                </div>
+            </nav>
+        
+
+        
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <div class="container">
+                    <ul>
+                        <li><a href="../index.html">BiFuncLib's documentation</a></li>
+                        
+    <li><a href="methods%20and%20main%20functions.html" aria-current="page">Methods and Main Functions</a>
+    </li>
+
+
+    <li class="is-active">FunLBM</li>
+
+                    </ul>
+                </div>
+            </nav>
+        
+    </header>
+
+
+
+    <section class="section site-hero" style="padding-bottom: 0;">
+        <div class="container">
+            <div class="columns">
+                <div class="column content is-8 is-offset-2">
+                        
+                            <h1 class="title is-2">
+                                <a href="../index.html">BiFuncLib's documentation</a>
+                            </h1>
+                            <div class="motto subtitle is-4">
+                                BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.
+                            </div>
+                        
+                    
+                </div>
+                <div class="column">
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<hr>
+
+
+    
+        <section class="section is-paddingless" id="document">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-2 mt-2 is-family-sans-serif">
+                        
+<div class="content globaltoc">
+    <p class="has-text-weight-bold">Table of Contents</p>
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="methods%20and%20main%20functions.html">Methods and Main Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="FunFEM.html">FunFEM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FunLBM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunCC.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunPF.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSparse.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bimax.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSVD.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CVX.html">FunFEM</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
+</ul>
+
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/methods and main functions/FunLBM.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+                        
+                    </div>
+                    <div class="column is-8">
+                        
+                        <article class="content is-medium sphinx-body">
+                            
+  <section id="funlbm">
+<h1>FunLBM<a class="headerlink" href="#funlbm" title="Link to this heading">¶</a></h1>
+<section id="method-description">
+<span id="funlbm-label"></span><h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+</section>
+<section id="usage-of-functions">
+<h2>Usage of Functions<a class="headerlink" href="#usage-of-functions" title="Link to this heading">¶</a></h2>
+</section>
+<section id="model-function">
+<h2>Model function<a class="headerlink" href="#model-function" title="Link to this heading">¶</a></h2>
+<section id="fem-sim-data">
+<h3>fem_sim_data<a class="headerlink" href="#fem-sim-data" title="Link to this heading">¶</a></h3>
+<section id="prameter">
+<h4>Prameter<a class="headerlink" href="#prameter" title="Link to this heading">¶</a></h4>
+</section>
+<section id="value">
+<h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+</section>
+</section>
+<section id="fem-bifunc">
+<h3>fem_bifunc<a class="headerlink" href="#fem-bifunc" title="Link to this heading">¶</a></h3>
+<section id="id1">
+<h4>Prameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id2">
+<h4>Value<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id3">
+<h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+</section>
+</section>
+</section>
+<section id="plot-function">
+<h2>Plot function<a class="headerlink" href="#plot-function" title="Link to this heading">¶</a></h2>
+<section id="fdplot-lbm-fdplot">
+<h3>FDPlot.lbm_fdplot<a class="headerlink" href="#fdplot-lbm-fdplot" title="Link to this heading">¶</a></h3>
+<section id="id4">
+<h4>Prameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id5">
+<h4>Value<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+</section>
+<section id="id6">
+<h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+</section>
+</section>
+</section>
+</section>
+
+
+
+                            
+                            
+                                <p class="has-text-weight-light is-size-6 my-4">
+                                    Previous:
+                                    <a href="FunFEM.html"
+                                       title="previous chapter">FunFEM</a>
+                                
+                                    |
+                                
+                                    Next:
+                                    <a href="FunCC.html"
+                                       title="next chapter">FunFEM</a>
+                                </p>
+                            
+                        </article>
+                    </div>
+                    <div class="column is-2 mt-2  is-family-sans-serif">
+                        
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">FunLBM</a><ul>
+<li><a class="reference internal" href="#method-description">Method Description</a></li>
+<li><a class="reference internal" href="#usage-of-functions">Usage of Functions</a></li>
+<li><a class="reference internal" href="#model-function">Model function</a><ul>
+<li><a class="reference internal" href="#fem-sim-data">fem_sim_data</a><ul>
+<li><a class="reference internal" href="#prameter">Prameter</a></li>
+<li><a class="reference internal" href="#value">Value</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fem-bifunc">fem_bifunc</a><ul>
+<li><a class="reference internal" href="#id1">Prameter</a></li>
+<li><a class="reference internal" href="#id2">Value</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plot-function">Plot function</a><ul>
+<li><a class="reference internal" href="#fdplot-lbm-fdplot">FDPlot.lbm_fdplot</a><ul>
+<li><a class="reference internal" href="#id4">Prameter</a></li>
+<li><a class="reference internal" href="#id5">Value</a></li>
+<li><a class="reference internal" href="#id6">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered has-text-primary">
+                <a href="../index.html">
+                    <img
+                        
+                            src="../_static/img/logo.svg"
+                        
+                        alt="Logo"
+                        
+                            style="height: 0em"
+                        
+                    />
+                 </a>
+                 <div class="footer-text">
+                
+                    <p>BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.</p>
+                
+                </div>
+
+                <p class="mt-4">Copyright &copy; 2025, Yuhao Zhong</p>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>
