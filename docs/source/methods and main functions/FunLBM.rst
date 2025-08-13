@@ -238,18 +238,30 @@ This setting outputs the functional images of the block matrix.
    | |fig9|   | |fig10|  | |fig11|  | |fig12|  |
    +----------+----------+----------+----------+
 
-.. |fig1|  image:: /_static/lbm_11.png  :width: 250px
-.. |fig2|  image:: /_static/lbm_12.png  :width: 250px
-.. |fig3|  image:: /_static/lbm_13.png  :width: 250px
-.. |fig4|  image:: /_static/lbm_14.png  :width: 250px
-.. |fig5|  image:: /_static/lbm_21.png  :width: 250px
-.. |fig6|  image:: /_static/lbm_23.png  :width: 250px
-.. |fig7|  image:: /_static/lbm_23.png  :width: 250px
-.. |fig8|  image:: /_static/lbm_24.png  :width: 250px
-.. |fig9|  image:: /_static/lbm_31.png  :width: 250px
-.. |fig10| image:: /_static/lbm_32.png  :width: 250px
-.. |fig11| image:: /_static/lbm_33.png  :width: 250px
-.. |fig12| image:: /_static/lbm_34.png  :width: 250px
+.. |fig1|  image:: /_static/lbm_11.png
+   :width: 250px
+.. |fig2|  image:: /_static/lbm_12.png
+   :width: 250px
+.. |fig3|  image:: /_static/lbm_13.png  
+   :width: 250px
+.. |fig4|  image:: /_static/lbm_14.png  
+   :width: 250px
+.. |fig5|  image:: /_static/lbm_21.png  
+   :width: 250px
+.. |fig6|  image:: /_static/lbm_23.png  
+   :width: 250px
+.. |fig7|  image:: /_static/lbm_23.png 
+   :width: 250px
+.. |fig8|  image:: /_static/lbm_24.png 
+   :width: 250px
+.. |fig9|  image:: /_static/lbm_31.png 
+   :width: 250px
+.. |fig10| image:: /_static/lbm_32.png 
+   :width: 250px
+.. |fig11| image:: /_static/lbm_33.png 
+   :width: 250px
+.. |fig12| image:: /_static/lbm_34.png 
+   :width: 250px
 
 - **types='means'**
 
@@ -259,12 +271,15 @@ This setting outputs the functional images of the estimated functional means.
    :class: tight-table
 
    +----------+----------+----------+
-   | |fig1|   | |fig2|   | |fig3|   |
+   | |figa|   | |figb|   | |figc|   |
    +----------+----------+----------+
 
-.. |fig1|  image:: /_static/lbm_mean1.png  :width: 250px
-.. |fig2|  image:: /_static/lbm_mean2.png  :width: 250px
-.. |fig3|  image:: /_static/lbm_mean3.png  :width: 250px
+.. |figa|  image:: /_static/lbm_mean1.png
+   :width: 250px
+.. |figb|  image:: /_static/lbm_mean2.png
+   :width: 250px
+.. |figc|  image:: /_static/lbm_mean3.png
+   :width: 250px
 
 - **types='proportions'**
 
@@ -278,7 +293,7 @@ This setting outputs the row and column mixing proportions respectively.
 
 This setting outputs the evolution of the SEM-Gibbs estimates for model parameters along the iterations.
 
-.. image:: /_static/lbm_proportion.png
+.. image:: /_static/lbm_evolution.png
    :width: 400
    :align: center
 

@@ -40,7 +40,7 @@ In this section, we detail their respective usage, aswell as parameters, output 
 
 fem_sim_data
 ~~~~~~~~~~~~~~~
-**fem_sim_data** generates simulated data.
+**fem_sim_data** generates simulated data sourced from the French bike-sharing system.
 
 .. code-block:: python
 
@@ -48,8 +48,7 @@ fem_sim_data
 
 Parameter
 ^^^^^^^^^^
-The simulated data for this algorithm are built-in and sourced from the French bike-sharing system;
-they are loaded internally and have no adjustable parameters.
+The simulated data are loaded internally and have no adjustable parameters.
 
 Value
 ^^^^^^^^^
@@ -68,6 +67,7 @@ The function **fem_sim_data** outputs a dict represents French bike-sharing syst
 Example
 ^^^^^^^^
 .. code-block:: python
+
     from BiFuncLib.simulation_data import fem_sim_data
     fem_simdata = fem_sim_data()
 
@@ -92,7 +92,7 @@ Parameter
    * - **fd**
      - dict, a functional data dict produced by the GENetLib package.
    * - **K**
-     - numeric or list, a sequence specifying the numbers of mixture components (clusters) among which the model selection criterion will choose the most appropriate number of groups. Default is 2:6.
+     - integer or list, a sequence specifying the numbers of mixture components (clusters) among which the model selection criterion will choose the most appropriate number of groups. Default is 2:6.
    * - **model**
      - list, a list defining discriminative latent mixture (DLM) models to fit. There are 12 different models: "DkBk", "DkB", "DBk", "DB", "AkjBk", "AkjB", "AkBk", "AkBk", "AjBk", "AjB", "ABk", "AB". Users may supply any subset of models as a list; the optimal result will be selected according to the specified criteria.
    * - **crit**
@@ -106,11 +106,11 @@ Parameter
    * - **eps**
      - numeric, the threshold value for the likelihood differences to stop the Fisher-EM algorithm. Default is 1e-6.
    * - **disp**
-     - bool, if true, some messages are printed during the clustering. Default is false.
+     - bool, if True, some messages are printed during the clustering. Default is False.
    * - **lambda_**
      - numeric, the (l\ :sub:`1` penalty) (between 0 and 1) for the sparse version. Default is 0.
    * - **graph**
-     - bool, if true, plot the evolution of the log-likelhood. Default is false.
+     - bool, if True, plot the evolution of the log-likelhood. Default is False.
 
 Value
 ^^^^^^^^^
@@ -159,6 +159,7 @@ If **graph=True**, a plot of the log-likelihood versus iteration number will be 
 Example
 ^^^^^^^^
 .. code-block:: python
+  
     from BiFuncLib.fem_bifunc import fem_bifunc
     from BiFuncLib.simulation_data import fem_sim_data
     from BiFuncLib.BsplineFunc import BsplineFunc
@@ -241,10 +242,13 @@ And a scatter plot:
 Example
 ^^^^^^^^
 .. code-block:: python
+  
+    import numpy as np
     from BiFuncLib.fem_bifunc import fem_bifunc
     from BiFuncLib.simulation_data import fem_sim_data
     from BiFuncLib.BsplineFunc import BsplineFunc
     from GENetLib.fda_func import create_fourier_basis
+    from BiFuncLib.FDPlot import FDPlot
     fem_simdata = fem_sim_data()
     # Create fd object
     basis = create_fourier_basis((0, 181), nbasis=25)

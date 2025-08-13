@@ -231,14 +231,13 @@
 In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function.</p>
 <section id="fem-sim-data">
 <h3>fem_sim_data<a class="headerlink" href="#fem-sim-data" title="Link to this heading">¶</a></h3>
-<p><strong>fem_sim_data</strong> generates simulated data.</p>
+<p><strong>fem_sim_data</strong> generates simulated data sourced from the French bike-sharing system.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fem_sim_data</span><span class="p">()</span>
 </pre></div>
 </div>
 <section id="parameter">
 <h4>Parameter<a class="headerlink" href="#parameter" title="Link to this heading">¶</a></h4>
-<p>The simulated data for this algorithm are built-in and sourced from the French bike-sharing system;
-they are loaded internally and have no adjustable parameters.</p>
+<p>The simulated data are loaded internally and have no adjustable parameters.</p>
 </section>
 <section id="value">
 <h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
@@ -253,6 +252,10 @@ they are loaded internally and have no adjustable parameters.</p>
 </section>
 <section id="example">
 <h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem_sim_data</span>
+<span class="n">fem_simdata</span> <span class="o">=</span> <span class="n">fem_sim_data</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="fem-bifunc">
@@ -278,7 +281,7 @@ they are loaded internally and have no adjustable parameters.</p>
 <td><p>dict, a functional data dict produced by the GENetLib package.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>K</strong></p></td>
-<td><p>numeric or list, a sequence specifying the numbers of mixture components (clusters) among which the model selection criterion will choose the most appropriate number of groups. Default is 2:6.</p></td>
+<td><p>integer or list, a sequence specifying the numbers of mixture components (clusters) among which the model selection criterion will choose the most appropriate number of groups. Default is 2:6.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>model</strong></p></td>
 <td><p>list, a list defining discriminative latent mixture (DLM) models to fit. There are 12 different models: “DkBk”, “DkB”, “DBk”, “DB”, “AkjBk”, “AkjB”, “AkBk”, “AkBk”, “AjBk”, “AjB”, “ABk”, “AB”. Users may supply any subset of models as a list; the optimal result will be selected according to the specified criteria.</p></td>
@@ -299,13 +302,13 @@ they are loaded internally and have no adjustable parameters.</p>
 <td><p>numeric, the threshold value for the likelihood differences to stop the Fisher-EM algorithm. Default is 1e-6.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>disp</strong></p></td>
-<td><p>bool, if true, some messages are printed during the clustering. Default is false.</p></td>
+<td><p>bool, if True, some messages are printed during the clustering. Default is False.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>lambda_</strong></p></td>
 <td><p>numeric, the (l<sub>1</sub> penalty) (between 0 and 1) for the sparse version. Default is 0.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>graph</strong></p></td>
-<td><p>bool, if true, plot the evolution of the log-likelhood. Default is false.</p></td>
+<td><p>bool, if True, plot the evolution of the log-likelhood. Default is False.</p></td>
 </tr>
 </tbody>
 </table>
@@ -338,6 +341,23 @@ they are loaded internally and have no adjustable parameters.</p>
 </section>
 <section id="id3">
 <h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.fem_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem_bifunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.BsplineFunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">BsplineFunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">GENetLib.fda_func</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fourier_basis</span>
+<span class="n">fem_simdata</span> <span class="o">=</span> <span class="n">fem_sim_data</span><span class="p">()</span>
+<span class="c1"># Create fd object</span>
+<span class="n">basis</span> <span class="o">=</span> <span class="n">create_fourier_basis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">181</span><span class="p">),</span> <span class="n">nbasis</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">time_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">182</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">fdobj</span> <span class="o">=</span> <span class="n">BsplineFunc</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span><span class="o">.</span><span class="n">smooth_basis</span><span class="p">(</span><span class="n">time_grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fem_simdata</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">))[</span><span class="s1">&#39;fd&#39;</span><span class="p">]</span>
+<span class="c1"># Biclustering</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">fem_bifunc</span><span class="p">(</span><span class="n">fdobj</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AkjBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DkBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">],</span> <span class="n">crit</span> <span class="o">=</span> <span class="s1">&#39;icl&#39;</span><span class="p">,</span>
+                <span class="n">init</span><span class="o">=</span><span class="s1">&#39;hclust&#39;</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Another setting</span>
+<span class="n">res2</span> <span class="o">=</span> <span class="n">fem_bifunc</span><span class="p">(</span><span class="n">fdobj</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">]],</span> <span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AkjBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DkBk&#39;</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="n">Tinit</span><span class="o">=</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span>
+                <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">graph</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="fdplot-fem-fdplot">
@@ -394,6 +414,27 @@ and displays a scatter plot which visualizes the distribution of data samples ac
 </section>
 <section id="id6">
 <h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.fem_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem_bifunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">fem_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.BsplineFunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">BsplineFunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">GENetLib.fda_func</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_fourier_basis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.FDPlot</span><span class="w"> </span><span class="kn">import</span> <span class="n">FDPlot</span>
+<span class="n">fem_simdata</span> <span class="o">=</span> <span class="n">fem_sim_data</span><span class="p">()</span>
+<span class="c1"># Create fd object</span>
+<span class="n">basis</span> <span class="o">=</span> <span class="n">create_fourier_basis</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">181</span><span class="p">),</span> <span class="n">nbasis</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">time_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">182</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">fdobj</span> <span class="o">=</span> <span class="n">BsplineFunc</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span><span class="o">.</span><span class="n">smooth_basis</span><span class="p">(</span><span class="n">time_grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fem_simdata</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">))[</span><span class="s1">&#39;fd&#39;</span><span class="p">]</span>
+<span class="c1"># Biclustering</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">fem_bifunc</span><span class="p">(</span><span class="n">fdobj</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],</span> <span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AkjBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DkBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">],</span> <span class="n">crit</span> <span class="o">=</span> <span class="s1">&#39;icl&#39;</span><span class="p">,</span>
+                <span class="n">init</span><span class="o">=</span><span class="s1">&#39;hclust&#39;</span><span class="p">,</span> <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Another setting</span>
+<span class="n">res2</span> <span class="o">=</span> <span class="n">fem_bifunc</span><span class="p">(</span><span class="n">fdobj</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="p">[</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;K&#39;</span><span class="p">]],</span> <span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AkjBk&#39;</span><span class="p">,</span> <span class="s1">&#39;DkBk&#39;</span><span class="p">],</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="n">Tinit</span><span class="o">=</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">],</span>
+                <span class="n">lambda_</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">graph</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># plot</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">fem_fdplot</span><span class="p">(</span><span class="n">fem_simdata</span><span class="p">,</span> <span class="n">fdobj</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
