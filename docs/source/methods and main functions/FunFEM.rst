@@ -241,6 +241,7 @@ And a scatter plot:
 Example
 ^^^^^^^^
 .. code-block:: python
+  
     from BiFuncLib.fem_bifunc import fem_bifunc
     from BiFuncLib.simulation_data import fem_sim_data
     from BiFuncLib.BsplineFunc import BsplineFunc
