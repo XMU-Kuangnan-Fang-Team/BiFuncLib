@@ -167,7 +167,7 @@ The function **lbm_bifunc** outputs a dict including clustering results and info
 If **display=True**, the following information will be returned. 
 
 .. image:: /_static/lbm_res.png
-   :width: 700
+   :width: 400
    :align: center
 
 
@@ -223,34 +223,70 @@ Value
 ^^^^^^^^^
 Here we illustrate the outputs of the plot function under different class configurations.
 
-For each cluster category:
+- **types='blocks'**
 
-.. table:: 
+This setting outputs the functional images of the block matrix.
+
+.. table::
+   :class: tight-table
+
+   +----------+----------+----------+----------+
+   | |fig1|   | |fig2|   | |fig3|   | |fig4|   |
+   +----------+----------+----------+----------+
+   | |fig5|   | |fig6|   | |fig7|   | |fig8|   |
+   +----------+----------+----------+----------+
+   | |fig9|   | |fig10|  | |fig11|  | |fig12|  |
+   +----------+----------+----------+----------+
+
+.. |fig1|  image:: /_static/lbm_11.png  :width: 250px
+.. |fig2|  image:: /_static/lbm_12.png  :width: 250px
+.. |fig3|  image:: /_static/lbm_13.png  :width: 250px
+.. |fig4|  image:: /_static/lbm_14.png  :width: 250px
+.. |fig5|  image:: /_static/lbm_21.png  :width: 250px
+.. |fig6|  image:: /_static/lbm_23.png  :width: 250px
+.. |fig7|  image:: /_static/lbm_23.png  :width: 250px
+.. |fig8|  image:: /_static/lbm_24.png  :width: 250px
+.. |fig9|  image:: /_static/lbm_31.png  :width: 250px
+.. |fig10| image:: /_static/lbm_32.png  :width: 250px
+.. |fig11| image:: /_static/lbm_33.png  :width: 250px
+.. |fig12| image:: /_static/lbm_34.png  :width: 250px
+
+- **types='means'**
+
+This setting outputs the functional images of the estimated functional means.
+
+.. table::
    :class: tight-table
 
    +----------+----------+----------+
    | |fig1|   | |fig2|   | |fig3|   |
    +----------+----------+----------+
-   | |fig4|   | |fig5|   | |fig6|   |
-   +----------+----------+----------+
 
-.. |fig1| image:: /_static/fem_clus1.png
-   :width: 300px
-.. |fig2| image:: /_static/fem_clus2.png
-   :width: 300px
-.. |fig3| image:: /_static/fem_clus3.png
-   :width: 300px
-.. |fig4| image:: /_static/fem_clus4.png
-   :width: 300px
-.. |fig5| image:: /_static/fem_clus5.png
-   :width: 300px
-.. |fig6| image:: /_static/fem_clus6.png
-   :width: 300px
+.. |fig1|  image:: /_static/lbm_mean1.png  :width: 250px
+.. |fig2|  image:: /_static/lbm_mean2.png  :width: 250px
+.. |fig3|  image:: /_static/lbm_mean3.png  :width: 250px
 
+- **types='proportions'**
 
-And a scatter plot:
+This setting outputs the row and column mixing proportions respectively.
 
-.. image:: /_static/fem_cluster.png
+.. image:: /_static/lbm_proportion.png
+   :width: 400
+   :align: center
+
+- **types='evolution'**
+
+This setting outputs the evolution of the SEM-Gibbs estimates for model parameters along the iterations.
+
+.. image:: /_static/lbm_proportion.png
+   :width: 400
+   :align: center
+
+- **types='likelihood'**
+
+This setting outputs the behaviour of the complete-data likelihood over the iterations of the functional LBM algorithm.
+
+.. image:: /_static/lbm_likelihood.png
    :width: 400
    :align: center
 
@@ -258,23 +294,17 @@ And a scatter plot:
 Example
 ^^^^^^^^
 .. code-block:: python
-  
-    from BiFuncLib.fem_bifunc import fem_bifunc
-    from BiFuncLib.simulation_data import fem_sim_data
-    from BiFuncLib.BsplineFunc import BsplineFunc
-    from GENetLib.fda_func import create_fourier_basis
-    fem_simdata = fem_sim_data()
-    # Create fd object
-    basis = create_fourier_basis((0, 181), nbasis=25)
-    time_grid = np.arange(1, 182).tolist()
-    fdobj = BsplineFunc(basis).smooth_basis(time_grid, np.array(fem_simdata['data'].T))['fd']
-    # Biclustering
-    res = fem_bifunc(fdobj, K=[5,6], model=['AkjBk', 'DkBk', 'DB'], crit = 'icl',
-                    init='hclust', lambda_=0.01, disp=True)
-    # Another setting
-    res2 = fem_bifunc(fdobj, K=[res['K']], model=['AkjBk', 'DkBk'], init='user', Tinit=res['P'], 
-                    lambda_=0.01, disp=True, graph = True)
-    # plot
-    FDPlot(res).fem_fdplot(fem_simdata, fdobj)
+
+  from BiFuncLib.FDPlot import FDPlot
+  from BiFuncLib.simulation_data import lbm_sim_data
+  from BiFuncLib.lbm_bifunc import lbm_bifunc
+  lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 12)
+  data1 = lbm_simdata1['data']
+  lbm_res = lbm_bifunc(data1, K=4, L=3, display=False, init='kmeans')
+  FDPlot(lbm_res).lbm_fdplot('proportions')
+  FDPlot(lbm_res).lbm_fdplot('evolution')
+  FDPlot(lbm_res).lbm_fdplot('likelihood')
+  FDPlot(lbm_res).lbm_fdplot('blocks')
+  FDPlot(lbm_res).lbm_fdplot('means')
 
 
