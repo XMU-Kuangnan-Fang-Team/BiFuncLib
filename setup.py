@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='BiFuncLib',
-    version='0.0.3',
+    version='0.0.4',
     description='A Python library for biclustering with functional data',
     author='Yuhao Zhong',
     author_email='Barry57@163.com',
@@ -35,4 +35,5 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
 )
+
 
