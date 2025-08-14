@@ -228,11 +228,11 @@ def cc_sim_data():
 def fem_sim_data():
     current_file_path = Path(__file__).resolve()
     current_dir = current_file_path.parent
-    data_path1 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_data.csv'
-    data_path2 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_position.csv'
-    data_path3 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_bonus.csv'
-    data_path4 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_names.csv'
-    data_path5 = current_dir / 'simulation_data' / 'fem_sim_data' / 'velib_dates.csv'
+    data_path1 = current_dir / 'simulation_data' / 'velib_data.csv'
+    data_path2 = current_dir / 'simulation_data' / 'velib_position.csv'
+    data_path3 = current_dir / 'simulation_data' / 'velib_bonus.csv'
+    data_path4 = current_dir / 'simulation_data' / 'velib_names.csv'
+    data_path5 = current_dir / 'simulation_data' / 'velib_dates.csv'
     df_data = pd.read_csv(data_path1)
     df_pos = pd.read_csv(data_path2)
     df_bonus = pd.read_csv(data_path3).values.ravel().tolist()
@@ -467,4 +467,5 @@ def bimax_sim_data():
     data_path = current_dir / 'simulation_data' / 'bimax_sim_data.csv'
     bimax_data = pd.read_csv(data_path).values
     return bimax_data
+
 
