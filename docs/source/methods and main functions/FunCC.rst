@@ -136,17 +136,17 @@ Parameter
    * - **beta**
      - integer 1 or 0, if **beta=1** column shift is allowed, if **beta=0** column shift is avoided. Default is 0.
    * - **const_alpha**
-     - bool, if True, row shift is contrained as constant.
+     - bool, if True, row shift is contrained as constant. Default is False.
    * - **const_beta**
-     - bool, if True, column shift is contrained as constant.
+     - bool, if True, column shift is contrained as constant. Default is False.
    * - **shift_alignment**
-     - bool, if True, the shift aligment is performed, if False no alignment is performed.
+     - bool, if True, the shift aligment is performed, if False no alignment is performed. Default is False.
    * - **shift_max**
      - numeric between 0 and 1, controls the maximal allowed shift at each iteration, in the alignment procedure with respect to the range of curve domains.
    * - **max_iter_align**
      - integer, maximum number of iteration in the alignment procedure.
    * - **plot**
-     - bool, whether to output graphs showing how each model metric changes with iterations.
+     - bool, whether to output graphs showing how each model metric changes with iterations. Default is True.
 
 
 Value
@@ -222,11 +222,11 @@ Parameter
    * - **data**
      - array, same as in **cc_bifunc**.
    * - **only_mean**
-     - bool, if True, only the template functions for each bi-cluster is displayed.
+     - bool, if True, only the template functions for each bi-cluster is displayed. Default is False.
    * - **aligned**
-     - bool, if True, the alignemd functions are displayed.
+     - bool, if True, the alignemd functions are displayed. Default is False.
    * - **warping**
-     - bool, if True, a figure representing the warping functions are displayed.
+     - bool, if True, a figure representing the warping functions are displayed. Default is False.
 
 
 Value

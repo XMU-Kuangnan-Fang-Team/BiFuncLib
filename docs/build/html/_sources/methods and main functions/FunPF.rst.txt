@@ -16,7 +16,8 @@ Key Steps
    ``g_{i,j}(t) ≈ U_p(t)^⊤ β_{i,j}``,  
    yielding coefficient vectors ``β_{i,j} ∈ ℝ^p``.
 
-2. Objective Function  
+2. Objective Function
+
    Minimize
 
    .. math::
@@ -25,28 +26,38 @@ Key Steps
              + γ_2 \sum_{i_1<i_2} ρ_τ\!\bigl(\|\β^{(r)}_{i_1}-β^{(r)}_{i_2}\|_2\bigr)
              + γ_2\sqrt{N/q} \sum_{j_1<j_2} ρ_τ\!\bigl(\|\β^{(c)}_{j_1}-β^{(c)}_{j_2}\|_2\bigr),
 
-   where  
+   where
+
    - ``γ_1`` smooths each curve via a second-order difference penalty (matrix ``M``);  
+   
    - ``γ_2`` induces **fusion** of sample / covariate coefficients via a concave penalty ``ρ_τ`` (MCP or SCAD);  
+   
    - ``β^{(r)}_i`` and ``β^{(c)}_j`` denote the stacked coefficients for sample ``i`` and covariate ``j`` respectively.
 
-3. Tuning  
+3. Tuning
+
    - **Step 1** (smoothness): fix ``γ_2 = 0`` and choose optimal ``γ_1`` via BIC.  
+
    - **Step 2** (fusion): fix ``γ_1`` and choose ``γ_2`` via a second BIC.
 
 4. ADMM Algorithm  
+
    - **Primal updates**: closed-form ridge-type solution for ``β``.  
+
    - **Dual updates**: closed-form soft-thresholding for sample- and covariate-level fusion variables.  
+
    - **Convergence**: monitored through primal and dual residuals.
 
 5. Statistical Guarantees  
+
    - **Consistency**: under mild regularity, the oracle estimator (with known clusters) achieves  
      ``‖ĝ_{k_r,k_c} - g^*_{k_r,k_c}‖ = O_P((p log(Nq)/|G_min|)^{1/2})``.  
+
    - **Clustering consistency**: a local minimizer equals the oracle estimator with probability → 1 as ``N,q → ∞``.
 
 Function
 --------------
-This method provides four core functions: **lbm_sim_data**, **lbm_bifunc** and **FDPlot.lbm_fdplot**.
+This method provides four core functions: **pf_sim_data**, **pf_bifunc** and **FDPlot.pf_fdplot**.
 In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function. 
 
 lbm_sim_data

@@ -208,31 +208,37 @@ The method is distribution-free and automatically determines the number of clust
 Each observed curve is expanded with B-spline basis functions
 <code class="docutils literal notranslate"><span class="pre">g_{i,j}(t)</span> <span class="pre">≈</span> <span class="pre">U_p(t)^⊤</span> <span class="pre">β_{i,j}</span></code>,
 yielding coefficient vectors <code class="docutils literal notranslate"><span class="pre">β_{i,j}</span> <span class="pre">∈</span> <span class="pre">ℝ^p</span></code>.</p></li>
-<li><p>Objective Function
-Minimize</p>
+<li><p>Objective Function</p>
+<p>Minimize</p>
 <div class="math notranslate nohighlight">
 \[L(β) = \frac{1}{2}\|Y - Uβ\|_2^2
        + \frac{γ_1}{2}β^⊤ M β
        + γ_2 \sum_{i_1&lt;i_2} ρ_τ\!\bigl(\|\β^{(r)}_{i_1}-β^{(r)}_{i_2}\|_2\bigr)
        + γ_2\sqrt{N/q} \sum_{j_1&lt;j_2} ρ_τ\!\bigl(\|\β^{(c)}_{j_1}-β^{(c)}_{j_2}\|_2\bigr),\]</div>
-<p>where
-- <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> smooths each curve via a second-order difference penalty (matrix <code class="docutils literal notranslate"><span class="pre">M</span></code>);
-- <code class="docutils literal notranslate"><span class="pre">γ_2</span></code> induces <strong>fusion</strong> of sample / covariate coefficients via a concave penalty <code class="docutils literal notranslate"><span class="pre">ρ_τ</span></code> (MCP or SCAD);
-- <code class="docutils literal notranslate"><span class="pre">β^{(r)}_i</span></code> and <code class="docutils literal notranslate"><span class="pre">β^{(c)}_j</span></code> denote the stacked coefficients for sample <code class="docutils literal notranslate"><span class="pre">i</span></code> and covariate <code class="docutils literal notranslate"><span class="pre">j</span></code> respectively.</p>
-</li>
-<li><p>Tuning
-- <strong>Step 1</strong> (smoothness): fix <code class="docutils literal notranslate"><span class="pre">γ_2</span> <span class="pre">=</span> <span class="pre">0</span></code> and choose optimal <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> via BIC.
-- <strong>Step 2</strong> (fusion): fix <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> and choose <code class="docutils literal notranslate"><span class="pre">γ_2</span></code> via a second BIC.</p></li>
-<li><p>ADMM Algorithm
-- <strong>Primal updates</strong>: closed-form ridge-type solution for <code class="docutils literal notranslate"><span class="pre">β</span></code>.
-- <strong>Dual updates</strong>: closed-form soft-thresholding for sample- and covariate-level fusion variables.
-- <strong>Convergence</strong>: monitored through primal and dual residuals.</p></li>
-<li><p>Statistical Guarantees
-- <strong>Consistency</strong>: under mild regularity, the oracle estimator (with known clusters) achieves</p>
-<blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">‖ĝ_{k_r,k_c}</span> <span class="pre">-</span> <span class="pre">g^*_{k_r,k_c}‖</span> <span class="pre">=</span> <span class="pre">O_P((p</span> <span class="pre">log(Nq)/|G_min|)^{1/2})</span></code>.</p>
-</div></blockquote>
+<p>where</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">γ_1</span></code> smooths each curve via a second-order difference penalty (matrix <code class="docutils literal notranslate"><span class="pre">M</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">γ_2</span></code> induces <strong>fusion</strong> of sample / covariate coefficients via a concave penalty <code class="docutils literal notranslate"><span class="pre">ρ_τ</span></code> (MCP or SCAD);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">β^{(r)}_i</span></code> and <code class="docutils literal notranslate"><span class="pre">β^{(c)}_j</span></code> denote the stacked coefficients for sample <code class="docutils literal notranslate"><span class="pre">i</span></code> and covariate <code class="docutils literal notranslate"><span class="pre">j</span></code> respectively.</p></li>
+</ul>
+</li>
+<li><p>Tuning</p>
+<ul class="simple">
+<li><p><strong>Step 1</strong> (smoothness): fix <code class="docutils literal notranslate"><span class="pre">γ_2</span> <span class="pre">=</span> <span class="pre">0</span></code> and choose optimal <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> via BIC.</p></li>
+<li><p><strong>Step 2</strong> (fusion): fix <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> and choose <code class="docutils literal notranslate"><span class="pre">γ_2</span></code> via a second BIC.</p></li>
+</ul>
+</li>
+<li><p>ADMM Algorithm</p>
+<ul class="simple">
+<li><p><strong>Primal updates</strong>: closed-form ridge-type solution for <code class="docutils literal notranslate"><span class="pre">β</span></code>.</p></li>
+<li><p><strong>Dual updates</strong>: closed-form soft-thresholding for sample- and covariate-level fusion variables.</p></li>
+<li><p><strong>Convergence</strong>: monitored through primal and dual residuals.</p></li>
+</ul>
+</li>
+<li><p>Statistical Guarantees</p>
+<ul class="simple">
+<li><p><strong>Consistency</strong>: under mild regularity, the oracle estimator (with known clusters) achieves
+<code class="docutils literal notranslate"><span class="pre">‖ĝ_{k_r,k_c}</span> <span class="pre">-</span> <span class="pre">g^*_{k_r,k_c}‖</span> <span class="pre">=</span> <span class="pre">O_P((p</span> <span class="pre">log(Nq)/|G_min|)^{1/2})</span></code>.</p></li>
 <li><p><strong>Clustering consistency</strong>: a local minimizer equals the oracle estimator with probability → 1 as <code class="docutils literal notranslate"><span class="pre">N,q</span> <span class="pre">→</span> <span class="pre">∞</span></code>.</p></li>
 </ul>
 </li>
@@ -240,7 +246,7 @@ Minimize</p>
 </section>
 <section id="function">
 <h2>Function<a class="headerlink" href="#function" title="Link to this heading">¶</a></h2>
-<p>This method provides four core functions: <strong>lbm_sim_data</strong>, <strong>lbm_bifunc</strong> and <strong>FDPlot.lbm_fdplot</strong>.
+<p>This method provides four core functions: <strong>pf_sim_data</strong>, <strong>pf_bifunc</strong> and <strong>FDPlot.pf_fdplot</strong>.
 In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function.</p>
 <section id="lbm-sim-data">
 <h3>lbm_sim_data<a class="headerlink" href="#lbm-sim-data" title="Link to this heading">¶</a></h3>
