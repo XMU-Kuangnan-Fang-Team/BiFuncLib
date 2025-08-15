@@ -56,75 +56,58 @@ The key steps are summarized below.
 6. Visualization & Interpretation
 
    FunCC outputs non-exhaustive, non-overlapping bi-clusters described by
-   :math:`\mu(t)` and row/column effects, revealing interpretable spatio-temporal
-   patterns.
+   :math:`\mu(t)` and row/column effects, revealing interpretable spatio-temporal patterns.
 
 
 Function
 --------------
-This method provides four core functions: **lbm_sim_data**, **lbm_bifunc** and **FDPlot.lbm_fdplot**.
-In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function. 
+This method provides four core functions: **cc_sim_data**, **cc_bifunc**, **cc_bifunc_cv** and **FDPlot.cc_fdplot**.
+In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function.
+Because the parameters of functions **cc_bifunc** and **cc_bifunc_cv** are similar while their outputs differ, we will explain the two functions together. 
 
-lbm_sim_data
+cc_sim_data
 ~~~~~~~~~~~~~~~
-**lbm_sim_data** generates simulated data according to the funLBM model with K=4 groups for rows and L=3 groups for columns.
+**cc_sim_data** loads simulated data according to the funCC model.
 
 .. code-block:: python
 
-    lbm_sim_data(n = 100, p = 100, t = 30, bivariate = False, noise = None, seed = 111)
+    cc_sim_data()
 
 Parameter
 ^^^^^^^^^^
 
-.. list-table:: 
-   :widths: 30 70
-   :header-rows: 1
-   :align: center
-
-   * - Parameter
-     - Description
-   * - **n**
-     - integer, the number of rows (individuals) of the simulated data array.
-   * - **p**
-     - integer, the number of columns (functional variables) of the simulated data array,
-   * - **t**
-     - integer, the number of measures for the functions of the simulated data array.
-   * - **bivariate**
-     - bool, whether to generate bivariate simulated data. Default is False.
-   * - **noise**
-     - numeric or None, the noise intensity of simulated data. Default is 0.
-   * - **seed**
-     - integer, random seeds each time when data is generated. Default is 111.
+The simulated data are loaded internally and have no adjustable parameters.
 
 Value
 ^^^^^^^^^
-The function **lbm_sim_data** has two types of outputs: one is non-bivariate data,
-which is a three-dimensional matrix; the other is bivariate data, which includes two three-dimensional matrices.
 
-- **data**: array, if bivariate=False, outputs data array of size n x p x t. If bivariate=True, outputs two distinct n x p x t datasets.
-
-- **row_clust**: array, group memberships of rows for evaluation.
-
-- **col_clust**: array, group memberships of columns for evaluation.
-
+An object of class array of dimension 30 x 7 x 240.
 
 Example
 ^^^^^^^^
 .. code-block:: python
 
-  from BiFuncLib.simulation_data import lbm_sim_data
-  lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
-  data1 = lbm_simdata1['data']
-  lbm_simdata2 = lbm_sim_data(n = 50, p = 50, t = 15, bivariate = True)
-  data2 = [lbm_simdata2['data1'],lbm_simdata2['data2']]
+  from BiFuncLib.simulation_data import cc_sim_data
+  fun_mat = cc_sim_data()
 
-lbm_bifunc
-~~~~~~~~~~~~~
-**lbm_bifunc** performs model fitting.
+
+cc_bifunc and cc_bifunc_cv
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**cc_bifunc** performs model fitting, while **cc_bifunc_cv** selects the best delta for the algorithm.
 
 .. code-block:: python
 
-  lbm_bifunc(data, K, L, maxit = 50, burn = 25, basis_name = 'fourier', nbasis = 15, gibbs_it = 3, display = False, init = 'funFEM')
+   cc_bifunc(data, delta, theta = 1, template_type = 'mean', number = 100,
+             alpha = 0, beta = 0, const_alpha = False, const_beta = False,
+             shift_alignment = False, shift_max = 0.1, max_iter_align = 100)
+
+and
+
+.. code-block:: python
+
+   cc_bifunc_cv(data, delta_list, theta = 1.5, template_type = 'mean', number = 100,
+                alpha = 0, beta = 0, const_alpha = False, const_beta = False,
+                shift_alignment = False, shift_max = 0.1, max_iter_align = 100, plot = True)
 
 Parameter
 ^^^^^^^^^^
@@ -137,53 +120,65 @@ Parameter
    * - Parameter
      - Description
    * - **data**
-     - array or list, a data array of size n x p x t or a list contains two distinct n x p x t datasets.
-   * - **K**
-     - integer or list, the number of row clusters. If It is a list, the function performs grid search for best K.
-   * - **L**
-     - integer or list, the number of column clusters. If It is a list, the function performs grid search for best L.
-   * - **maxit**
-     - integer, the maximum number of iterations of the SEM-Gibbs algorithm. Default is 100.
-   * - **burn**
-     - integer, the number of of iterations of the burn-in period. Default is 50.
-   * - **basis_name**
-     - str, the name('fourier' or 'spline') of the basis functions used for the decomposition of the functions. Default is 'fourier'.
-   * - **nbasis**
-     - integer, number of the basis functions used for the decomposition of the functions. Default is 15.
-   * - **gibbs_it**
-     - integer, number of Gibbs iterations. Default is 3.
-   * - **display**
-     - bool, if true, information about the iterations is displayed. Default is False.
-   * - **init**
-     - str, The type of initialization: 'random', 'kmeans' or 'funFEM'. Default is 'funFEM'.
+     - array, the data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T.
+   * - **delta** (no cross validation)
+     - numeric, maximum of accepted score, should be a real value > 0.
+   * - **delta_list** (with cross validation)
+     - list, a list of delta to be selected.
+   * - **theta**
+     - numeric, scaling factor should be a real value > 1.
+   * - **template_type**
+     - str, type of template required. If **template_type='mean'** the template is evaluated as the average function, if **template_type='medoid'** the template is evaluated as the medoid function. Default is 'mean'.
+   * - **number**
+     - integer, maximum number of iteration. Default is 100.
+   * - **alpha**
+     - integer 1 or 0, if **alpha=1** row shift is allowed, if **alpha=0** row shift is avoided. Default is 0.
+   * - **beta**
+     - integer 1 or 0, if **beta=1** column shift is allowed, if **beta=0** column shift is avoided. Default is 0.
+   * - **const_alpha**
+     - bool, if True, row shift is contrained as constant.
+   * - **const_beta**
+     - bool, if True, column shift is contrained as constant.
+   * - **shift_alignment**
+     - bool, if True, the shift aligment is performed, if False no alignment is performed.
+   * - **shift_max**
+     - numeric between 0 and 1, controls the maximal allowed shift at each iteration, in the alignment procedure with respect to the range of curve domains.
+   * - **max_iter_align**
+     - integer, maximum number of iteration in the alignment procedure.
+   * - **plot**
+     - bool, whether to output graphs showing how each model metric changes with iterations.
+
 
 Value
 ^^^^^^^^^
-The function **lbm_bifunc** outputs a dict including clustering results and information of the model.
+The function **cc_bifunc** outputs a dict including clustering results and information of the model.
 
-- **prms**: dict, a dict containing all fitted parameters for the best model (according to ICL).
+- **Number**: integer, the number of clustering groups.
 
-- **Z**: array, the dummy matrix of row clustering.
+- **RowxNumber**: array of bool, a matrix contains row clustering results.
 
-- **W**: array, the dummy matrix of column clustering.
+- **Numberxcol**: array of bool, a matrix contains column clustering results.
 
-- **row_clust**: list, the group memberships of rows.
+- **Parameter**: dict, a dict containing the parameters setting of the algorithm.
 
-- **col_clust**: liat, the group memberships of columns.
+The function **cc_bifunc_cv** outputs a dataframe including each model metric changes with different delta. Users can select best parameter through the function.
+If **plot=True**, then the following graphs will be displayed:
 
-- **allPrms**: dict, a dict containing the fitted parameters for all tested models.
+- Delta v.s. H score
 
-- **loglik**: array, an array contains all the log-likelihood of the iterations.
+.. image:: /_static/cc_htot.png
+   :width: 400
+   :align: center
 
-- **icl**: numeric, the value of ICL for the best model.
+- Delta v.s. number of not assigned
 
-- **allRes**: list, if perform grid search for **K** and **L**, the function outputs information for all the models.
+.. image:: /_static/cc_notassigned.png
+   :width: 400
+   :align: center
 
-- **criteria**: list, if perform grid search for **K** and **L**, the function outputs the ICL value for each model.
+- Delta v.s. number of cluster
 
-If **display=True**, the following information will be returned. 
-
-.. image:: /_static/lbm_res.png
+.. image:: /_static/cc_numclus.png
    :width: 400
    :align: center
 
@@ -192,33 +187,25 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
-  from BiFuncLib.simulation_data import lbm_sim_data
-  from BiFuncLib.lbm_bifunc import lbm_bifunc
-  from BiFuncLib.lbm_main_func import ari
-  lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 1)
-  data1 = lbm_simdata1['data']
-  lbm_res = lbm_bifunc(data1, K=4, L=3, display=True, init = 'kmeans')
-  print(ari(lbm_res['col_clust'],lbm_simdata1['col_clust']))
-  print(ari(lbm_res['row_clust'],lbm_simdata1['row_clust']))
-  # Grid search for K
-  lbm_simdata2 = lbm_sim_data(n = 50, p = 50, t = 15, bivariate = True)
-  data2 = [lbm_simdata2['data1'],lbm_simdata2['data2']]
-  lbm_res_grid = lbm_bifunc(data2, K=[2,3,4], L=[2,3], init = 'funFEM')
-  print(ari(lbm_res_grid['col_clust'],lbm_simdata2['col_clust']))
-  print(ari(lbm_res_grid['row_clust'],lbm_simdata2['row_clust']))
+  from BiFuncLib.simulation_data import cc_sim_data
+  from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
+  delta_list = np.linspace(0.1, 20, num = 21)
+  fun_mat = cc_sim_data()
+  # Find best delta
+  cc_result_cv = cc_bifunc_cv(fun_mat, delta_list = delta_list, alpha = 1, beta = 0, const_alpha = True, plot = True)
+  # Without shift_alignment
+  cc_result_1 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = False)
+  # With shift_alignment
+  cc_result_2 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = True)
 
-It is worth noting that the **ari** function computes the Adjusted Rand Index (ARI),
-which compares two clustering partitions to evaluate the accuracy of the model's classification.
-The function takes two sequences (lists or arrays) as input and returns a value between 0 and 1;
-the closer this value is to 1, the better the agreement between the two partitions.
 
-FDPlot.lbm_fdplot
+FDPlot.cc_fdplot
 ~~~~~~~~~~~~~~~~~~
-**FDPlot.lbm_fdplot** produces various kinds of visualizations.
+**FDPlot.cc_fdplot** displays the clustered function curves and provides options for mean subtraction, alignment, and warping.
 
 .. code-block:: python
 
-    FDPlot(result).lbm_fdplot(data, types='blocks')
+    FDPlot(result).cc_fdplot(data, only_mean = False, aligned = False, warping = False)
 
 
 Parameter
@@ -231,58 +218,22 @@ Parameter
    * - Parameter
      - Description
    * - **result**
-     - dict, a clustering result generated by **lbm_bifunc** function.
-   * - **types**
-     - str, The type of plot to display. Possible plots are 'blocks' (default), 'means', 'evolution', 'likelihood' and 'proportions'.
+     - dict, a clustering result generated by **cc_bifunc** function.
+   * - **data**
+     - array, same as in **cc_bifunc**.
+   * - **only_mean**
+     - bool, if True, only the template functions for each bi-cluster is displayed.
+   * - **aligned**
+     - bool, if True, the alignemd functions are displayed.
+   * - **warping**
+     - bool, if True, a figure representing the warping functions are displayed.
 
 
 Value
 ^^^^^^^^^
-Here we illustrate the outputs of the plot function under different class configurations.
+Here we illustrate the outputs of the plot function in different settings.
 
-- **types='blocks'**
-
-This setting outputs the functional images of the block matrix.
-
-.. table::
-   :class: tight-table
-
-   +----------+----------+----------+----------+
-   | |fig1|   | |fig2|   | |fig3|   | |fig4|   |
-   +----------+----------+----------+----------+
-   | |fig5|   | |fig6|   | |fig7|   | |fig8|   |
-   +----------+----------+----------+----------+
-   | |fig9|   | |fig10|  | |fig11|  | |fig12|  |
-   +----------+----------+----------+----------+
-
-.. |fig1|  image:: /_static/lbm_11.png
-   :width: 250px
-.. |fig2|  image:: /_static/lbm_12.png
-   :width: 250px
-.. |fig3|  image:: /_static/lbm_13.png  
-   :width: 250px
-.. |fig4|  image:: /_static/lbm_14.png  
-   :width: 250px
-.. |fig5|  image:: /_static/lbm_21.png  
-   :width: 250px
-.. |fig6|  image:: /_static/lbm_23.png  
-   :width: 250px
-.. |fig7|  image:: /_static/lbm_23.png 
-   :width: 250px
-.. |fig8|  image:: /_static/lbm_24.png 
-   :width: 250px
-.. |fig9|  image:: /_static/lbm_31.png 
-   :width: 250px
-.. |fig10| image:: /_static/lbm_32.png 
-   :width: 250px
-.. |fig11| image:: /_static/lbm_33.png 
-   :width: 250px
-.. |fig12| image:: /_static/lbm_34.png 
-   :width: 250px
-
-- **types='means'**
-
-This setting outputs the functional images of the estimated functional means.
+- cluster results
 
 .. table::
    :class: tight-table
@@ -291,34 +242,23 @@ This setting outputs the functional images of the estimated functional means.
    | |figa|   | |figb|   | |figc|   |
    +----------+----------+----------+
 
-.. |figa|  image:: /_static/lbm_mean1.png
+.. |figa|  image:: /_static/cc_clus1.png
    :width: 250px
-.. |figb|  image:: /_static/lbm_mean2.png
+.. |figb|  image:: /_static/cc_clus2.png
    :width: 250px
-.. |figc|  image:: /_static/lbm_mean3.png
+.. |figc|  image:: /_static/cc_clus3.png
    :width: 250px
 
-- **types='proportions'**
 
-This setting outputs the row and column mixing proportions respectively.
+- alignemd function
 
-.. image:: /_static/lbm_proportion.png
+.. image:: /_static/cc_aligned.png
    :width: 400
    :align: center
 
-- **types='evolution'**
+- warping function
 
-This setting outputs the evolution of the SEM-Gibbs estimates for model parameters along the iterations.
-
-.. image:: /_static/lbm_evolution.png
-   :width: 400
-   :align: center
-
-- **types='likelihood'**
-
-This setting outputs the behaviour of the complete-data likelihood over the iterations of the functional LBM algorithm.
-
-.. image:: /_static/lbm_likelihood.png
+.. image:: /_static/cc_warping.png
    :width: 400
    :align: center
 
@@ -327,16 +267,19 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
-  from BiFuncLib.FDPlot import FDPlot
-  from BiFuncLib.simulation_data import lbm_sim_data
-  from BiFuncLib.lbm_bifunc import lbm_bifunc
-  lbm_simdata1 = lbm_sim_data(n = 100, p = 100, t = 30, seed = 12)
-  data1 = lbm_simdata1['data']
-  lbm_res = lbm_bifunc(data1, K=4, L=3, display=False, init='kmeans')
-  FDPlot(lbm_res).lbm_fdplot('proportions')
-  FDPlot(lbm_res).lbm_fdplot('evolution')
-  FDPlot(lbm_res).lbm_fdplot('likelihood')
-  FDPlot(lbm_res).lbm_fdplot('blocks')
-  FDPlot(lbm_res).lbm_fdplot('means')
+   import numpy as np
+   from BiFuncLib.FDPlot import FDPlot
+   from BiFuncLib.simulation_data import cc_sim_data
+   from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
+   delta_list = np.linspace(0.1, 20, num = 21)
+   fun_mat = cc_sim_data()
+   # Find best delta
+   cc_result_cv = cc_bifunc_cv(fun_mat, delta_list = delta_list, alpha = 1, beta = 0, const_alpha = True, plot = True)
+   # Without shift_alignment
+   cc_result_1 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = False)
+   FDPlot(cc_result_1).cc_fdplot(fun_mat, only_mean = True, aligned = False, warping = False)
+   # With shift_alignment
+   cc_result_2 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = True)
+   FDPlot(cc_result_2).cc_fdplot(fun_mat, only_mean = False, aligned = True, warping = True)
 
 

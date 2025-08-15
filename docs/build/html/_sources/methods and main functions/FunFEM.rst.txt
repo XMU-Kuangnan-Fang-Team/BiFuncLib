@@ -40,7 +40,7 @@ In this section, we detail their respective usage, aswell as parameters, output 
 
 fem_sim_data
 ~~~~~~~~~~~~~~~
-**fem_sim_data** generates simulated data sourced from the French bike-sharing system.
+**fem_sim_data** loads real-world data sourced from the French bike-sharing system.
 
 .. code-block:: python
 
@@ -241,7 +241,7 @@ And a scatter plot:
 
 Example
 ^^^^^^^^
-C
+.. code-block:: python
   
     import numpy as np
     from BiFuncLib.fem_bifunc import fem_bifunc

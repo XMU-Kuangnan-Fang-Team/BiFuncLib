@@ -138,7 +138,7 @@ Parameter
    * - **display**
      - bool, if true, information about the iterations is displayed. Default is False.
    * - **init**
-     - str, The type of initialization: 'random', 'kmeans' or 'funFEM'. Default is 'funFEM'.
+     - str, the type of initialization: 'random', 'kmeans' or 'funFEM'. Default is 'funFEM'.
 
 Value
 ^^^^^^^^^
