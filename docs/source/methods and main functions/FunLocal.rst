@@ -1,7 +1,7 @@
-FunFEM
+FunLocal
 =========================
 
-.. _funfem-label:
+.. _funlocal-label:
 
 Method Description
 ------------------

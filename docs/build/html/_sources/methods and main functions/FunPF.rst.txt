@@ -1,7 +1,7 @@
-FunFEM
+FunPF
 =========================
 
-.. _funfem-label:
+.. _funpf-label:
 
 Method Description
 ------------------

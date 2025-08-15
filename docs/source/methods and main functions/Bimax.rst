@@ -1,7 +1,7 @@
-FunFEM
+Bimax
 =========================
 
-.. _funfem-label:
+.. _bimax-label:
 
 Method Description
 ------------------

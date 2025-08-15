@@ -1,7 +1,7 @@
-FunFEM
+SSVD
 =========================
 
-.. _funfem-label:
+.. _ssvd-label:
 
 Method Description
 ------------------

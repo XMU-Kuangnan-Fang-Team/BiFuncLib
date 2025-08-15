@@ -241,7 +241,7 @@ And a scatter plot:
 
 Example
 ^^^^^^^^
-.. code-block:: python
+C
   
     import numpy as np
     from BiFuncLib.fem_bifunc import fem_bifunc

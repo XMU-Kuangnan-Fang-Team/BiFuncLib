@@ -1,7 +1,7 @@
-FunFEM
+CVX
 =========================
 
-.. _funfem-label:
+.. _cvx-label:
 
 Method Description
 ------------------

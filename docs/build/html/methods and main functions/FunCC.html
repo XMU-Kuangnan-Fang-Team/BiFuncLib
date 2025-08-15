@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunFEM &mdash; BiFuncLib's documentation  documentation</title>
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunCC &mdash; BiFuncLib's documentation  documentation</title>
 
     
         
@@ -29,6 +29,7 @@
             <script src="../_static/documentation_options.js?v=5929fcd5"></script>
             <script src="../_static/doctools.js?v=9bcbadda"></script>
             <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+            <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
 
     
@@ -37,8 +38,8 @@
     
             <link rel="index" title="Index" href="../genindex.html"/>
             <link rel="search" title="Search" href="../search.html"/>
-            <link rel="next" title="FunFEM" href="FunPF.html"/>
-            <link rel="prev" title="FunFEM" href="FunLBM.html"/>
+            <link rel="next" title="FunPF" href="FunPF.html"/>
+            <link rel="prev" title="FunLBM" href="FunLBM.html"/>
 
     
 
@@ -105,7 +106,7 @@
     </li>
 
 
-    <li class="is-active">FunFEM</li>
+    <li class="is-active">FunCC</li>
 
                     </ul>
                 </div>
@@ -152,19 +153,18 @@
     <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="methods%20and%20main%20functions.html">Methods and Main Functions</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="FunFEM.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="FunLBM.html">FunFEM</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="FunPF.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="FunSparse.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Bimax.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="SSVD.html">FunFEM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CVX.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLBM.html">FunLBM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FunCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunPF.html">FunPF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSparse.html">FunSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunSAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunLocal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bimax.html">Bimax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSVD.html">SSVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CVX.html">CVX</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html">Main References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html#other-references">Other References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
 </ul>
 
@@ -192,53 +192,317 @@
                         
                         <article class="content is-medium sphinx-body">
                             
-  <section id="funfem">
-<h1>FunFEM<a class="headerlink" href="#funfem" title="Link to this heading">¶</a></h1>
+  <section id="funcc">
+<h1>FunCC<a class="headerlink" href="#funcc" title="Link to this heading">¶</a></h1>
+<p id="funcc-label">This page references the <a class="reference external" href="https://search.r-project.org/CRAN/refmans/FunCC/html/00Index.html">official documentation of FunCC</a>.</p>
 <section id="method-description">
-<span id="funfem-label"></span><h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+<h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+<p>FunCC is a non-parametric, greedy bi-clustering algorithm for matrices whose
+entries are continuous curves.  It extends the Cheng &amp; Church strategy to the
+functional domain and optionally co-estimates curve alignment (phase registration).
+The key steps are summarized below.</p>
+<ol class="arabic">
+<li><p>Functional Data Representation
+Discrete observations are smoothed into continuous curves <span class="math notranslate nohighlight">\(f_{ij}(t)\)</span>,
+forming an <span class="math notranslate nohighlight">\(n \times m\)</span> functional matrix.</p></li>
+<li><p>Ideal Bi-Cluster Model &amp; H-score</p>
+<p>Within a bi-cluster <span class="math notranslate nohighlight">\(B(I,J)\)</span> each curve is modeled as</p>
+<div class="math notranslate nohighlight">
+\[f_{ij}(t) = \mu(t) + \alpha_i(t) + \beta_j(t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the cluster mean curve and <span class="math notranslate nohighlight">\(\alpha_i,\beta_j\)</span>
+capture row- and column-specific deviations.  The <strong>H-score</strong> quantifies
+within-cluster dispersion via the average squared <span class="math notranslate nohighlight">\(L^2\)</span> distance to
+the fitted template.</p>
+</li>
+<li><p>Greedy Iterative Search (Functional Cheng &amp; Church)</p>
+<ul class="simple">
+<li><p>Multiple-node deletion: remove rows/columns whose contribution exceeds <span class="math notranslate nohighlight">\(\theta \cdot H\)</span>.</p></li>
+<li><p>Single-node deletion: iteratively drop the worst row/column until
+<span class="math notranslate nohighlight">\(H &lt; \delta\)</span>.</p></li>
+<li><p>Node addition: re-introduce previously removed rows/columns that do not
+increase <span class="math notranslate nohighlight">\(H\)</span>.</p></li>
+</ul>
+<p>After a cluster is finalized, assigned elements are masked; <strong>Bimax</strong> locates the
+largest remaining sub-matrix and the process repeats.</p>
+</li>
+<li><p>Optional Curve Alignment</p>
+<p>A shift warping <span class="math notranslate nohighlight">\(w_{ij}(t)=t+q_{ij}\)</span> is estimated per curve to minimize
+the squared <span class="math notranslate nohighlight">\(L^2\)</span> distance to the current template.  Alignment and
+template updates iterate until convergence.</p>
+</li>
+<li><p>Parameter Tuning</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\delta\)</span> balances cluster quality vs. quantity.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta\)</span> controls the aggressiveness of multiple-node deletion.</p></li>
+</ul>
+</li>
+<li><p>Visualization &amp; Interpretation</p>
+<p>FunCC outputs non-exhaustive, non-overlapping bi-clusters described by
+<span class="math notranslate nohighlight">\(\mu(t)\)</span> and row/column effects, revealing interpretable spatio-temporal
+patterns.</p>
+</li>
+</ol>
 </section>
-<section id="usage-of-functions">
-<h2>Usage of Functions<a class="headerlink" href="#usage-of-functions" title="Link to this heading">¶</a></h2>
-</section>
-<section id="model-function">
-<h2>Model function<a class="headerlink" href="#model-function" title="Link to this heading">¶</a></h2>
-<section id="fem-sim-data">
-<h3>fem_sim_data<a class="headerlink" href="#fem-sim-data" title="Link to this heading">¶</a></h3>
-<section id="prameter">
-<h4>Prameter<a class="headerlink" href="#prameter" title="Link to this heading">¶</a></h4>
+<section id="function">
+<h2>Function<a class="headerlink" href="#function" title="Link to this heading">¶</a></h2>
+<p>This method provides four core functions: <strong>lbm_sim_data</strong>, <strong>lbm_bifunc</strong> and <strong>FDPlot.lbm_fdplot</strong>.
+In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function.</p>
+<section id="lbm-sim-data">
+<h3>lbm_sim_data<a class="headerlink" href="#lbm-sim-data" title="Link to this heading">¶</a></h3>
+<p><strong>lbm_sim_data</strong> generates simulated data according to the funLBM model with K=4 groups for rows and L=3 groups for columns.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">bivariate</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">111</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="parameter">
+<h4>Parameter<a class="headerlink" href="#parameter" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>n</strong></p></td>
+<td><p>integer, the number of rows (individuals) of the simulated data array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>p</strong></p></td>
+<td><p>integer, the number of columns (functional variables) of the simulated data array,</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>t</strong></p></td>
+<td><p>integer, the number of measures for the functions of the simulated data array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>bivariate</strong></p></td>
+<td><p>bool, whether to generate bivariate simulated data. Default is False.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>noise</strong></p></td>
+<td><p>numeric or None, the noise intensity of simulated data. Default is 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>seed</strong></p></td>
+<td><p>integer, random seeds each time when data is generated. Default is 111.</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="value">
 <h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
+<p>The function <strong>lbm_sim_data</strong> has two types of outputs: one is non-bivariate data,
+which is a three-dimensional matrix; the other is bivariate data, which includes two three-dimensional matrices.</p>
+<ul class="simple">
+<li><p><strong>data</strong>: array, if bivariate=False, outputs data array of size n x p x t. If bivariate=True, outputs two distinct n x p x t datasets.</p></li>
+<li><p><strong>row_clust</strong>: array, group memberships of rows for evaluation.</p></li>
+<li><p><strong>col_clust</strong>: array, group memberships of columns for evaluation.</p></li>
+</ul>
 </section>
 <section id="example">
 <h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">lbm_sim_data</span>
+<span class="n">lbm_simdata1</span> <span class="o">=</span> <span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">lbm_simdata1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">lbm_simdata2</span> <span class="o">=</span> <span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">bivariate</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data2</span> <span class="o">=</span> <span class="p">[</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;data1&#39;</span><span class="p">],</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;data2&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
 </section>
 </section>
-<section id="fem-bifunc">
-<h3>fem_bifunc<a class="headerlink" href="#fem-bifunc" title="Link to this heading">¶</a></h3>
+<section id="lbm-bifunc">
+<h3>lbm_bifunc<a class="headerlink" href="#lbm-bifunc" title="Link to this heading">¶</a></h3>
+<p><strong>lbm_bifunc</strong> performs model fitting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">lbm_bifunc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">maxit</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">burn</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">basis_name</span> <span class="o">=</span> <span class="s1">&#39;fourier&#39;</span><span class="p">,</span> <span class="n">nbasis</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">gibbs_it</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="s1">&#39;funFEM&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <section id="id1">
-<h4>Prameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<h4>Parameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>data</strong></p></td>
+<td><p>array or list, a data array of size n x p x t or a list contains two distinct n x p x t datasets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>K</strong></p></td>
+<td><p>integer or list, the number of row clusters. If It is a list, the function performs grid search for best K.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>L</strong></p></td>
+<td><p>integer or list, the number of column clusters. If It is a list, the function performs grid search for best L.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>maxit</strong></p></td>
+<td><p>integer, the maximum number of iterations of the SEM-Gibbs algorithm. Default is 100.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>burn</strong></p></td>
+<td><p>integer, the number of of iterations of the burn-in period. Default is 50.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>basis_name</strong></p></td>
+<td><p>str, the name(‘fourier’ or ‘spline’) of the basis functions used for the decomposition of the functions. Default is ‘fourier’.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>nbasis</strong></p></td>
+<td><p>integer, number of the basis functions used for the decomposition of the functions. Default is 15.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>gibbs_it</strong></p></td>
+<td><p>integer, number of Gibbs iterations. Default is 3.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>display</strong></p></td>
+<td><p>bool, if true, information about the iterations is displayed. Default is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>init</strong></p></td>
+<td><p>str, The type of initialization: ‘random’, ‘kmeans’ or ‘funFEM’. Default is ‘funFEM’.</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="id2">
 <h4>Value<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<p>The function <strong>lbm_bifunc</strong> outputs a dict including clustering results and information of the model.</p>
+<ul class="simple">
+<li><p><strong>prms</strong>: dict, a dict containing all fitted parameters for the best model (according to ICL).</p></li>
+<li><p><strong>Z</strong>: array, the dummy matrix of row clustering.</p></li>
+<li><p><strong>W</strong>: array, the dummy matrix of column clustering.</p></li>
+<li><p><strong>row_clust</strong>: list, the group memberships of rows.</p></li>
+<li><p><strong>col_clust</strong>: liat, the group memberships of columns.</p></li>
+<li><p><strong>allPrms</strong>: dict, a dict containing the fitted parameters for all tested models.</p></li>
+<li><p><strong>loglik</strong>: array, an array contains all the log-likelihood of the iterations.</p></li>
+<li><p><strong>icl</strong>: numeric, the value of ICL for the best model.</p></li>
+<li><p><strong>allRes</strong>: list, if perform grid search for <strong>K</strong> and <strong>L</strong>, the function outputs information for all the models.</p></li>
+<li><p><strong>criteria</strong>: list, if perform grid search for <strong>K</strong> and <strong>L</strong>, the function outputs the ICL value for each model.</p></li>
+</ul>
+<p>If <strong>display=True</strong>, the following information will be returned.</p>
+<a class="reference internal image-reference" href="../_images/lbm_res.png"><img alt="../_images/lbm_res.png" class="align-center" src="../_images/lbm_res.png" style="width: 400px;" />
+</a>
 </section>
 <section id="id3">
 <h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">lbm_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.lbm_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">lbm_bifunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.lbm_main_func</span><span class="w"> </span><span class="kn">import</span> <span class="n">ari</span>
+<span class="n">lbm_simdata1</span> <span class="o">=</span> <span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">lbm_simdata1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">lbm_res</span> <span class="o">=</span> <span class="n">lbm_bifunc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="s1">&#39;kmeans&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ari</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">[</span><span class="s1">&#39;col_clust&#39;</span><span class="p">],</span><span class="n">lbm_simdata1</span><span class="p">[</span><span class="s1">&#39;col_clust&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ari</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">[</span><span class="s1">&#39;row_clust&#39;</span><span class="p">],</span><span class="n">lbm_simdata1</span><span class="p">[</span><span class="s1">&#39;row_clust&#39;</span><span class="p">]))</span>
+<span class="c1"># Grid search for K</span>
+<span class="n">lbm_simdata2</span> <span class="o">=</span> <span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">bivariate</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">data2</span> <span class="o">=</span> <span class="p">[</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;data1&#39;</span><span class="p">],</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;data2&#39;</span><span class="p">]]</span>
+<span class="n">lbm_res_grid</span> <span class="o">=</span> <span class="n">lbm_bifunc</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">L</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">init</span> <span class="o">=</span> <span class="s1">&#39;funFEM&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ari</span><span class="p">(</span><span class="n">lbm_res_grid</span><span class="p">[</span><span class="s1">&#39;col_clust&#39;</span><span class="p">],</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;col_clust&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ari</span><span class="p">(</span><span class="n">lbm_res_grid</span><span class="p">[</span><span class="s1">&#39;row_clust&#39;</span><span class="p">],</span><span class="n">lbm_simdata2</span><span class="p">[</span><span class="s1">&#39;row_clust&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>It is worth noting that the <strong>ari</strong> function computes the Adjusted Rand Index (ARI),
+which compares two clustering partitions to evaluate the accuracy of the model’s classification.
+The function takes two sequences (lists or arrays) as input and returns a value between 0 and 1;
+the closer this value is to 1, the better the agreement between the two partitions.</p>
 </section>
 </section>
-</section>
-<section id="plot-function">
-<h2>Plot function<a class="headerlink" href="#plot-function" title="Link to this heading">¶</a></h2>
-<section id="fdplot-fem-fdplot">
-<h3>FDPlot.fem_fdplot<a class="headerlink" href="#fdplot-fem-fdplot" title="Link to this heading">¶</a></h3>
+<section id="fdplot-lbm-fdplot">
+<h3>FDPlot.lbm_fdplot<a class="headerlink" href="#fdplot-lbm-fdplot" title="Link to this heading">¶</a></h3>
+<p><strong>FDPlot.lbm_fdplot</strong> produces various kinds of visualizations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FDPlot</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="s1">&#39;blocks&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 <section id="id4">
-<h4>Prameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<h4>Parameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>result</strong></p></td>
+<td><p>dict, a clustering result generated by <strong>lbm_bifunc</strong> function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>types</strong></p></td>
+<td><p>str, The type of plot to display. Possible plots are ‘blocks’ (default), ‘means’, ‘evolution’, ‘likelihood’ and ‘proportions’.</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="id5">
 <h4>Value<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>Here we illustrate the outputs of the plot function under different class configurations.</p>
+<ul class="simple">
+<li><p><strong>types=’blocks’</strong></p></li>
+</ul>
+<p>This setting outputs the functional images of the block matrix.</p>
+<table class="tight-table docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/lbm_11.png"><img alt="fig1" src="../_images/lbm_11.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_12.png"><img alt="fig2" src="../_images/lbm_12.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_13.png"><img alt="fig3" src="../_images/lbm_13.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_14.png"><img alt="fig4" src="../_images/lbm_14.png" style="width: 250px;" /></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../_images/lbm_21.png"><img alt="fig5" src="../_images/lbm_21.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_23.png"><img alt="fig6" src="../_images/lbm_23.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_23.png"><img alt="fig7" src="../_images/lbm_23.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_24.png"><img alt="fig8" src="../_images/lbm_24.png" style="width: 250px;" /></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/lbm_31.png"><img alt="fig9" src="../_images/lbm_31.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_32.png"><img alt="fig10" src="../_images/lbm_32.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_33.png"><img alt="fig11" src="../_images/lbm_33.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_34.png"><img alt="fig12" src="../_images/lbm_34.png" style="width: 250px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>types=’means’</strong></p></li>
+</ul>
+<p>This setting outputs the functional images of the estimated functional means.</p>
+<table class="tight-table docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/lbm_mean1.png"><img alt="figa" src="../_images/lbm_mean1.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_mean2.png"><img alt="figb" src="../_images/lbm_mean2.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/lbm_mean3.png"><img alt="figc" src="../_images/lbm_mean3.png" style="width: 250px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p><strong>types=’proportions’</strong></p></li>
+</ul>
+<p>This setting outputs the row and column mixing proportions respectively.</p>
+<a class="reference internal image-reference" href="../_images/lbm_proportion.png"><img alt="../_images/lbm_proportion.png" class="align-center" src="../_images/lbm_proportion.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p><strong>types=’evolution’</strong></p></li>
+</ul>
+<p>This setting outputs the evolution of the SEM-Gibbs estimates for model parameters along the iterations.</p>
+<a class="reference internal image-reference" href="../_images/lbm_evolution.png"><img alt="../_images/lbm_evolution.png" class="align-center" src="../_images/lbm_evolution.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p><strong>types=’likelihood’</strong></p></li>
+</ul>
+<p>This setting outputs the behaviour of the complete-data likelihood over the iterations of the functional LBM algorithm.</p>
+<a class="reference internal image-reference" href="../_images/lbm_likelihood.png"><img alt="../_images/lbm_likelihood.png" class="align-center" src="../_images/lbm_likelihood.png" style="width: 400px;" />
+</a>
 </section>
 <section id="id6">
 <h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.FDPlot</span><span class="w"> </span><span class="kn">import</span> <span class="n">FDPlot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">lbm_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.lbm_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">lbm_bifunc</span>
+<span class="n">lbm_simdata1</span> <span class="o">=</span> <span class="n">lbm_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">lbm_simdata1</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">lbm_res</span> <span class="o">=</span> <span class="n">lbm_bifunc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;kmeans&#39;</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="s1">&#39;proportions&#39;</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="s1">&#39;evolution&#39;</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="s1">&#39;likelihood&#39;</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="s1">&#39;blocks&#39;</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">lbm_res</span><span class="p">)</span><span class="o">.</span><span class="n">lbm_fdplot</span><span class="p">(</span><span class="s1">&#39;means&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 </section>
@@ -251,13 +515,13 @@
                                 <p class="has-text-weight-light is-size-6 my-4">
                                     Previous:
                                     <a href="FunLBM.html"
-                                       title="previous chapter">FunFEM</a>
+                                       title="previous chapter">FunLBM</a>
                                 
                                     |
                                 
                                     Next:
                                     <a href="FunPF.html"
-                                       title="next chapter">FunFEM</a>
+                                       title="next chapter">FunPF</a>
                                 </p>
                             
                         </article>
@@ -267,27 +531,23 @@
   <div class="content localtoc">
     <p class="has-text-weight-bold">On this page</p>
     <ul>
-<li><a class="reference internal" href="#">FunFEM</a><ul>
+<li><a class="reference internal" href="#">FunCC</a><ul>
 <li><a class="reference internal" href="#method-description">Method Description</a></li>
-<li><a class="reference internal" href="#usage-of-functions">Usage of Functions</a></li>
-<li><a class="reference internal" href="#model-function">Model function</a><ul>
-<li><a class="reference internal" href="#fem-sim-data">fem_sim_data</a><ul>
-<li><a class="reference internal" href="#prameter">Prameter</a></li>
+<li><a class="reference internal" href="#function">Function</a><ul>
+<li><a class="reference internal" href="#lbm-sim-data">lbm_sim_data</a><ul>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
 <li><a class="reference internal" href="#value">Value</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#fem-bifunc">fem_bifunc</a><ul>
-<li><a class="reference internal" href="#id1">Prameter</a></li>
+<li><a class="reference internal" href="#lbm-bifunc">lbm_bifunc</a><ul>
+<li><a class="reference internal" href="#id1">Parameter</a></li>
 <li><a class="reference internal" href="#id2">Value</a></li>
 <li><a class="reference internal" href="#id3">Example</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a class="reference internal" href="#plot-function">Plot function</a><ul>
-<li><a class="reference internal" href="#fdplot-fem-fdplot">FDPlot.fem_fdplot</a><ul>
-<li><a class="reference internal" href="#id4">Prameter</a></li>
+<li><a class="reference internal" href="#fdplot-lbm-fdplot">FDPlot.lbm_fdplot</a><ul>
+<li><a class="reference internal" href="#id4">Parameter</a></li>
 <li><a class="reference internal" href="#id5">Value</a></li>
 <li><a class="reference internal" href="#id6">Example</a></li>
 </ul>

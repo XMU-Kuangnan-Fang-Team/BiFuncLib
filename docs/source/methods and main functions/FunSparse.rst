@@ -1,7 +1,7 @@
-FunFEM
+FunSparse
 =========================
 
-.. _funfem-label:
+.. _funsparse-label:
 
 Method Description
 ------------------

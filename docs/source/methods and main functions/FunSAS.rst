@@ -1,7 +1,7 @@
-FunFEM
+FunSAS
 =========================
 
-.. _funfem-label:
+.. _funsas-label:
 
 Method Description
 ------------------
