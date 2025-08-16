@@ -307,7 +307,7 @@ def sasfclust_init(data, pert = 0, grid = list(np.linspace(0.01, 1, 100)),
             class_ = gmm.fit_predict(points)
         elif init == 'hierarchical':
             Z = linkage(points, method='ward')
-            class_ = fcluster(Z, t=G, criterion='maxclust')
+            class_ = fcluster(Z, t=G, criterion='maxclust') - 1
         else:
             raise ValueError("Wrong initialization!")
     else:
@@ -601,4 +601,5 @@ def get_zero(mod, mu_fd=None):
         M = P @ mu_eval.T
         fraction = np.sum(np.abs(M) == 0) / M.size
         return fraction
+
 
