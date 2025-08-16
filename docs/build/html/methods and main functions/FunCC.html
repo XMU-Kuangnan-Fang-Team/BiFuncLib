@@ -323,13 +323,13 @@ Because the parameters of functions <strong>cc_bifunc</strong> and <strong>cc_bi
 <td><p>integer 1 or 0, if <strong>beta=1</strong> column shift is allowed, if <strong>beta=0</strong> column shift is avoided. Default is 0.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>const_alpha</strong></p></td>
-<td><p>bool, if True, row shift is contrained as constant.</p></td>
+<td><p>bool, if True, row shift is contrained as constant. Default is False.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>const_beta</strong></p></td>
-<td><p>bool, if True, column shift is contrained as constant.</p></td>
+<td><p>bool, if True, column shift is contrained as constant. Default is False.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>shift_alignment</strong></p></td>
-<td><p>bool, if True, the shift aligment is performed, if False no alignment is performed.</p></td>
+<td><p>bool, if True, the shift aligment is performed, if False no alignment is performed. Default is False.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>shift_max</strong></p></td>
 <td><p>numeric between 0 and 1, controls the maximal allowed shift at each iteration, in the alignment procedure with respect to the range of curve domains.</p></td>
@@ -338,7 +338,7 @@ Because the parameters of functions <strong>cc_bifunc</strong> and <strong>cc_bi
 <td><p>integer, maximum number of iteration in the alignment procedure.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>plot</strong></p></td>
-<td><p>bool, whether to output graphs showing how each model metric changes with iterations.</p></td>
+<td><p>bool, whether to output graphs showing how each model metric changes with iterations. Default is True.</p></td>
 </tr>
 </tbody>
 </table>
@@ -412,13 +412,13 @@ If <strong>plot=True</strong>, then the following graphs will be displayed:</p>
 <td><p>array, same as in <strong>cc_bifunc</strong>.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>only_mean</strong></p></td>
-<td><p>bool, if True, only the template functions for each bi-cluster is displayed.</p></td>
+<td><p>bool, if True, only the template functions for each bi-cluster is displayed. Default is False.</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>aligned</strong></p></td>
-<td><p>bool, if True, the alignemd functions are displayed.</p></td>
+<td><p>bool, if True, the alignemd functions are displayed. Default is False.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>warping</strong></p></td>
-<td><p>bool, if True, a figure representing the warping functions are displayed.</p></td>
+<td><p>bool, if True, a figure representing the warping functions are displayed. Default is False.</p></td>
 </tr>
 </tbody>
 </table>

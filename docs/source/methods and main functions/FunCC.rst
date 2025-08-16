@@ -121,9 +121,9 @@ Parameter
      - Description
    * - **data**
      - array, the data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,...,n, for a functional variable m, m=1,...,p, at point t, t=1,...,T.
-   * - **delta** (no cross validation)
+   * - **delta (no cross validation)**
      - numeric, maximum of accepted score, should be a real value > 0.
-   * - **delta_list** (with cross validation)
+   * - **delta_list (with cross validation)**
      - list, a list of delta to be selected.
    * - **theta**
      - numeric, scaling factor should be a real value > 1.

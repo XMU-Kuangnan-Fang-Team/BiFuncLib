@@ -36,7 +36,7 @@ Optionally, sparsity-inducing regularization (l\ :sub:`1` penalty) is applied to
 Function
 --------------
 This method provides three core functions: **fem_sim_data**, **fem_bifunc**, and **FDPlot.fem_fdplot**.
-In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function. 
+In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function. 
 
 fem_sim_data
 ~~~~~~~~~~~~~~~

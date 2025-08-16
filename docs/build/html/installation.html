@@ -180,6 +180,59 @@
                             
   <section id="installation">
 <h1>installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
+<section id="install-from-pypi">
+<h2>Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Link to this heading">¶</a></h2>
+<p>It is recommended to use <code class="docutils literal notranslate"><span class="pre">pip</span></code> for installation. You need to check the upgrade at the beginning:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+<p>Then you can instll this package using the code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>BiFuncLib
+</pre></div>
+</div>
+<p>You can also use the installation method for a specified version.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">BiFuncLib</span><span class="o">==</span><span class="m">0</span>.0.1
+</pre></div>
+</div>
+</section>
+<section id="install-from-source">
+<h2>Install from source<a class="headerlink" href="#install-from-source" title="Link to this heading">¶</a></h2>
+<p>If you want to work with the latest development version or wish to contribute to <strong>BiFuncLib</strong>, this way will be suitable.</p>
+<p>Clone the latest source code from GitHub and navigate into the directory of the cloned project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib.git
+<span class="nb">cd</span><span class="w"> </span>BiFuncLib
+</pre></div>
+</div>
+<p>Run the following command to install the project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Alternatively, if you want to install the project in development mode (which will install the project along with all development dependencies), you can use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>If you prefer to use the setup.py script to install, you can run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
+<p>Dependencies and version control for running <strong>BiFuncLib</strong>:</p>
+<ul class="simple">
+<li><p>genetlib&gt;=1.2.4</p></li>
+<li><p>matplotlib&gt;=3.7.1</p></li>
+<li><p>networkx&gt;=2.8.4</p></li>
+<li><p>numpy==1.24.3</p></li>
+<li><p>pandas&gt;=1.5.3</p></li>
+<li><p>scikit_learn&gt;=1.2.2</p></li>
+<li><p>scikit-learn-extra</p></li>
+<li><p>scipy&gt;=1.10.1</p></li>
+<li><p>seaborn&gt;=0.13.2</p></li>
+<li><p>setuptools==67.8.0</p></li>
+</ul>
+<p>When you install using the <strong>pip install</strong> method, these dependencies will be automatically installed.</p>
+</section>
 </section>
 
 
@@ -202,6 +255,18 @@
                     </div>
                     <div class="column is-2 mt-2  is-family-sans-serif">
                         
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">installation</a><ul>
+<li><a class="reference internal" href="#install-from-pypi">Install from PyPI</a></li>
+<li><a class="reference internal" href="#install-from-source">Install from source</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
                         
                     </div>
                 </div>
