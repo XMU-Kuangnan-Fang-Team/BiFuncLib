@@ -67,7 +67,7 @@ Because the parameters of functions **cc_bifunc** and **cc_bifunc_cv** are simil
 
 cc_sim_data
 ~~~~~~~~~~~~~~~
-**cc_sim_data** loads simulated data according to the funCC model.
+**cc_sim_data** loads simulated data according to the FunCC model.
 
 .. code-block:: python
 
