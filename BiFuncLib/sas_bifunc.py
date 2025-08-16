@@ -109,16 +109,6 @@ def sas_bifunc(X = None, timeindex = None, curve = None, grid = None, q = 30, pa
     return out
 
 
-
-'''
-from simulation_data import sas_sim_data
-sas_simdata_0 = sas_sim_data(0, n_i = 20, var_e = 1, var_b = 0.25)
-sas_result = sas_bifunc(X = sas_simdata_0['X'], grid = sas_simdata_0['grid'],
-                        lambda_s = 1e-6, lambda_l = 10, G = 2, maxit = 5, q = 10)
-'''
-
-
-
 def sas_bifunc_cv(X = None, timeindex = None, curve = None, grid = None, q = 30,
                   lambda_l_seq = None, lambda_s_seq = None, G_seq = None, tol = 1e-7, maxit = 50,
                   par_LQA = None, plot = False, trace = False, init = "kmeans", varcon = "diagonal",
@@ -226,4 +216,5 @@ def sas_bifunc_cv(X = None, timeindex = None, curve = None, grid = None, q = 30,
            "zeros": zeros_all,
            "ms": (m1, m2, m3)}
     return out
+
 
