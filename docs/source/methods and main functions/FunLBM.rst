@@ -45,8 +45,8 @@ This allows for an interpretable summary of the data, highlighting patterns and 
 
 Function
 --------------
-This method provides four core functions: **lbm_sim_data**, **lbm_bifunc** and **FDPlot.lbm_fdplot**.
-In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function. 
+This method provides three core functions: **lbm_sim_data**, **lbm_bifunc** and **FDPlot.lbm_fdplot**.
+In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function. 
 
 lbm_sim_data
 ~~~~~~~~~~~~~~~

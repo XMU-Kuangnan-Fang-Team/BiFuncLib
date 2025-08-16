@@ -57,8 +57,8 @@ Key Steps
 
 Function
 --------------
-This method provides four core functions: **pf_sim_data**, **pf_bifunc** and **FDPlot.pf_fdplot**.
-In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function. 
+This method provides three core functions: **pf_sim_data**, **pf_bifunc** and **FDPlot.pf_fdplot**.
+In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function. 
 
 pf_sim_data
 ~~~~~~~~~~~~~~~
