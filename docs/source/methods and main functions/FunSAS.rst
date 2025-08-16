@@ -140,83 +140,119 @@ Parameter
    * - **q**
      - numeric, the dimension of the set of B-spline functions. Default is 30.
    * - **par_LQA**
-     - 
-   * - **alpha**
-     - integer 1 or 0, if **alpha=1** row shift is allowed, if **alpha=0** row shift is avoided. Default is 0.
-   * - **beta**
-     - integer 1 or 0, if **beta=1** column shift is allowed, if **beta=0** column shift is avoided. Default is 0.
-   * - **const_alpha**
-     - bool, if True, row shift is contrained as constant. Default is False.
-   * - **const_beta**
-     - bool, if True, column shift is contrained as constant. Default is False.
-   * - **shift_alignment**
-     - bool, if True, the shift aligment is performed, if False no alignment is performed. Default is False.
-   * - **shift_max**
-     - numeric between 0 and 1, controls the maximal allowed shift at each iteration, in the alignment procedure with respect to the range of curve domains.
-   * - **max_iter_align**
-     - integer, maximum number of iteration in the alignment procedure.
+     - dict or none, parameters for the local quadratic approximation (LQA) in the ECM algorithm. eps_diff is the lower bound for the coefficient mean differences, values below eps_diff are set to zero. MAX_iter_LQA is the maximum number of iterations allowed in the LQA. eps_LQA is the tolerance for the stopping condition of LQA. If none, default is **par_LQA = {"eps_diff": 1e-6, "MAX_iter_LQA": 200, "eps_LQA": 1e-5}**.
+   * - **lambda_l/lambda_l_seq**
+     - numeric/array, number/sequence of tuning parameter of the functional adaptive pairwise fusion penalty (FAPFP).
+   * - **lambda_s/lambda_s_seq**
+     - numeric/array, number/sequence of tuning parameter of the smoothness penalty.
+   * - **G/G_seq**
+     - integer/array, number/sequence of number of clusters
+   * - **tol**
+     - numeric, the tolerance for the stopping condition of the expectation conditional maximization (ECM) algorithms. Default is 1e-7.
+   * - **maxit**
+     - integer, the maximum number of iterations allowed in the ECM algorithm. Default is 50.
    * - **plot**
-     - bool, whether to output graphs showing how each model metric changes with iterations. Default is True.
+     - bool, if True, the estimated cluster means are plotted at each iteration of the ECM algorithm. Default is False.
+   * - **trace**
+     - bool, if True, information are shown at each iteration of the ECM algorithm. Default is False.
+   * - **init**
+     - str, the way to initialize the ECM algorithm. There are three ways of initialization: 'kmeans', 'model-based', and 'hierarchical', that provide initialization through the k-means algorithm, model-based clustering based on parameterized finite Gaussian mixture model, and hierarchical clustering, respectively. Default is "kmeans".
+   * - **varcon**
+     - str, the type of coefficient covariance matrix. Three values are allowed: "full", "diagonal", and "equal". "full" means unrestricted cluster coefficient covariance matrices allowed to be different among clusters. "diagonal" means diagonal cluster coefficient covariance matrices that are equal among clusters. "equal" means diagonal cluster coefficient covariance matrices, with equal diagonal entries, that are equal among clusters. Default is "diagonal".
+   * - **lambda_s_ini**
+     - numeric or none,  The tuning parameter used to obtain the functional data through smoothing B-splines before applying the initialization algorithm. If none a Generalized cross validation procedure is used as described in Ramsay (2005). Default is None.
+   * - **K_fold**
+     - integer, number of folds. Default is 5.
+   * - **X_test**
+     - array or none, only for functional data observed over a regular grid, a matrix where the rows must correspond to argument values and columns to replications of the test set. Default is None.
+   * - **grid_test**
+     - array or none, the vector of time points where the test set curves are sampled. Default is None.
+   * - **m1**
+     - numeric, the m-standard deviation rule parameter to choose G for each lambda_s and lambda_l. Default is 1.
+   * - **m2**
+     - numeric, the m-standard deviation rule parameter to choose lambda_s fixed G for each lambda_l. Default is 0.
+   * - **m3**
+     - numeric, the m-standard deviation rule parameter to choose lambda_l fixed G and lambda_s. Default is 1.
+
+If **trace=True**, it will print how each metric evolves across iterations.
+
+.. image:: /_static/sas_res.png
+   :width: 700
+   :align: center
 
 
 Value
 ^^^^^^^^^
-The function **cc_bifunc** outputs a dict including clustering results and information of the model.
+The function **sas_bifunc** outputs a dict including clustering results and information of the model.
 
-- **Number**: integer, the number of clustering groups.
+- **mod**
+  1. data: dict, contains the vectorized form of X, timeindex, and curve. For functional data observed over a regular grid timeindex and curve are trivially obtained.
+  2. parameters: dict, contains all the estimated parameters.
+  3. vars: dict contains results from the Expectation step of the ECM algorithm.
+  4. FullS: array, the matrix of B-spline computed over grid.
+  5. grid: list, the vector of time points where the curves are sampled.
+  6. W: array, the basis roughness penalty matrix containing the inner products of pairs of basis function second derivatives.
+  7. AW_vec: array, vectorized version of the diagonal matrix used in the approximation of FAPFP.
+  8. P_tot: sparse.csr.csr_matrix, Sparse Matrix used to compute all the pairwise comparisons in the FAPFP.
+  9. lambda_s: numeric, tuning parameter of the smoothness penalty.
+  10. lambda_l: numeric, tuning parameter of the FAPFP.
 
-- **RowxNumber**: array of bool, a matrix contains row clustering results.
+- **clus**
+  1. classes: array, the cluster membership.
+  2. po_pr: array, posterior probabilities of cluster membership.
+ 
+- **mean_fd**: dict, the estimated cluster mean functions generated by **GENetLib**.
 
-- **Numberxcol**: array of bool, a matrix contains column clustering results.
+The function **cc_bifunc_cv** outputs clustering results and optimal parameters.
 
-- **Parameter**: dict, a dict containing the parameters setting of the algorithm.
+- **G_opt**: integer, the optimal number of clusters.
 
-The function **cc_bifunc_cv** outputs a dataframe including each model metric changes with different delta. Users can select best parameter through the function.
-If **plot=True**, then the following graphs will be displayed:
+- **lambda_l_opt**: array, the optimal tuning parameter of the FAPFP.
 
-- Delta v.s. H score
+- **lambda_s_opt**: array, the optimal tuning parameter of the smoothness penalty.
 
-.. image:: /_static/cc_htot.png
-   :width: 400
-   :align: center
+- **comb_list**: array, the combinations of G, lambda_s and lambda_l explored.
 
-- Delta v.s. number of not assigned
+- **CV**: array, the cross-validation values obtained for each combination of G,lambda_s and lambda_l.
 
-.. image:: /_static/cc_notassigned.png
-   :width: 400
-   :align: center
+- **CV_sd**: array, the standard deviations of the cross-validation values.
 
-- Delta v.s. number of cluster
+- **zeros**: array, fraction of domain over which the estimated cluster means are fused.
 
-.. image:: /_static/cc_numclus.png
-   :width: 400
-   :align: center
+- **ms**: tuple, the m-standard deviation rule parameters.
 
 
 Example
 ^^^^^^^^
 .. code-block:: python
 
-  from BiFuncLib.simulation_data import cc_sim_data
-  from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
-  delta_list = np.linspace(0.1, 20, num = 21)
-  fun_mat = cc_sim_data()
-  # Find best delta
-  cc_result_cv = cc_bifunc_cv(fun_mat, delta_list = delta_list, alpha = 1, beta = 0, const_alpha = True, plot = True)
-  # Without shift_alignment
-  cc_result_1 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = False)
-  # With shift_alignment
-  cc_result_2 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = True)
+  from BiFuncLib.simulation_data import sas_sim_data
+  from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
+  sas_simdata = sas_sim_data(1, n_i = 20, var_e = 1, var_b = 0.25)
+  sas_result = sas_bifunc(X = sas_simdata['X'], grid = sas_simdata['grid'],
+                          lambda_s = 1e-6, lambda_l = 10, G = 2, maxit = 5, q = 10,
+                          init = 'hierarchical', trace = True, varcon = 'full')
+  lambda_s_seq = 10 ** np.arange(-4, -2, dtype=float)
+  lambda_l_seq = 10 ** np.arange(-1, 1, dtype=float)
+  G_seq = [2, 3]
+  sas_cv_result = sas_bifunc_cv(X = sas_simdata['X'], grid = sas_simdata['grid'],
+                                lambda_l_seq = lambda_l_seq, lambda_s_seq = lambda_s_seq,
+                                G_seq = G_seq, maxit = 20, K_fold = 2, q = 10)
 
 
-FDPlot.cc_fdplot
-~~~~~~~~~~~~~~~~~~
-**FDPlot.cc_fdplot** displays the clustered function curves and provides options for mean subtraction, alignment, and warping.
+FDPlot.sas_fdplot and FDPlot.sas_cvplot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When applied to **sas_bifunc** output, the **FDPlot.sas_fdplot** function plots the estimated cluster mean functions and the classified curves.
 
 .. code-block:: python
 
-    FDPlot(result).cc_fdplot(data, only_mean = False, aligned = False, warping = False)
+    FDPlot(result).sas_fdplot()
 
+When applied to **sas_bifunc_cv** output, it produces cross-validation plots: the first shows CV values versus G, lambda_s, and lambda_l; the second fixes G at its optimum and shows CV values versus lambda_s and lambda_l; the third fixes both G and lambda_s at their optima and shows CV values versus lambda_l.
+
+.. code-block:: python
+
+    FDPlot(result).sas_cvplot()
 
 Parameter
 ^^^^^^^^^^
@@ -228,68 +264,46 @@ Parameter
    * - Parameter
      - Description
    * - **result**
-     - dict, a clustering result generated by **cc_bifunc** function.
-   * - **data**
-     - array, same as in **cc_bifunc**.
-   * - **only_mean**
-     - bool, if True, only the template functions for each bi-cluster is displayed. Default is False.
-   * - **aligned**
-     - bool, if True, the alignemd functions are displayed. Default is False.
-   * - **warping**
-     - bool, if True, a figure representing the warping functions are displayed. Default is False.
+     - dict, a clustering result generated by **sas_bifunc** or **sas_bifunc_cv** function.
 
 
 Value
 ^^^^^^^^^
-Here we illustrate the outputs of the plot function in different settings.
 
-- cluster results
+- FDPlot.sas_fdplot
 
-.. table::
-   :class: tight-table
-
-   +----------+----------+----------+
-   | |figa|   | |figb|   | |figc|   |
-   +----------+----------+----------+
-
-.. |figa|  image:: /_static/cc_clus1.png
-   :width: 250px
-.. |figb|  image:: /_static/cc_clus2.png
-   :width: 250px
-.. |figc|  image:: /_static/cc_clus3.png
-   :width: 250px
-
-
-- alignemd function
-
-.. image:: /_static/cc_aligned.png
-   :width: 400
+.. image:: /_static/sas_fd.png
+   :width: 700
    :align: center
 
-- warping function
 
-.. image:: /_static/cc_warping.png
-   :width: 400
+- FDPlot.sas_cvplot
+
+.. image:: /_static/sas_cv.png
+   :width: 700
    :align: center
+
+
 
 
 Example
 ^^^^^^^^
 .. code-block:: python
 
-   import numpy as np
-   from BiFuncLib.FDPlot import FDPlot
-   from BiFuncLib.simulation_data import cc_sim_data
-   from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
-   delta_list = np.linspace(0.1, 20, num = 21)
-   fun_mat = cc_sim_data()
-   # Find best delta
-   cc_result_cv = cc_bifunc_cv(fun_mat, delta_list = delta_list, alpha = 1, beta = 0, const_alpha = True, plot = True)
-   # Without shift_alignment
-   cc_result_1 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = False)
-   FDPlot(cc_result_1).cc_fdplot(fun_mat, only_mean = True, aligned = False, warping = False)
-   # With shift_alignment
-   cc_result_2 = cc_bifunc(fun_mat, delta = 10, alpha = 1, beta = 0, const_alpha = True, shift_alignment = True)
-   FDPlot(cc_result_2).cc_fdplot(fun_mat, only_mean = False, aligned = True, warping = True)
+    from BiFuncLib.FDPlot import FDPlot
+    from BiFuncLib.simulation_data import sas_sim_data
+    from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
+    sas_simdata_0 = sas_sim_data(1, n_i = 20, var_e = 1, var_b = 0.25)
+    sas_result = sas_bifunc(X = sas_simdata_0['X'], grid = sas_simdata_0['grid'],
+                            lambda_s = 1e-6, lambda_l = 10, G = 2, maxit = 5, q = 10,
+                            init = 'hierarchical', trace = True, varcon = 'full')
+    lambda_s_seq = 10 ** np.arange(-4, -2, dtype=float)
+    lambda_l_seq = 10 ** np.arange(-1, 1, dtype=float)
+    G_seq = [2, 3]
+    sas_cv_result = sas_bifunc_cv(X = sas_simdata_0['X'], grid = sas_simdata_0['grid'],
+                                  lambda_l_seq = lambda_l_seq, lambda_s_seq = lambda_s_seq,
+                                  G_seq = G_seq, maxit = 20, K_fold = 2, q = 10)
+    FDPlot(sas_result).sas_fdplot()
+    FDPlot(sas_cv_result).sas_cvplot()
 
 
