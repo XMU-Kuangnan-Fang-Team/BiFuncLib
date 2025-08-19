@@ -31,28 +31,6 @@ def initial_svd(X, nu = 1, nv = 1):
         return u, vt.T
 
 
-def jaccardmat(res1, res2):
-    if res1.Number > 0 and res2.Number > 0:
-        mat = np.zeros((res1.Number, res2.Number))
-        for i in range(res1.Number):
-            for j in range(res2.Number):
-                product1 = np.outer(res1.RowxNumber[:, i], res1.NumberxCol[i, :])
-                product2 = np.outer(res2.RowxNumber[:, j], res2.NumberxCol[j, :])
-                flat1 = np.ravel(product1 > 0, order='F')
-                flat2 = np.ravel(product2 > 0, order='F')
-                A_set = set(np.nonzero(flat1)[0])
-                B_set = set(np.nonzero(flat2)[0])
-                intersection = A_set.intersection(B_set)
-                denom = len(A_set) + len(B_set) - len(intersection)
-                jaccard = len(intersection) / denom if denom != 0 else 0
-                mat[i, j] = jaccard
-        rownames = [f"BC{i+1}" for i in range(res1.Number)]
-        colnames = [f"BC{j+1}" for j in range(res2.Number)]
-        mat_df = pd.DataFrame(mat, index=rownames, columns=colnames)
-    else:
-        mat_df = pd.DataFrame([[0]])
-    return mat_df
-
 def jaccardmat(res1, res2, mode=None):
     def jaccard_sets(A, B):
         intersection = A & B
@@ -730,4 +708,5 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
     info.append(params)
     Number = number
     return BiclustResult(params, RowxNumber, NumberxCol, Number, info)
+
 
