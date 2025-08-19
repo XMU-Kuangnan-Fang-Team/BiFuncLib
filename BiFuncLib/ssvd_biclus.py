@@ -1,7 +1,7 @@
 from BiFuncLib.ssvd_main_func import ssvd_bc, s4vd
 
 
-def s4vd_biclus(data, plot = True, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5,
+def s4vd_biclus(data, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5,
                 gamm=0, iters=100, nbiclust=10, merr=1e-3, cols_nc=True, rows_nc=True,
                 row_overlap=True, col_overlap=True, row_min=1, col_min=1, pointwise=True,
                 start_iter=3, savepath=False):
@@ -12,7 +12,8 @@ def s4vd_biclus(data, plot = True, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6,
     return res
         
     
-def ssvd_biclus(data, plot = True, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
+def ssvd_biclus(data, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     res = ssvd_bc(data, K=K, threu=threu, threv=threv, gamu=gamu, gamv=gamv, merr=merr, niter=niter)
     return res
+
 
