@@ -5,55 +5,59 @@ FunPF
 
 Method Description
 ------------------
-This method is developed by our team. We propose a **doubly-penalized fusion** framework that simultaneously estimates smooth functional curves and discovers **row (sample) and column (covariate) clusters** in a single optimization.  
-The method is distribution-free and automatically determines the number of clusters.
 
-Key Steps
----------
+This method is developed by our team. We propose a **doubly-penalized fusion** framework that simultaneously estimates smooth functional curves and discovers **row (sample) and column (covariate) clusters** in a single optimization. The method is distribution-free and automatically determines the number of clusters. The key steps are listed below.
 
-1. Functional Representation  
-   Each observed curve is expanded with B-spline basis functions  
-   ``g_{i,j}(t) ≈ U_p(t)^⊤ β_{i,j}``,  
-   yielding coefficient vectors ``β_{i,j} ∈ ℝ^p``.
+1. **Functional Representation**  
+   Each observed curve is expanded with B-spline basis functions
 
-2. Objective Function
+   .. math::
+
+     g_{i,j}(t) \approx \mathbf{U}_p(t)^\top \boldsymbol{\beta}_{i,j},
+
+   yielding coefficient vectors :math:`\boldsymbol{\beta}_{i,j} \in \mathbb{R}^p`.
+
+2. **Objective Function**
 
    Minimize
 
    .. math::
-      L(β) = \frac{1}{2}\|Y - Uβ\|_2^2
-             + \frac{γ_1}{2}β^⊤ M β
-             + γ_2 \sum_{i_1<i_2} ρ_τ\!\bigl(\|\β^{(r)}_{i_1}-β^{(r)}_{i_2}\|_2\bigr)
-             + γ_2\sqrt{N/q} \sum_{j_1<j_2} ρ_τ\!\bigl(\|\β^{(c)}_{j_1}-β^{(c)}_{j_2}\|_2\bigr),
 
-   where
+     L(\boldsymbol{\beta}) = \frac{1}{2}\| \mathbf{Y} - \mathbf{U} \boldsymbol{\beta} \|_2^2 + \frac{\gamma_1}{2} \boldsymbol{\beta}^\top \mathbf{M} \boldsymbol{\beta} + \gamma_2 \sum_{i_1 < i_2} \rho_\tau \left( \| \boldsymbol{\beta}^{(r)}_{i_1} - \boldsymbol{\beta}^{(r)}_{i_2} \|_2 \right) + \gamma_2 \sqrt{\frac{N}{q}} \sum_{j_1 < j_2} \rho_\tau \left( \| \boldsymbol{\beta}^{(c)}_{j_1} - \boldsymbol{\beta}^{(c)}_{j_2} \|_2 \right),
 
-   - ``γ_1`` smooths each curve via a second-order difference penalty (matrix ``M``);  
+where
+
+   - :math:`\gamma_1` smooths each curve via a second-order difference penalty (matrix :math:`\mathbf{M}`);
    
-   - ``γ_2`` induces **fusion** of sample / covariate coefficients via a concave penalty ``ρ_τ`` (MCP or SCAD);  
+   - :math:`\gamma_2` induces **fusion** of sample / covariate coefficients via a concave penalty :math:`\rho_\tau` (MCP or SCAD);
    
-   - ``β^{(r)}_i`` and ``β^{(c)}_j`` denote the stacked coefficients for sample ``i`` and covariate ``j`` respectively.
+   - :math:`\boldsymbol{\beta}^{(r)}_i` and :math:`\boldsymbol{\beta}^{(c)}_j` denote the stacked coefficients for sample :math:`i` and covariate :math:`j` respectively.
 
-3. Tuning
+3. **Tuning**
 
-   - **Step 1** (smoothness): fix ``γ_2 = 0`` and choose optimal ``γ_1`` via BIC.  
+   - **Step 1** (smoothness): fix :math:`\gamma_2 = 0` and choose optimal :math:`\gamma_1` via BIC.  
 
-   - **Step 2** (fusion): fix ``γ_1`` and choose ``γ_2`` via a second BIC.
+   - **Step 2** (fusion): fix :math:`\gamma_1` and choose :math:`\gamma_2` via a second BIC.
 
-4. ADMM Algorithm  
+4. **ADMM Algorithm**  
 
-   - **Primal updates**: closed-form ridge-type solution for ``β``.  
-
-   - **Dual updates**: closed-form soft-thresholding for sample- and covariate-level fusion variables.  
-
+   - **Primal updates**: closed-form ridge-type solution for :math:`\boldsymbol{\beta}`.
+   
+   - **Dual updates**: closed-form soft-thresholding for sample- and covariate-level fusion variables.
+   
    - **Convergence**: monitored through primal and dual residuals.
 
-5. Statistical Guarantees  
+5. **Statistical Guarantees**  
 
    - **Consistency**: under mild regularity, the oracle estimator (with known clusters) achieves  
-     ``‖ĝ_{k_r,k_c} - g^*_{k_r,k_c}‖ = O_P((p log(Nq)/|G_min|)^{1/2})``.  
+     
+     .. math::
 
-   - **Clustering consistency**: a local minimizer equals the oracle estimator with probability → 1 as ``N,q → ∞``.
+       \| \hat{g}_{k_r,k_c} - g^*_{k_r,k_c} \| = O_P \left( \left( \frac{p \log(Nq)}{|G_{\min}|} \right)^{1/2} \right).
+     
+   
+   - **Clustering consistency**: a local minimizer equals the oracle estimator with probability → 1 as :math:`N, q \to \infty`.
+
 
 Function
 --------------
