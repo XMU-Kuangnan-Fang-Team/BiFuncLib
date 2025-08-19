@@ -43,7 +43,7 @@ The degrees of sparsity of the singular vectors :math:`u` and :math:`v` are cont
 
      \text{BIC}(\lambda) = \frac{\|Y - \hat{Y}\|^2}{nd \cdot \hat{\sigma}^2} + \frac{\log(nd)}{nd} \hat{df}(\lambda),
 
-  where :math:`\hat{df}(\lambda)` is the degree of sparsity (number of non-zero entries) and :math:`\hat{\sigma}^2` is the estimated error variance.
+where :math:`\hat{df}(\lambda)` is the degree of sparsity (number of non-zero entries) and :math:`\hat{\sigma}^2` is the estimated error variance.
 
 - **Post-processing for Interpretation**
 
