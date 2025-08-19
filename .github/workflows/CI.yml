@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - "BiFuncLib/*.py"
+      - "setup.py"
+      - "requirements.py"
+      - "pytest/*.py"
+  pull_request:
+    paths:
+      - "BiFuncLib/*.py"
+      - "setup.py"
+      - "requirements.py"
+      - "pytest/*.py"
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Install BiFuncLib & dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+      - name: Test
+        run: |
+          pip install pytest
+          pytest pytest
