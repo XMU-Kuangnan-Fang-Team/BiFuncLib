@@ -6,49 +6,48 @@ SSVD
 
 Method Description
 ------------------
-- Sparse data representation
+
+- **Sparse Data Representation**
 
 SSVD operates on high-dimensional data matrices where rows typically represent samples (e.g., subjects) and columns represent variables (e.g., genes). The data matrix is often centered to ensure that each column has zero mean. This preprocessing step helps in identifying interpretable patterns by removing the overall mean effect.
 
-- Model Definition
+- **Model Definition**
 
-SSVD seeks a low-rank, checkerboard-structured matrix approximation to the data matrix \( X \). The checkerboard structure is achieved by imposing sparsity on both the left and right singular vectors, resulting in many zero entries. Specifically, the model aims to decompose \( X \) into a sum of rank-one matrices \( s_k u_k v_k^T \), where \( u_k \) and \( v_k \) are sparse singular vectors. This structure allows for simultaneous clustering of rows and columns, revealing interpretable row-column associations.
+SSVD seeks a low-rank, checkerboard-structured matrix approximation to the data matrix :math:`X`. The checkerboard structure is achieved by imposing sparsity on both the left and right singular vectors, resulting in many zero entries. Specifically, the model aims to decompose :math:`X` into a sum of rank-one matrices :math:`s_k u_k v_k^T`, where :math:`u_k` and :math:`v_k` are sparse singular vectors. This structure allows for simultaneous clustering of rows and columns, revealing interpretable row-column associations.
 
-- Iterative algorithm for computation
+- **Iterative Algorithm for Computation**
 
 The SSVD algorithm alternates between optimizing the left and right singular vectors while imposing sparsity-inducing penalties. The steps are as follows:
 
-1. Apply standard SVD to the data matrix \( X \) to obtain the initial singular vectors.
+  1. **Initialization**: Apply standard SVD to the data matrix :math:`X` to obtain the initial singular vectors.
+  2. **Update :math:`v`**: For fixed :math:`u`, update :math:`v` using a soft-thresholding rule to impose sparsity:
 
-2. For fixed \( u \), update \( v \) using a soft-thresholding rule to impose sparsity:
+     .. math::
 
-.. math::
+        \tilde{v}_j = \text{sign}((X^T u)_j) \left( |(X^T u)_j| - \frac{\lambda_v w_{2,j}}{2} \right)_+
 
-   \tilde{v}_j = \text{sign}((X^T u)_j) \left( |(X^T u)_j| - \frac{\lambda_v w_{2,j}}{2} \right)_+
+  3. **Update :math:`u`**: For fixed :math:`v`, update :math:`u` similarly:
 
-3. For fixed \( v \), update \( u \) similarly:
+     .. math::
 
-.. math::
+        \tilde{u}_i = \text{sign}((X v)_i) \left( |(X v)_i| - \frac{\lambda_u w_{1,i}}{2} \right)_+
 
-   \tilde{u}_i = \text{sign}((X v)_i) \left( |(X v)_i| - \frac{\lambda_u w_{1,i}}{2} \right)_+
+  4. **Normalization and Singular Value Update**: Normalize :math:`u` and :math:`v` and update the singular value :math:`s`.
+  5. **Convergence Check**: Repeat the updates until convergence, typically within 5 to 10 iterations. The penalty parameters :math:`\lambda_u` and :math:`\lambda_v` are selected using the Bayesian Information Criterion (BIC) to balance sparsity and goodness-of-fit.
 
-4. Normalize \( u \) and \( v \) and update the singular value \( s \).
+- **Penalty Parameter Selection**
 
-5. Repeat the updates until convergence, typically within 5 to 10 iterations. The penalty parameters \( \lambda_u \) and \( \lambda_v \) are selected using the Bayesian Information Criterion (BIC) to balance sparsity and goodness-of-fit.
+The degrees of sparsity of the singular vectors :math:`u` and :math:`v` are controlled by the penalty parameters :math:`\lambda_u` and :math:`\lambda_v`. These parameters are selected using the BIC, which balances the model complexity (number of non-zero entries) with the fit to the data. The BIC is defined as:
 
-- Penalty parameter selection
+  .. math::
 
-The degrees of sparsity of the singular vectors \( u \) and \( v \) are controlled by the penalty parameters \( \lambda_u \) and \( \lambda_v \). These parameters are selected using the BIC, which balances the model complexity (number of non-zero entries) with the fit to the data. The BIC is defined as:
+     \text{BIC}(\lambda) = \frac{\|Y - \hat{Y}\|^2}{nd \cdot \hat{\sigma}^2} + \frac{\log(nd)}{nd} \hat{df}(\lambda),
 
-.. math::
+  where :math:`\hat{df}(\lambda)` is the degree of sparsity (number of non-zero entries) and :math:`\hat{\sigma}^2` is the estimated error variance.
 
-   \text{BIC}(\lambda) = \frac{\|Y - \hat{Y}\|^2}{nd \cdot \hat{\sigma}^2} + \frac{\log(nd)}{nd} \hat{df}(\lambda),
+- **Post-processing for Interpretation**
 
-where \( \hat{df}(\lambda) \) is the degree of sparsity (number of non-zero entries) and \( \hat{\sigma}^2 \) is the estimated error variance.
-
-- Post-processing for interpretation
-
-After obtaining the SSVD layers, the resulting sparse singular vectors can be used to identify biclusters. For example, in gene expression data, the non-zero entries in \( u \) and \( v \) indicate which samples and genes are associated within each bicluster. The biclusters can be visualized using image plots or scatter plots of the singular vectors, revealing distinct groupings and contrasts between different conditions or classes.
+After obtaining the SSVD layers, the resulting sparse singular vectors can be used to identify biclusters. For example, in gene expression data, the non-zero entries in :math:`u` and :math:`v` indicate which samples and genes are associated within each bicluster. The biclusters can be visualized using image plots or scatter plots of the singular vectors, revealing distinct groupings and contrasts between different conditions or classes.
 
 
 Function
