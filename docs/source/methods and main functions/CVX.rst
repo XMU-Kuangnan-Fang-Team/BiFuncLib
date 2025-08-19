@@ -364,5 +364,5 @@ Example
   print("=== Example 3 ===")
   nGamma = 7
   gammaSeq = 10 ** np.linspace(0, 1, nGamma)
-  cvx_res3 = cvx_biclus_valid(data, phi, k, gammaSeq, smooth = True)
+  cvx_res3 = cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gammaSeq, smooth = True)
 
