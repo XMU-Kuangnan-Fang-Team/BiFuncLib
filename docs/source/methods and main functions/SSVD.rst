@@ -113,59 +113,25 @@ For **ssvd_biclus** function, the parameters are listed below:
 
    * - Parameter
      - Description
-   * - **matrix**
-     - array, the pre-thresholded binary expression matrix where 1 indicates a gene responds under a condition.
-   * - **minr**
-     - integer, minimal numbers of rows an inclusion-maximal all-1 submatrix must contain to be reported, filtering out tiny biclusters.
-   * - **minc**
-     - integer, minimal numbers of columns an inclusion-maximal all-1 submatrix must contain to be reported, filtering out tiny biclusters.
-   * - **number**
-     - integer, maximum biclusters returned after duplicate removal, set to 100 in the paper for fair cross-method comparison.
+   * - **data**
+     - array, the matrix to be clustered.
+   * - **K**
+     - integer, number of SSVD-layers.
+   * - **threu**
+     - integer 1 or 2, type of penalty (thresholding rule) for the left singular vector, 1 = (Adaptive) LASSO, 2 = hard thresholding. Default is 1.
+   * - **threv**
+     - integer 1 or 2, type of penalty (thresholding rule) for the right singular vector, 1 = (Adaptive) LASSO, 2 = hard thresholding. Default is 1.
+   * - **gamu**
+     - numeric, weight parameter in Adaptive LASSO for the left singular vector, nonnegative constant. Default is 0.
+   * - **gamv**
+     - numeric, weight parameter in Adaptive LASSO for the right singular vector, nonnegative constant. Default is 0.
+   * - **merr**
+     - numeric, threshold to decide convergence. Default is 1e-4.
+   * - **niter**
+     - integer, maximum number of iterations. Default is 100.
 
 For **s4vd_biclus** function, the parameters are listed below:
 
-
-Value
-^^^^^^^^^
-The function **bimax_biclus** outputs a BiclustResult object defined within the package.
-The key results are **feature_cluster** and **sample_cluster**, and we omitted the outputs that are identical to the inputs.
-
-- **params**: dict, stores the user-supplied parameter dict (minr, minc, number, etc.).
-
-- **RowxNumber**: array, binary matrix indicating which rows belong to which of the K row clusters (1 = member, 0 = non-member).
-
-- **NumberxCol**: array, transposed binary matrix indicating which columns belong to which of the L column clusters.
-
-- **Number**: integer, total number of biclusters returned after filtering,
-
-- **cluster_row_sizes**: integer, the number of rows assigned to each row cluster (obtained as column sums of **RowxNumber**).
-
-- **cluster_col_sizes**: integer, the number of columns assigned to each column cluster (obtained as column sums of **NumberxCol**).
-
-
-
-Example
-^^^^^^^^
-.. code-block:: python
-
-  from BiFuncLib.simulation_data import bimax_sim_data
-  from BiFuncLib.bimax_biclus import bimax_biclus
-  bimax_simdata = bimax_sim_data()
-  bimax_res = bimax_biclus(bimax_simdata, minr=4,minc=4,number=10)
-
-
-bcheatmap
-~~~~~~~~~~~~~~~~~~
-**bcheatmap** visualizes the scalar clustering result in the form of a heatmap.
-
-.. code-block:: python
-
-    bcheatmap(X, res, cexR=1.5, cexC=1.25, axisR=False, axisC=True, heatcols=None, clustercols=None,
-              allrows=False, allcolumns=True)
-
-
-Parameter
-^^^^^^^^^^
 .. list-table:: 
    :widths: 30 70
    :header-rows: 1
@@ -173,35 +139,80 @@ Parameter
 
    * - Parameter
      - Description
-   * - **X**
-     - array, the matrix needs to be clustered.
-   * - **res**
-     - BiclustResult object, the biclustering result object containing information about row and column assignments to biclusters.
-   * - **cexR**
-     - numeric, the font size of row labels. Default is 1.5.
-   * - **cexC**
-     - numeric, the font size of column labels. Default is 1.25.
-   * - **axisR**
-     - bool, whether to show row labels on the heatmap. Default is False.
-   * - **axisC**
-     - bool, whether to show column labels on the heatmap. Default is True.
-   * - **heatcols**
-     - str or none, color palette for the heatmap. Default is None which stands for a diverging blue-white-red palette.
-   * - **clustercols**
-     - list or none, list of colors for outlining biclusters on the heatmap. Default is a list of distinct colors.
-   * - **allrows**
-     - bool, whether to include all rows in the heatmap, even those not assigned to any bicluster. Default is False.
-   * - **allcolumns**
-     - bool, whether to include all columns in the heatmap, even those not assigned to any bicluster. Default is True.
+   * - **data**
+     - array, the matrix to be clustered.
+   * - **steps**
+     - integer, number of subsamples used to perform the stability selection. Default is 100.
+   * - **pcerv**
+     - numeric, per comparsion wise error rate to control the number of falsely selected right singular vector coefficients (columns/samples). Default is 0.1.
+   * - **pceru**
+     - numeric, per comparsion wise error rate to control the number of falsely selected left singular vector coefficients (rows/genes). Default is 0.1.
+   * - **ss_thr**
+     - tuple, range of the cutoff threshold (relative selection frequency) for the stability selection. Default is (0.6, 0.65).
+   * - **size**
+     - numeric, size of the subsamples used to perform the stability selection. Default is 0.5.
+   * - **gamm**
+     - numeric, weight parameter for the adaptive LASSO, nonnegative constant. Default is 0.
+   * - **iters**
+     - integer, maximal number of iterations to fit a single bicluster. Default is 100.
+   * - **nbiclust**
+     - integer, maximal number of biclusters. Default is 10.
+   * - **merr**
+     - numeric, threshold to decide convergence. Default is 1e-3.
+   * - **cols_nc**
+     - bool, allow for negative correlation of columns (samples) over rows (genes). Default is True.
+   * - **rows_nc**
+     - bool, allow for negative correlation of rows (genes) over columns (samples). Default is True.
+   * - **row_overlap**
+     - bool, allow rows to overlap between biclusters. Default is True.
+   * - **col_overlap**
+     - bool, allow columns to overlap between biclusters. Default is True.
+   * - **row_min**
+     - integer, minimal number of rows. Default is 1.
+   * - **col_min**
+     - integer, minimal number of columns. Default is 1.
+   * - **pointwise**
+     - bool, performs a fast pointwise stability selection instead of calculating the complete stability path. Default is False.
+   * - **start_iter**
+     - integer, number of starting iterations in which the algorithm is not allowed to converge. Default is 3.
+   * - **savepath**
+     - bool, saves the stability path in order plot the path with the stabpathplot function. Default is False.
 
 
 Value
 ^^^^^^^^^
-A heatmap will be displayed to show the clustering result.
+Both functions return a BiclustResult object, which is the same as :ref:`Bimax <bimax-label>`.
 
-.. image:: /_static/bimax_res.png
+
+Example
+^^^^^^^^
+.. code-block:: python
+
+   from BiFuncLib.simulation_data import ssvd_sim_data
+   from BiFuncLib.ssvd_biclus import s4vd_biclus, ssvd_biclus
+   ssvd_simdata = ssvd_sim_data()
+   data = ssvd_simdata['data']
+   res_sim = ssvd_simdata['res']
+   s4vd_res = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=False, nbiclust=1)
+   s4vd_res_pw = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=True, nbiclust=1)
+   res2_ssvd = ssvd_biclus(data,K=1)
+
+
+Other functions
+~~~~~~~~~~~~~~~~~~
+For visualization, we use **bcheatmap** function which can be seen at :ref:`Bimax <bimax-label>` to show the clustering results. A heatmap will be displayed:
+
+.. image:: /_static/ssvd_res.png
    :width: 400
    :align: center
+
+For evaluation, we use **jaccardmat** function. Its usage is shown below:
+
+.. code-block:: python
+
+   jaccardmat(res1, res2, mode=None)
+
+**res1** and **res2** parameters are two BiclustResult objects, **mode** is used to control whether the calculation is performed row-wise (mode='row'), column-wise (mode='column'), or over the entire matrix (mode='None'). This ffunction outputs a matrix contains jaccard indexes.
 
 
 Example
@@ -209,9 +220,23 @@ Example
 
 .. code-block:: python
 
-  from BiFuncLib.simulation_data import bimax_sim_data
-  from BiFuncLib.bimax_biclus import bimax_biclus
-  from BiFuncLib.bcheatmap import bcheatmap
-  bimax_simdata = bimax_sim_data()
-  bimax_res = bimax_biclus(bimax_simdata, minr=4,minc=4,number=10)
-  bcheatmap(bimax_simdata,bimax_res)
+   from BiFuncLib.simulation_data import ssvd_sim_data
+   from BiFuncLib.ssvd_main_func import jaccardmat
+   from BiFuncLib.ssvd_biclus import s4vd_biclus, ssvd_biclus
+   from BiFuncLib.bcheatmap import bcheatmap
+   ssvd_simdata = ssvd_sim_data()
+   data = ssvd_simdata['data']
+   res_sim = ssvd_simdata['res']
+   s4vd_res = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=False, nbiclust=1)
+   print(jaccardmat(res_sim, s4vd_res, 'row'))
+   print(jaccardmat(res_sim, s4vd_res, 'column'))
+   bcheatmap(data, s4vd_res)
+   s4vd_res_pw = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=True, nbiclust=1)
+   print(jaccardmat(res_sim, s4vd_res_pw))
+   bcheatmap(data, s4vd_res_pw)
+   res2_ssvd = ssvd_biclus(data,K=1)
+   print(jaccardmat(res_sim, res2_ssvd))
+   bcheatmap(data, res2_ssvd)
+
+
+
