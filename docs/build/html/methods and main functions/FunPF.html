@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunPF &mdash; BiFuncLib's documentation  documentation</title>
+
+    
+        
+        
+            <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+        
+            <link rel="stylesheet" type="text/css" href="../_static/css/main.css?v=fd6b4214" />
+        
+    
+
+    <script type="text/javascript" src="../_static/js/main.js"></script>
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+
+        
+            <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+            <script src="../_static/doctools.js?v=9bcbadda"></script>
+            <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+            <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+
+    
+        
+        <link rel="shortcut icon" href="../_static/img/favicon.ico"/>
+    
+            <link rel="index" title="Index" href="../genindex.html"/>
+            <link rel="search" title="Search" href="../search.html"/>
+            <link rel="next" title="FunSparse" href="FunSparse.html"/>
+            <link rel="prev" title="FunCC" href="FunCC.html"/>
+
+    
+
+    
+</head>
+<body>
+
+
+    <header>
+        
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="../index.html">
+                            <img
+                                
+                                    src="../_static/img/logo.svg"
+                                
+                                alt="Logo"
+                                
+                                    style="height: 0em"
+                                
+                                />
+                            
+                                <p class="title is-3"
+                                
+                                >
+                                    BiFuncLib
+                                </p>
+                            
+                        </a>
+                        <!--<a role="button" class="navbar-burger burger" aria-label="menu"
+                           aria-expanded="false"
+                           data-target="navbarMenu">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>-->
+                    </div>
+
+                    
+                        <div id="navbarMenu" class="navbar-menu">
+                            <div class="navbar-end">
+                                <!--
+                                <a class="navbar-item" href="https://documatt.com">Documatt</a>
+                                <a class="navbar-item"
+                                   href="https://snippets.documatt.com">Snippets</a>
+                                <a class="navbar-item is-active" href="https://blog.documatt.com">Blog</a>
+                                -->
+                            </div>
+                        </div>
+                    
+                </div>
+            </nav>
+        
+
+        
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <div class="container">
+                    <ul>
+                        <li><a href="../index.html">BiFuncLib's documentation</a></li>
+                        
+    <li><a href="methods%20and%20main%20functions.html" aria-current="page">Methods and Main Functions</a>
+    </li>
+
+
+    <li class="is-active">FunPF</li>
+
+                    </ul>
+                </div>
+            </nav>
+        
+    </header>
+
+
+
+    <section class="section site-hero" style="padding-bottom: 0;">
+        <div class="container">
+            <div class="columns">
+                <div class="column content is-8 is-offset-2">
+                        
+                            <h1 class="title is-2">
+                                <a href="../index.html">BiFuncLib's documentation</a>
+                            </h1>
+                            <div class="motto subtitle is-4">
+                                BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.
+                            </div>
+                        
+                    
+                </div>
+                <div class="column">
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<hr>
+
+
+    
+        <section class="section is-paddingless" id="document">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-2 mt-2 is-family-sans-serif">
+                        
+<div class="content globaltoc">
+    <p class="has-text-weight-bold">Table of Contents</p>
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="methods%20and%20main%20functions.html">Methods and Main Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="FunFEM.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLBM.html">FunLBM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunCC.html">FunCC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FunPF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSparse.html">FunSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunSAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunLocal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bimax.html">Bimax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSVD.html">SSVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CVX.html">CVX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
+</ul>
+
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/methods and main functions/FunPF.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+                        
+                    </div>
+                    <div class="column is-8">
+                        
+                        <article class="content is-medium sphinx-body">
+                            
+  <section id="funpf">
+<h1>FunPF<a class="headerlink" href="#funpf" title="Link to this heading">¶</a></h1>
+<section id="method-description">
+<span id="funpf-label"></span><h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+<p>This method is developed by our team. We propose a <strong>doubly-penalized fusion</strong> framework that simultaneously estimates smooth functional curves and discovers <strong>row (sample) and column (covariate) clusters</strong> in a single optimization.
+The method is distribution-free and automatically determines the number of clusters.</p>
+</section>
+<section id="key-steps">
+<h2>Key Steps<a class="headerlink" href="#key-steps" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Functional Representation
+Each observed curve is expanded with B-spline basis functions
+<code class="docutils literal notranslate"><span class="pre">g_{i,j}(t)</span> <span class="pre">≈</span> <span class="pre">U_p(t)^⊤</span> <span class="pre">β_{i,j}</span></code>,
+yielding coefficient vectors <code class="docutils literal notranslate"><span class="pre">β_{i,j}</span> <span class="pre">∈</span> <span class="pre">ℝ^p</span></code>.</p></li>
+<li><p>Objective Function</p>
+<p>Minimize</p>
+<div class="math notranslate nohighlight">
+\[L(β) = \frac{1}{2}\|Y - Uβ\|_2^2
+       + \frac{γ_1}{2}β^⊤ M β
+       + γ_2 \sum_{i_1&lt;i_2} ρ_τ\!\bigl(\|\β^{(r)}_{i_1}-β^{(r)}_{i_2}\|_2\bigr)
+       + γ_2\sqrt{N/q} \sum_{j_1&lt;j_2} ρ_τ\!\bigl(\|\β^{(c)}_{j_1}-β^{(c)}_{j_2}\|_2\bigr),\]</div>
+<p>where</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">γ_1</span></code> smooths each curve via a second-order difference penalty (matrix <code class="docutils literal notranslate"><span class="pre">M</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">γ_2</span></code> induces <strong>fusion</strong> of sample / covariate coefficients via a concave penalty <code class="docutils literal notranslate"><span class="pre">ρ_τ</span></code> (MCP or SCAD);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">β^{(r)}_i</span></code> and <code class="docutils literal notranslate"><span class="pre">β^{(c)}_j</span></code> denote the stacked coefficients for sample <code class="docutils literal notranslate"><span class="pre">i</span></code> and covariate <code class="docutils literal notranslate"><span class="pre">j</span></code> respectively.</p></li>
+</ul>
+</li>
+<li><p>Tuning</p>
+<ul class="simple">
+<li><p><strong>Step 1</strong> (smoothness): fix <code class="docutils literal notranslate"><span class="pre">γ_2</span> <span class="pre">=</span> <span class="pre">0</span></code> and choose optimal <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> via BIC.</p></li>
+<li><p><strong>Step 2</strong> (fusion): fix <code class="docutils literal notranslate"><span class="pre">γ_1</span></code> and choose <code class="docutils literal notranslate"><span class="pre">γ_2</span></code> via a second BIC.</p></li>
+</ul>
+</li>
+<li><p>ADMM Algorithm</p>
+<ul class="simple">
+<li><p><strong>Primal updates</strong>: closed-form ridge-type solution for <code class="docutils literal notranslate"><span class="pre">β</span></code>.</p></li>
+<li><p><strong>Dual updates</strong>: closed-form soft-thresholding for sample- and covariate-level fusion variables.</p></li>
+<li><p><strong>Convergence</strong>: monitored through primal and dual residuals.</p></li>
+</ul>
+</li>
+<li><p>Statistical Guarantees</p>
+<ul class="simple">
+<li><p><strong>Consistency</strong>: under mild regularity, the oracle estimator (with known clusters) achieves
+<code class="docutils literal notranslate"><span class="pre">‖ĝ_{k_r,k_c}</span> <span class="pre">-</span> <span class="pre">g^*_{k_r,k_c}‖</span> <span class="pre">=</span> <span class="pre">O_P((p</span> <span class="pre">log(Nq)/|G_min|)^{1/2})</span></code>.</p></li>
+<li><p><strong>Clustering consistency</strong>: a local minimizer equals the oracle estimator with probability → 1 as <code class="docutils literal notranslate"><span class="pre">N,q</span> <span class="pre">→</span> <span class="pre">∞</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="function">
+<h2>Function<a class="headerlink" href="#function" title="Link to this heading">¶</a></h2>
+<p>This method provides three core functions: <strong>pf_sim_data</strong>, <strong>pf_bifunc</strong> and <strong>FDPlot.pf_fdplot</strong>.
+In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function.</p>
+<section id="pf-sim-data">
+<h3>pf_sim_data<a class="headerlink" href="#pf-sim-data" title="Link to this heading">¶</a></h3>
+<p><strong>pf_sim_data</strong> generates simulated data according to the FunPF model, which transforms the 3D data into a 2D matrix, and seperates data into 3*3 parts.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pf_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">nknots</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="parameter">
+<h4>Parameter<a class="headerlink" href="#parameter" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>n</strong></p></td>
+<td><p>integer, the number of samples.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>T</strong></p></td>
+<td><p>integer, the number of time points per sample.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>nknots</strong></p></td>
+<td><p>integer, the number of interior knots used in the B-spline basis expansion for estimating the underlying mean functions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>order</strong></p></td>
+<td><p>integer, the polynomial degree of the B-spline basis plus one (e.g., order 4 gives cubic splines).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>seed</strong></p></td>
+<td><p>integer, random seeds each time when data is generated. Default is 123.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="value">
+<h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
+<p>The function <strong>pf_sim_data</strong> outputs a dict contains simulated data matrix and the true clustering results.</p>
+<ul class="simple">
+<li><p><strong>data</strong>: dataframe, a simulated data with different time and measurements.</p></li>
+<li><p><strong>location</strong>: array, a sequence of time from 0 to 1.</p></li>
+<li><p><strong>feature cluster</strong>: list, true feature clustering results.</p></li>
+<li><p><strong>sample cluster</strong>: list, true sample clustering results.</p></li>
+</ul>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">pf_sim_data</span>
+<span class="n">pf_simdata</span> <span class="o">=</span> <span class="n">pf_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">nknots</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pf-bifunc">
+<h3>pf_bifunc<a class="headerlink" href="#pf-bifunc" title="Link to this heading">¶</a></h3>
+<p><strong>pf_bifunc</strong> performs model fitting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pf_bifunc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nknots</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">gamma1</span><span class="p">,</span> <span class="n">gamma2</span><span class="p">,</span> <span class="n">opt</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">eps_abs</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">eps_rel</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id1">
+<h4>Parameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>data</strong></p></td>
+<td><p>array or list, a data array of size n x p x t or a list contains two distinct n x p x t datasets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>nknots</strong></p></td>
+<td><p>integer, number of interior knots used in the B-spline basis expansion for estimating the underlying mean functions.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>order</strong></p></td>
+<td><p>integer, polynomial degree of the B-spline basis plus one (e.g., order 4 gives cubic splines).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>gamma1</strong></p></td>
+<td><p>numeric, smoothness penalty tuning parameter that controls the trade-off between data fidelity and functional smoothness during estimation.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>gamma2</strong></p></td>
+<td><p>numeric, fusion penalty tuning parameter that governs the strength of clustering by penalizing differences between coefficient vectors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>opt</strong></p></td>
+<td><p>bool, if True the function selects optimal (gamma1, gamma2) via a two-step BIC procedure; otherwise user-supplied values are used. Default is False.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>theta</strong></p></td>
+<td><p>numeric (&gt;0), ADMM augmented-Lagrangian penalty weight. Default is 1.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>tau</strong></p></td>
+<td><p>numeric (&gt;1), MCP/SCAD regularization parameter controlling the concavity of the fusion penalty. Default is 3.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>max_iter</strong></p></td>
+<td><p>integer, maximum number of ADMM iterations before stopping. Default is 500.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>eps_abs</strong></p></td>
+<td><p>numeric (&gt;0), absolute convergence tolerance for primal and dual residuals. Default is 1e-3.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>eps_rel</strong></p></td>
+<td><p>numeric (&gt;0), relative convergence tolerance for primal and dual residuals. Default is 1e-3.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h4>Value<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<p>The function <strong>pf_bifunc</strong> outputs a dict including clustering results and information of the model.
+The key results are <strong>feature_cluster</strong> and <strong>sample_cluster</strong>, and we omitted the outputs that are identical to the inputs.</p>
+<ul class="simple">
+<li><p><strong>Beta</strong>: list, estimated regression coefficients for each covariate in the model.</p></li>
+<li><p><strong>feature_cluster</strong>: list, the clustering assignment for each feature or covariate.</p></li>
+<li><p><strong>feature_number</strong>: integer, the total count of features or covariates considered in the analysis.</p></li>
+<li><p><strong>iter</strong>: integer, the number of iterations the algorithm has executed.</p></li>
+<li><p><strong>Lambda1</strong>: numeric, the Lagrange multipliers associated with the row clustering constraints.</p></li>
+<li><p><strong>Lambda2</strong>: numeric, the Lagrange multipliers related to the column clustering constraints.</p></li>
+<li><p><strong>sample_cluster</strong>: list, the clustering assignment for each sample or observation.</p></li>
+<li><p><strong>sample_number</strong>: integer, the total number of samples or observations in the dataset.</p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">pf_sim_data</span>
+<span class="n">pf_simdata</span> <span class="o">=</span> <span class="n">pf_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">nknots</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">pf_result</span> <span class="o">=</span> <span class="n">pf_bifunc</span><span class="p">(</span><span class="n">pf_simdata</span><span class="p">,</span> <span class="n">nknots</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">gamma1</span> <span class="o">=</span> <span class="mf">0.023</span><span class="p">,</span> <span class="n">gamma2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                     <span class="n">theta</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">eps_abs</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">eps_rel</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fdplot-pf-fdplot">
+<h3>FDPlot.pf_fdplot<a class="headerlink" href="#fdplot-pf-fdplot" title="Link to this heading">¶</a></h3>
+<p><strong>FDPlot.pf_fdplot</strong> visualizes the result generated by <strong>pf_bifunc</strong> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FDPlot</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">pf_fdplot</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="id4">
+<h4>Parameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>result</strong></p></td>
+<td><p>dict, a clustering result generated by <strong>pf_bifunc</strong> function.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h4>Value<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>The function has two parts of output.
+One is the lattice plot of the clustering results, and the other is the reconstructed function curves.</p>
+<ul class="simple">
+<li><p>Lattice plot of the clustering results</p></li>
+</ul>
+<table class="tight-table docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/pf_lattice1.png"><img alt="figa" src="../_images/pf_lattice1.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_lattice2.png"><img alt="figb" src="../_images/pf_lattice2.png" style="width: 250px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Reconstructed function curves</p></li>
+</ul>
+<table class="tight-table docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/pf_clus1.png"><img alt="fig1" src="../_images/pf_clus1.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus2.png"><img alt="fig2" src="../_images/pf_clus2.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus3.png"><img alt="fig3" src="../_images/pf_clus3.png" style="width: 250px;" /></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../_images/pf_clus4.png"><img alt="fig4" src="../_images/pf_clus4.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus5.png"><img alt="fig5" src="../_images/pf_clus5.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus6.png"><img alt="fig6" src="../_images/pf_clus6.png" style="width: 250px;" /></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/pf_clus7.png"><img alt="fig7" src="../_images/pf_clus7.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus8.png"><img alt="fig8" src="../_images/pf_clus8.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/pf_clus9.png"><img alt="fig9" src="../_images/pf_clus9.png" style="width: 250px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.pf_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">pf_bifunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">pf_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.FDPlot</span><span class="w"> </span><span class="kn">import</span> <span class="n">FDPlot</span>
+<span class="n">pf_simdata</span> <span class="o">=</span> <span class="n">pf_sim_data</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">nknots</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">pf_result</span> <span class="o">=</span> <span class="n">pf_bifunc</span><span class="p">(</span><span class="n">pf_simdata</span><span class="p">,</span> <span class="n">nknots</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">gamma1</span> <span class="o">=</span> <span class="mf">0.023</span><span class="p">,</span> <span class="n">gamma2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                     <span class="n">theta</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tau</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">max_iter</span> <span class="o">=</span> <span class="mi">500</span><span class="p">,</span> <span class="n">eps_abs</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">eps_rel</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">pf_result</span><span class="p">)</span><span class="o">.</span><span class="n">pf_fdplot</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+
+                            
+                            
+                                <p class="has-text-weight-light is-size-6 my-4">
+                                    Previous:
+                                    <a href="FunCC.html"
+                                       title="previous chapter">FunCC</a>
+                                
+                                    |
+                                
+                                    Next:
+                                    <a href="FunSparse.html"
+                                       title="next chapter">FunSparse</a>
+                                </p>
+                            
+                        </article>
+                    </div>
+                    <div class="column is-2 mt-2  is-family-sans-serif">
+                        
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">FunPF</a><ul>
+<li><a class="reference internal" href="#method-description">Method Description</a></li>
+<li><a class="reference internal" href="#key-steps">Key Steps</a></li>
+<li><a class="reference internal" href="#function">Function</a><ul>
+<li><a class="reference internal" href="#pf-sim-data">pf_sim_data</a><ul>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
+<li><a class="reference internal" href="#value">Value</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pf-bifunc">pf_bifunc</a><ul>
+<li><a class="reference internal" href="#id1">Parameter</a></li>
+<li><a class="reference internal" href="#id2">Value</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fdplot-pf-fdplot">FDPlot.pf_fdplot</a><ul>
+<li><a class="reference internal" href="#id4">Parameter</a></li>
+<li><a class="reference internal" href="#id5">Value</a></li>
+<li><a class="reference internal" href="#id6">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered has-text-primary">
+                <a href="../index.html">
+                    <img
+                        
+                            src="../_static/img/logo.svg"
+                        
+                        alt="Logo"
+                        
+                            style="height: 0em"
+                        
+                    />
+                 </a>
+                 <div class="footer-text">
+                
+                    <p>BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.</p>
+                
+                </div>
+
+                <p class="mt-4">Copyright &copy; 2025, Yuhao Zhong</p>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

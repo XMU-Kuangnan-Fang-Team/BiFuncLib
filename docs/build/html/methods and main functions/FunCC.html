@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunCC &mdash; BiFuncLib's documentation  documentation</title>
+
+    
+        
+        
+            <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+        
+            <link rel="stylesheet" type="text/css" href="../_static/css/main.css?v=fd6b4214" />
+        
+    
+
+    <script type="text/javascript" src="../_static/js/main.js"></script>
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+
+        
+            <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+            <script src="../_static/doctools.js?v=9bcbadda"></script>
+            <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+            <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+
+    
+        
+        <link rel="shortcut icon" href="../_static/img/favicon.ico"/>
+    
+            <link rel="index" title="Index" href="../genindex.html"/>
+            <link rel="search" title="Search" href="../search.html"/>
+            <link rel="next" title="FunPF" href="FunPF.html"/>
+            <link rel="prev" title="FunLBM" href="FunLBM.html"/>
+
+    
+
+    
+</head>
+<body>
+
+
+    <header>
+        
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="../index.html">
+                            <img
+                                
+                                    src="../_static/img/logo.svg"
+                                
+                                alt="Logo"
+                                
+                                    style="height: 0em"
+                                
+                                />
+                            
+                                <p class="title is-3"
+                                
+                                >
+                                    BiFuncLib
+                                </p>
+                            
+                        </a>
+                        <!--<a role="button" class="navbar-burger burger" aria-label="menu"
+                           aria-expanded="false"
+                           data-target="navbarMenu">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>-->
+                    </div>
+
+                    
+                        <div id="navbarMenu" class="navbar-menu">
+                            <div class="navbar-end">
+                                <!--
+                                <a class="navbar-item" href="https://documatt.com">Documatt</a>
+                                <a class="navbar-item"
+                                   href="https://snippets.documatt.com">Snippets</a>
+                                <a class="navbar-item is-active" href="https://blog.documatt.com">Blog</a>
+                                -->
+                            </div>
+                        </div>
+                    
+                </div>
+            </nav>
+        
+
+        
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <div class="container">
+                    <ul>
+                        <li><a href="../index.html">BiFuncLib's documentation</a></li>
+                        
+    <li><a href="methods%20and%20main%20functions.html" aria-current="page">Methods and Main Functions</a>
+    </li>
+
+
+    <li class="is-active">FunCC</li>
+
+                    </ul>
+                </div>
+            </nav>
+        
+    </header>
+
+
+
+    <section class="section site-hero" style="padding-bottom: 0;">
+        <div class="container">
+            <div class="columns">
+                <div class="column content is-8 is-offset-2">
+                        
+                            <h1 class="title is-2">
+                                <a href="../index.html">BiFuncLib's documentation</a>
+                            </h1>
+                            <div class="motto subtitle is-4">
+                                BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.
+                            </div>
+                        
+                    
+                </div>
+                <div class="column">
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<hr>
+
+
+    
+        <section class="section is-paddingless" id="document">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-2 mt-2 is-family-sans-serif">
+                        
+<div class="content globaltoc">
+    <p class="has-text-weight-bold">Table of Contents</p>
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="methods%20and%20main%20functions.html">Methods and Main Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="FunFEM.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLBM.html">FunLBM</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FunCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunPF.html">FunPF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSparse.html">FunSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunSAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunLocal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bimax.html">Bimax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSVD.html">SSVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CVX.html">CVX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
+</ul>
+
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/methods and main functions/FunCC.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+                        
+                    </div>
+                    <div class="column is-8">
+                        
+                        <article class="content is-medium sphinx-body">
+                            
+  <section id="funcc">
+<h1>FunCC<a class="headerlink" href="#funcc" title="Link to this heading">¶</a></h1>
+<p id="funcc-label">This page references the <a class="reference external" href="https://search.r-project.org/CRAN/refmans/FunCC/html/00Index.html">official documentation of FunCC</a>.</p>
+<section id="method-description">
+<h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+<p>FunCC is a non-parametric, greedy bi-clustering algorithm for matrices whose
+entries are continuous curves.  It extends the Cheng &amp; Church strategy to the
+functional domain and optionally co-estimates curve alignment (phase registration).
+The key steps are summarized below.</p>
+<ol class="arabic">
+<li><p>Functional Data Representation
+Discrete observations are smoothed into continuous curves <span class="math notranslate nohighlight">\(f_{ij}(t)\)</span>,
+forming an <span class="math notranslate nohighlight">\(n \times m\)</span> functional matrix.</p></li>
+<li><p>Ideal Bi-Cluster Model &amp; H-score</p>
+<p>Within a bi-cluster <span class="math notranslate nohighlight">\(B(I,J)\)</span> each curve is modeled as</p>
+<div class="math notranslate nohighlight">
+\[f_{ij}(t) = \mu(t) + \alpha_i(t) + \beta_j(t)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu\)</span> is the cluster mean curve and <span class="math notranslate nohighlight">\(\alpha_i,\beta_j\)</span>
+capture row- and column-specific deviations.  The <strong>H-score</strong> quantifies
+within-cluster dispersion via the average squared <span class="math notranslate nohighlight">\(L^2\)</span> distance to
+the fitted template.</p>
+</li>
+<li><p>Greedy Iterative Search (Functional Cheng &amp; Church)</p>
+<ul class="simple">
+<li><p>Multiple-node deletion: remove rows/columns whose contribution exceeds <span class="math notranslate nohighlight">\(\theta \cdot H\)</span>.</p></li>
+<li><p>Single-node deletion: iteratively drop the worst row/column until
+<span class="math notranslate nohighlight">\(H &lt; \delta\)</span>.</p></li>
+<li><p>Node addition: re-introduce previously removed rows/columns that do not
+increase <span class="math notranslate nohighlight">\(H\)</span>.</p></li>
+</ul>
+<p>After a cluster is finalized, assigned elements are masked; <strong>Bimax</strong> locates the
+largest remaining sub-matrix and the process repeats.</p>
+</li>
+<li><p>Optional Curve Alignment</p>
+<p>A shift warping <span class="math notranslate nohighlight">\(w_{ij}(t)=t+q_{ij}\)</span> is estimated per curve to minimize
+the squared <span class="math notranslate nohighlight">\(L^2\)</span> distance to the current template.  Alignment and
+template updates iterate until convergence.</p>
+</li>
+<li><p>Parameter Tuning</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\delta\)</span> balances cluster quality vs. quantity.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta\)</span> controls the aggressiveness of multiple-node deletion.</p></li>
+</ul>
+</li>
+<li><p>Visualization &amp; Interpretation</p>
+<p>FunCC outputs non-exhaustive, non-overlapping bi-clusters described by
+<span class="math notranslate nohighlight">\(\mu(t)\)</span> and row/column effects, revealing interpretable spatio-temporal patterns.</p>
+</li>
+</ol>
+</section>
+<section id="function">
+<h2>Function<a class="headerlink" href="#function" title="Link to this heading">¶</a></h2>
+<p>This method provides four core functions: <strong>cc_sim_data</strong>, <strong>cc_bifunc</strong>, <strong>cc_bifunc_cv</strong> and <strong>FDPlot.cc_fdplot</strong>.
+In this section, we detail their respective usage, aswell as parameters, output values and usage examples for each function.
+Because the parameters of functions <strong>cc_bifunc</strong> and <strong>cc_bifunc_cv</strong> are similar while their outputs differ, we will explain the two functions together.</p>
+<section id="cc-sim-data">
+<h3>cc_sim_data<a class="headerlink" href="#cc-sim-data" title="Link to this heading">¶</a></h3>
+<p><strong>cc_sim_data</strong> loads simulated data according to the funCC model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cc_sim_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="parameter">
+<h4>Parameter<a class="headerlink" href="#parameter" title="Link to this heading">¶</a></h4>
+<p>The simulated data are loaded internally and have no adjustable parameters.</p>
+</section>
+<section id="value">
+<h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
+<p>An object of class array of dimension 30 x 7 x 240.</p>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_sim_data</span>
+<span class="n">fun_mat</span> <span class="o">=</span> <span class="n">cc_sim_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cc-bifunc-and-cc-bifunc-cv">
+<h3>cc_bifunc and cc_bifunc_cv<a class="headerlink" href="#cc-bifunc-and-cc-bifunc-cv" title="Link to this heading">¶</a></h3>
+<p><strong>cc_bifunc</strong> performs model fitting, while <strong>cc_bifunc_cv</strong> selects the best delta for the algorithm.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cc_bifunc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">template_type</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+          <span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">const_beta</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+          <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">shift_max</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">max_iter_align</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cc_bifunc_cv</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">delta_list</span><span class="p">,</span> <span class="n">theta</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">template_type</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">number</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+             <span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">const_beta</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+             <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">shift_max</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">max_iter_align</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id1">
+<h4>Parameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>data</strong></p></td>
+<td><p>array, the data array (n x m x T) where each entry corresponds to the measure of one observation i, i=1,…,n, for a functional variable m, m=1,…,p, at point t, t=1,…,T.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>delta</strong> (no cross validation)</p></td>
+<td><p>numeric, maximum of accepted score, should be a real value &gt; 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>delta_list</strong> (with cross validation)</p></td>
+<td><p>list, a list of delta to be selected.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>theta</strong></p></td>
+<td><p>numeric, scaling factor should be a real value &gt; 1.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>template_type</strong></p></td>
+<td><p>str, type of template required. If <strong>template_type=’mean’</strong> the template is evaluated as the average function, if <strong>template_type=’medoid’</strong> the template is evaluated as the medoid function. Default is ‘mean’.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>number</strong></p></td>
+<td><p>integer, maximum number of iteration. Default is 100.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>alpha</strong></p></td>
+<td><p>integer 1 or 0, if <strong>alpha=1</strong> row shift is allowed, if <strong>alpha=0</strong> row shift is avoided. Default is 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>beta</strong></p></td>
+<td><p>integer 1 or 0, if <strong>beta=1</strong> column shift is allowed, if <strong>beta=0</strong> column shift is avoided. Default is 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>const_alpha</strong></p></td>
+<td><p>bool, if True, row shift is contrained as constant. Default is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>const_beta</strong></p></td>
+<td><p>bool, if True, column shift is contrained as constant. Default is False.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>shift_alignment</strong></p></td>
+<td><p>bool, if True, the shift aligment is performed, if False no alignment is performed. Default is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>shift_max</strong></p></td>
+<td><p>numeric between 0 and 1, controls the maximal allowed shift at each iteration, in the alignment procedure with respect to the range of curve domains.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>max_iter_align</strong></p></td>
+<td><p>integer, maximum number of iteration in the alignment procedure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot</strong></p></td>
+<td><p>bool, whether to output graphs showing how each model metric changes with iterations. Default is True.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h4>Value<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<p>The function <strong>cc_bifunc</strong> outputs a dict including clustering results and information of the model.</p>
+<ul class="simple">
+<li><p><strong>Number</strong>: integer, the number of clustering groups.</p></li>
+<li><p><strong>RowxNumber</strong>: array of bool, a matrix contains row clustering results.</p></li>
+<li><p><strong>Numberxcol</strong>: array of bool, a matrix contains column clustering results.</p></li>
+<li><p><strong>Parameter</strong>: dict, a dict containing the parameters setting of the algorithm.</p></li>
+</ul>
+<p>The function <strong>cc_bifunc_cv</strong> outputs a dataframe including each model metric changes with different delta. Users can select best parameter through the function.
+If <strong>plot=True</strong>, then the following graphs will be displayed:</p>
+<ul class="simple">
+<li><p>Delta v.s. H score</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/cc_htot.png"><img alt="../_images/cc_htot.png" class="align-center" src="../_images/cc_htot.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p>Delta v.s. number of not assigned</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/cc_notassigned.png"><img alt="../_images/cc_notassigned.png" class="align-center" src="../_images/cc_notassigned.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p>Delta v.s. number of cluster</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/cc_numclus.png"><img alt="../_images/cc_numclus.png" class="align-center" src="../_images/cc_numclus.png" style="width: 400px;" />
+</a>
+</section>
+<section id="id3">
+<h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.cc_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_bifunc</span><span class="p">,</span> <span class="n">cc_bifunc_cv</span>
+<span class="n">delta_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">fun_mat</span> <span class="o">=</span> <span class="n">cc_sim_data</span><span class="p">()</span>
+<span class="c1"># Find best delta</span>
+<span class="n">cc_result_cv</span> <span class="o">=</span> <span class="n">cc_bifunc_cv</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta_list</span> <span class="o">=</span> <span class="n">delta_list</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Without shift_alignment</span>
+<span class="n">cc_result_1</span> <span class="o">=</span> <span class="n">cc_bifunc</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># With shift_alignment</span>
+<span class="n">cc_result_2</span> <span class="o">=</span> <span class="n">cc_bifunc</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fdplot-cc-fdplot">
+<h3>FDPlot.cc_fdplot<a class="headerlink" href="#fdplot-cc-fdplot" title="Link to this heading">¶</a></h3>
+<p><strong>FDPlot.cc_fdplot</strong> displays the clustered function curves and provides options for mean subtraction, alignment, and warping.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FDPlot</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">cc_fdplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">only_mean</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">aligned</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">warping</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id4">
+<h4>Parameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>result</strong></p></td>
+<td><p>dict, a clustering result generated by <strong>cc_bifunc</strong> function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>data</strong></p></td>
+<td><p>array, same as in <strong>cc_bifunc</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>only_mean</strong></p></td>
+<td><p>bool, if True, only the template functions for each bi-cluster is displayed. Default is False.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>aligned</strong></p></td>
+<td><p>bool, if True, the alignemd functions are displayed. Default is False.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>warping</strong></p></td>
+<td><p>bool, if True, a figure representing the warping functions are displayed. Default is False.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h4>Value<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>Here we illustrate the outputs of the plot function in different settings.</p>
+<ul class="simple">
+<li><p>cluster results</p></li>
+</ul>
+<table class="tight-table docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../_images/cc_clus1.png"><img alt="figa" src="../_images/cc_clus1.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/cc_clus2.png"><img alt="figb" src="../_images/cc_clus2.png" style="width: 250px;" /></a></p></td>
+<td><p><a class="reference internal" href="../_images/cc_clus3.png"><img alt="figc" src="../_images/cc_clus3.png" style="width: 250px;" /></a></p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>alignemd function</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/cc_aligned.png"><img alt="../_images/cc_aligned.png" class="align-center" src="../_images/cc_aligned.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p>warping function</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/cc_warping.png"><img alt="../_images/cc_warping.png" class="align-center" src="../_images/cc_warping.png" style="width: 400px;" />
+</a>
+</section>
+<section id="id6">
+<h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.FDPlot</span><span class="w"> </span><span class="kn">import</span> <span class="n">FDPlot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.cc_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_bifunc</span><span class="p">,</span> <span class="n">cc_bifunc_cv</span>
+<span class="n">delta_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">21</span><span class="p">)</span>
+<span class="n">fun_mat</span> <span class="o">=</span> <span class="n">cc_sim_data</span><span class="p">()</span>
+<span class="c1"># Find best delta</span>
+<span class="n">cc_result_cv</span> <span class="o">=</span> <span class="n">cc_bifunc_cv</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta_list</span> <span class="o">=</span> <span class="n">delta_list</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Without shift_alignment</span>
+<span class="n">cc_result_1</span> <span class="o">=</span> <span class="n">cc_bifunc</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">cc_result_1</span><span class="p">)</span><span class="o">.</span><span class="n">cc_fdplot</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">only_mean</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">aligned</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">warping</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># With shift_alignment</span>
+<span class="n">cc_result_2</span> <span class="o">=</span> <span class="n">cc_bifunc</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">delta</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">const_alpha</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">shift_alignment</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">cc_result_2</span><span class="p">)</span><span class="o">.</span><span class="n">cc_fdplot</span><span class="p">(</span><span class="n">fun_mat</span><span class="p">,</span> <span class="n">only_mean</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">aligned</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">warping</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+
+                            
+                            
+                                <p class="has-text-weight-light is-size-6 my-4">
+                                    Previous:
+                                    <a href="FunLBM.html"
+                                       title="previous chapter">FunLBM</a>
+                                
+                                    |
+                                
+                                    Next:
+                                    <a href="FunPF.html"
+                                       title="next chapter">FunPF</a>
+                                </p>
+                            
+                        </article>
+                    </div>
+                    <div class="column is-2 mt-2  is-family-sans-serif">
+                        
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">FunCC</a><ul>
+<li><a class="reference internal" href="#method-description">Method Description</a></li>
+<li><a class="reference internal" href="#function">Function</a><ul>
+<li><a class="reference internal" href="#cc-sim-data">cc_sim_data</a><ul>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
+<li><a class="reference internal" href="#value">Value</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cc-bifunc-and-cc-bifunc-cv">cc_bifunc and cc_bifunc_cv</a><ul>
+<li><a class="reference internal" href="#id1">Parameter</a></li>
+<li><a class="reference internal" href="#id2">Value</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fdplot-cc-fdplot">FDPlot.cc_fdplot</a><ul>
+<li><a class="reference internal" href="#id4">Parameter</a></li>
+<li><a class="reference internal" href="#id5">Value</a></li>
+<li><a class="reference internal" href="#id6">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered has-text-primary">
+                <a href="../index.html">
+                    <img
+                        
+                            src="../_static/img/logo.svg"
+                        
+                        alt="Logo"
+                        
+                            style="height: 0em"
+                        
+                    />
+                 </a>
+                 <div class="footer-text">
+                
+                    <p>BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.</p>
+                
+                </div>
+
+                <p class="mt-4">Copyright &copy; 2025, Yuhao Zhong</p>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

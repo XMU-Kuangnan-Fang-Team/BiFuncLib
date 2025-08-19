@@ -402,40 +402,38 @@ class FDPlot:
             T = x['T']
             K = x['K']
             L = x['L']
+            nbasis = x['nbasis']
             if x['basisName'] == 'spline':
-                basis = create_bspline_basis((0, T), x['nbasis'])
+                basis = create_bspline_basis((0, T), nbasis)
             elif x['basisName'] == 'fourier':
-                basis = create_fourier_basis((0, T), x['nbasis'])
-            obj = {
-                'basis': basis,
-                'coefs': None,
-                'fdnames': {'time': list(range(1, T+1)), 'reps': None, 'values': None}
-            }
+                basis = create_fourier_basis((0, T), nbasis)
             if x['datatype'] == 0:
                 for k in range(K):
                     for l in range(L):
-                        slice_mu = x['prms']['mu'][:, l, ]
-                        idx_max = np.unravel_index(np.argmax(slice_mu, axis=None), slice_mu.shape)
-                        mu_max = x['prms']['mu'][idx_max[0], l, :]
-                        idx_min = np.unravel_index(np.argmin(slice_mu, axis=None), slice_mu.shape)
-                        mu_min = x['prms']['mu'][idx_min[0], l, :]
-                        obj['coefs'] = np.transpose(np.vstack([mu_min, mu_max]))
+                        slice_mu = x['prms']['mu'][k, l, :]
+                        mu_max = slice_mu
+                        mu_min = slice_mu
+                        obj = {
+                            'basis': basis,
+                            'coefs': np.column_stack([mu_min, mu_max]),
+                            'fdnames': {'time': list(range(1, T+1)), 'reps': None, 'values': None}
+                        }
                         plot_fd(obj, xlab='', ylab='')
-                        plt.show()
             else:
                 for r in range(x['datatype']):
                     for k in range(K):
                         for l in range(L):
-                            start_idx = r * x['nbasis']
-                            end_idx = (r+1)*x['nbasis']
-                            slice_mu = x['prms']['mu'][:, l, start_idx:end_idx]
-                            idx_max = np.unravel_index(np.argmax(slice_mu, axis=None), slice_mu.shape)
-                            mu_max = x['prms']['mu'][idx_max[0], l, start_idx:end_idx]
-                            idx_min = np.unravel_index(np.argmin(slice_mu, axis=None), slice_mu.shape)
-                            mu_min = x['prms']['mu'][idx_min[0], l, start_idx:end_idx]
-                            obj['coefs'] = np.transpose(np.vstack([mu_min, mu_max]))
+                            start_idx = r * nbasis
+                            end_idx = (r + 1) * nbasis
+                            slice_mu = x['prms']['mu'][k, l, start_idx:end_idx]
+                            mu_max = slice_mu
+                            mu_min = slice_mu
+                            obj = {
+                                'basis': basis,
+                                'coefs': np.column_stack([mu_min, mu_max]),
+                                'fdnames': {'time': list(range(1, T+1)), 'reps': None, 'values': None}
+                            }
                             plot_fd(obj, xlab='', ylab='')
-                            plt.show()
             
         elif types == "likelihood":
             plt.figure()
@@ -616,4 +614,5 @@ class FDPlot:
         plt.plot(x, w, linestyle='-', linewidth=2, label='Weighting function')
         plt.title('Weighting function')
         plt.show()
+
 

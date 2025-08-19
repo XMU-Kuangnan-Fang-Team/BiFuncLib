@@ -195,6 +195,9 @@ bcheatmap(data, res2_ssvd)
 `cvx_biclus_missing` handles data with missing values.
 
 ```python
+import numpy as np
+import random
+import math
 from BiFuncLib.simulation_data import cvx_sim_data
 from BiFuncLib.cvx_main_func import gkn_weights
 from BiFuncLib.cvx_biclus import cvx_biclus_valid, cvx_biclus_missing
@@ -202,25 +205,36 @@ cvx_simdata = cvx_sim_data()
 X = cvx_simdata.copy()
 X = X - np.mean(np.mean(X))
 X = X / np.linalg.norm(X, 'fro')
-phi = 0.5; k = 5; data = X
+data = X
+phi = 0.5
+k = 5
 # Example 1
-nGamma = 5
-gammaSeq = 10 ** np.linspace(0, 3, nGamma)
-cvx_res1 = cvx_biclus_valid(data, phi, k, gammaSeq, plot_error = False)
-# Example 2
 wts = gkn_weights(X, phi=phi, k_row=k, k_col=k)
 E_row = wts["E_row"]
 E_col = wts["E_col"]
-gamma = 200
+gam = 200
 m_row = E_row.shape[0]
 m_col = E_col.shape[0]
-np.random.seed(123)
 n = X.shape[1]
 p = X.shape[0]
 Lambda_row = np.random.randn(n, m_row)
 Lambda_col = np.random.randn(p, m_col)
 Theta = random.sample(range(1, n*p+1), math.floor(0.1 * n * p))
-cvx_res2 = cvx_biclus_missing(data, phi, k, gamma, Lambda_row, Lambda_col, Theta)
+wts = gkn_weights(data, phi=phi, k_row=k, k_col=k)
+w_row = wts["w_row"]
+w_col = wts["w_col"]
+E_row = wts["E_row"]
+E_col = wts["E_col"]
+cvx_res1 = cvx_biclus_missing(data, E_row, E_col, w_row, w_col, gam, Lambda_row, Lambda_col, Theta)
+# Example 2
+nGamma = 5
+gammaSeq = 10 ** np.linspace(0, 3, nGamma)
+wts = gkn_weights(data, phi=phi, k_row=k, k_col=k)
+w_row = wts["w_row"]
+w_col = wts["w_col"]
+E_row = wts["E_row"]
+E_col = wts["E_col"]
+cvx_res2 = cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gammaSeq, plot_error = False)
 ```
 
 For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).

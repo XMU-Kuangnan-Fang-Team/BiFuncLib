@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>FunSparse &mdash; BiFuncLib's documentation  documentation</title>
+
+    
+        
+        
+            <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+        
+            <link rel="stylesheet" type="text/css" href="../_static/css/main.css?v=fd6b4214" />
+        
+    
+
+    <script type="text/javascript" src="../_static/js/main.js"></script>
+
+        <script type="text/javascript" id="documentation_options"
+                data-url_root="../"
+                src="../_static/documentation_options.js"></script>
+
+        
+            <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+            <script src="../_static/doctools.js?v=9bcbadda"></script>
+            <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+
+    
+        
+        <link rel="shortcut icon" href="../_static/img/favicon.ico"/>
+    
+            <link rel="index" title="Index" href="../genindex.html"/>
+            <link rel="search" title="Search" href="../search.html"/>
+            <link rel="next" title="FunSAS" href="FunSAS.html"/>
+            <link rel="prev" title="FunPF" href="FunPF.html"/>
+
+    
+
+    
+</head>
+<body>
+
+
+    <header>
+        
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="../index.html">
+                            <img
+                                
+                                    src="../_static/img/logo.svg"
+                                
+                                alt="Logo"
+                                
+                                    style="height: 0em"
+                                
+                                />
+                            
+                                <p class="title is-3"
+                                
+                                >
+                                    BiFuncLib
+                                </p>
+                            
+                        </a>
+                        <!--<a role="button" class="navbar-burger burger" aria-label="menu"
+                           aria-expanded="false"
+                           data-target="navbarMenu">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>-->
+                    </div>
+
+                    
+                        <div id="navbarMenu" class="navbar-menu">
+                            <div class="navbar-end">
+                                <!--
+                                <a class="navbar-item" href="https://documatt.com">Documatt</a>
+                                <a class="navbar-item"
+                                   href="https://snippets.documatt.com">Snippets</a>
+                                <a class="navbar-item is-active" href="https://blog.documatt.com">Blog</a>
+                                -->
+                            </div>
+                        </div>
+                    
+                </div>
+            </nav>
+        
+
+        
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <div class="container">
+                    <ul>
+                        <li><a href="../index.html">BiFuncLib's documentation</a></li>
+                        
+    <li><a href="methods%20and%20main%20functions.html" aria-current="page">Methods and Main Functions</a>
+    </li>
+
+
+    <li class="is-active">FunSparse</li>
+
+                    </ul>
+                </div>
+            </nav>
+        
+    </header>
+
+
+
+    <section class="section site-hero" style="padding-bottom: 0;">
+        <div class="container">
+            <div class="columns">
+                <div class="column content is-8 is-offset-2">
+                        
+                            <h1 class="title is-2">
+                                <a href="../index.html">BiFuncLib's documentation</a>
+                            </h1>
+                            <div class="motto subtitle is-4">
+                                BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.
+                            </div>
+                        
+                    
+                </div>
+                <div class="column">
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<hr>
+
+
+    
+        <section class="section is-paddingless" id="document">
+            <div class="container">
+                <div class="columns">
+                    <div class="column is-2 mt-2 is-family-sans-serif">
+                        
+<div class="content globaltoc">
+    <p class="has-text-weight-bold">Table of Contents</p>
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="methods%20and%20main%20functions.html">Methods and Main Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="FunFEM.html">FunFEM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLBM.html">FunLBM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunCC.html">FunCC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunPF.html">FunPF</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FunSparse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunSAS.html">FunSAS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="FunLocal.html">FunLocal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Bimax.html">Bimax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SSVD.html">SSVD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CVX.html">CVX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution</a></li>
+</ul>
+
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/methods and main functions/FunSparse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+                        
+                    </div>
+                    <div class="column is-8">
+                        
+                        <article class="content is-medium sphinx-body">
+                            
+  <section id="funsparse">
+<h1>FunSparse<a class="headerlink" href="#funsparse" title="Link to this heading">¶</a></h1>
+<section id="method-description">
+<span id="funsparse-label"></span><h2>Method Description<a class="headerlink" href="#method-description" title="Link to this heading">¶</a></h2>
+<p>Sparse Functional K-means Clustering is an advanced clustering technique designed for functional data,
+such as time series or curves. It extends traditional K-means clustering by incorporating sparsity to select the most relevant features of the data for clustering, enhancing interpretability and accuracy.</p>
+<ul class="simple">
+<li><p>Functional Data Representation</p></li>
+</ul>
+<p>Each observed curve is represented in a continuous form, ensuring the data are suitable for clustering.</p>
+<ul class="simple">
+<li><p>Sparsity Constraint</p></li>
+</ul>
+<p>A sparsity constraint is introduced to select the most relevant parts of the domain, controlled by a parameter m that specifies the measure of the domain where the weighting function is zero.</p>
+<ul class="simple">
+<li><p>Optimization Problem</p></li>
+</ul>
+<p>The clustering problem is formulated as a variational problem, maximizing the weighted between-cluster sum of squares (BCSS) subject to the sparsity constraint.</p>
+<ul class="simple">
+<li><p>Iterative Algorithm</p></li>
+</ul>
+<p>An iterative algorithm is used to solve the optimization problem. The algorithm alternates between:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>Weighting Function Update</strong>: Given the current clustering, the optimal weighting function is computed using the solution to the variational problem. This step identifies the most relevant parts of the domain for clustering.</p></li>
+<li><p><strong>Clustering Update</strong>: Given the weighting function, the optimal clustering is found by applying a functional K-means clustering algorithm, where the distance between functions is weighted according to the weighting function.</p></li>
+</ol>
+</div></blockquote>
+<ul class="simple">
+<li><p>Parameter Tuning</p></li>
+</ul>
+<p>The sparsity parameter m is tuned using a permutation-based GAP statistics approach to determine the optimal level of sparsity.</p>
+<ul class="simple">
+<li><p>Visualization and Interpretation</p></li>
+</ul>
+<p>The results are visualized through estimated cluster mean functions and the weighting function, highlighting the most discriminative parts of the domain.</p>
+</section>
+<section id="function">
+<h2>Function<a class="headerlink" href="#function" title="Link to this heading">¶</a></h2>
+<p>This method provides three core functions: <strong>sparse_sim_data</strong>, <strong>sparse_bifunc</strong> and <strong>FDPlot.sparse_fdplot</strong>.
+In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function.</p>
+<section id="sparse-sim-data">
+<h3>sparse_sim_data<a class="headerlink" href="#sparse-sim-data" title="Link to this heading">¶</a></h3>
+<p><strong>sparse_sim_data</strong> generates simulated data according to the FunSparse model, and a true clustering result.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">,</span> <span class="n">plot</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="parameter">
+<h4>Parameter<a class="headerlink" href="#parameter" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>n</strong></p></td>
+<td><p>integer, the number of observations or curves to generate for each cluster.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>x</strong></p></td>
+<td><p>array, the domain over which the functional data is defined. This is typically a set of points (e.g., time points or spatial coordinates) where the functional data is observed.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>paramC</strong></p></td>
+<td><p>numeric, a parameter that controls the overlap between the two clusters. It specifies the proportion of the domain where the mean functions of the two clusters are identical.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot</strong></p></td>
+<td><p>bool, whether to plot the generated data. Default is False.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="value">
+<h4>Value<a class="headerlink" href="#value" title="Link to this heading">¶</a></h4>
+<p>The function <strong>sparse_sim_data</strong> outputs a matrix contains simulated data, and a sequence contains true clustering result.</p>
+<ul class="simple">
+<li><p><strong>data</strong>: array, a simulated data generated by FunSparse model.</p></li>
+<li><p><strong>cluster</strong>: array, true clustering results.</p></li>
+</ul>
+<p>If <strong>plot=True</strong>, a visualization of simulated data will be displayed.</p>
+<a class="reference internal image-reference" href="../_images/sparse_data.png"><img alt="../_images/sparse_data.png" class="align-center" src="../_images/sparse_data.png" style="width: 400px;" />
+</a>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">sparse_sim_data</span>
+<span class="n">paramC</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">sparse_simdata</span> <span class="o">=</span> <span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sparse-bifunc">
+<h3>sparse_bifunc<a class="headerlink" href="#sparse-bifunc" title="Link to this heading">¶</a></h3>
+<p><strong>sparse_bifunc</strong> performs model fitting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_bifunc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;kmea&#39;</span><span class="p">,</span> <span class="n">true_clus</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id1">
+<h4>Parameter<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>data</strong></p></td>
+<td><p>array, the functional data to be clustered. This is typically a 2D array where each column represents a functional observation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>x</strong></p></td>
+<td><p>array, the domain over which the functional data is defined. This is typically a set of points (e.g., time points or spatial coordinates) where the functional data is observed.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>k</strong></p></td>
+<td><p>integer, the number of clusters to form.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>method</strong></p></td>
+<td><p>str, the clustering method to use, ‘pam’, ‘hier’ or ‘kmea’. Default is ‘kmea’.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>true_clus</strong></p></td>
+<td><p>numeric or None, The true cluster labels. If known, the Classification Error Rate (CER) will be calculated to evaluate the clustering performance.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h4>Value<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<p>The function <strong>sparse_bifunc</strong> outputs a dict including clustering results and the value of CER (if <strong>true_clus=True</strong>).</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>result</strong>: dict, clustering results for FunSparse model, including:</dt><dd><ol class="arabic simple">
+<li><p><strong>cluster</strong>: array, indicates the cluster assignment for each data point.</p></li>
+<li><p><strong>iteration</strong>: integer, the number of iterations the algorithm has run.</p></li>
+<li><p><strong>obj</strong>: numeric, the value of the objective function.</p></li>
+<li><p><strong>w</strong>: array, weighting function used in sparse clustering.</p></li>
+</ol>
+</dd>
+</dl>
+</li>
+<li><p><strong>CER</strong>: numeric, the Classification Error Rate (CER).</p></li>
+</ul>
+</section>
+<section id="id3">
+<h4>Example<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">sparse_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.sparse_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">sparse_bifunc</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">paramC</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">sparse_simdata</span> <span class="o">=</span> <span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">part_vera</span> <span class="o">=</span> <span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">)[</span><span class="s1">&#39;cluster&#39;</span><span class="p">]</span>
+<span class="n">sparse_res</span> <span class="o">=</span> <span class="n">sparse_bifunc</span><span class="p">(</span><span class="n">sparse_simdata</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">true_clus</span> <span class="o">=</span> <span class="n">part_vera</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="fdplot-sparse-fdplot">
+<h3>FDPlot.sparse_fdplot<a class="headerlink" href="#fdplot-sparse-fdplot" title="Link to this heading">¶</a></h3>
+<p><strong>FDPlot.sparse_fdplot</strong> visualizes the result generated by <strong>pf_bifunc</strong> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FDPlot</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">sparse_fdplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id4">
+<h4>Parameter<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h4>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>result</strong></p></td>
+<td><p>dict, a clustering result generated by <strong>sparse_bifunc</strong> function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>x</strong></p></td>
+<td><p>array, the domain over which the functional data is defined. This is typically a set of points (e.g., time points or spatial coordinates) where the functional data is observed.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>data</strong></p></td>
+<td><p>array, the functional data to be clustered. This is typically a 2D array where each column represents a functional observation.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h4>Value<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>The function outputs two graphs.</p>
+<p>The first image represents the outcomes of applying sparse functional K-means clustering to functional datasets,
+with each curve corresponding to a data point and different colors indicating distinct clusters.</p>
+<a class="reference internal image-reference" href="../_images/sparse_cluster.png"><img alt="../_images/sparse_cluster.png" class="align-center" src="../_images/sparse_cluster.png" style="width: 400px;" />
+</a>
+<p>The second image illustrates the weighting function resulting from the sparse clustering algorithm,
+highlighting the critical portions of the data domain that are essential for cluster differentiation.</p>
+<a class="reference internal image-reference" href="../_images/sparse_weighting.png"><img alt="../_images/sparse_weighting.png" class="align-center" src="../_images/sparse_weighting.png" style="width: 400px;" />
+</a>
+</section>
+<section id="id6">
+<h4>Example<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.simulation_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">sparse_sim_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.sparse_bifunc</span><span class="w"> </span><span class="kn">import</span> <span class="n">sparse_bifunc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">BiFuncLib.FDPlot</span><span class="w"> </span><span class="kn">import</span> <span class="n">FDPlot</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">paramC</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">sparse_simdata</span> <span class="o">=</span> <span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">)[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">part_vera</span> <span class="o">=</span> <span class="n">sparse_sim_data</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">paramC</span><span class="p">)[</span><span class="s1">&#39;cluster&#39;</span><span class="p">]</span>
+<span class="n">sparse_res</span> <span class="o">=</span> <span class="n">sparse_bifunc</span><span class="p">(</span><span class="n">sparse_simdata</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">true_clus</span> <span class="o">=</span> <span class="n">part_vera</span><span class="p">)</span>
+<span class="n">FDPlot</span><span class="p">(</span><span class="n">sparse_res</span><span class="p">)</span><span class="o">.</span><span class="n">sparse_fdplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sparse_simdata</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+
+                            
+                            
+                                <p class="has-text-weight-light is-size-6 my-4">
+                                    Previous:
+                                    <a href="FunPF.html"
+                                       title="previous chapter">FunPF</a>
+                                
+                                    |
+                                
+                                    Next:
+                                    <a href="FunSAS.html"
+                                       title="next chapter">FunSAS</a>
+                                </p>
+                            
+                        </article>
+                    </div>
+                    <div class="column is-2 mt-2  is-family-sans-serif">
+                        
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">FunSparse</a><ul>
+<li><a class="reference internal" href="#method-description">Method Description</a></li>
+<li><a class="reference internal" href="#function">Function</a><ul>
+<li><a class="reference internal" href="#sparse-sim-data">sparse_sim_data</a><ul>
+<li><a class="reference internal" href="#parameter">Parameter</a></li>
+<li><a class="reference internal" href="#value">Value</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sparse-bifunc">sparse_bifunc</a><ul>
+<li><a class="reference internal" href="#id1">Parameter</a></li>
+<li><a class="reference internal" href="#id2">Value</a></li>
+<li><a class="reference internal" href="#id3">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#fdplot-sparse-fdplot">FDPlot.sparse_fdplot</a><ul>
+<li><a class="reference internal" href="#id4">Parameter</a></li>
+<li><a class="reference internal" href="#id5">Value</a></li>
+<li><a class="reference internal" href="#id6">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered has-text-primary">
+                <a href="../index.html">
+                    <img
+                        
+                            src="../_static/img/logo.svg"
+                        
+                        alt="Logo"
+                        
+                            style="height: 0em"
+                        
+                    />
+                 </a>
+                 <div class="footer-text">
+                
+                    <p>BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.</p>
+                
+                </div>
+
+                <p class="mt-4">Copyright &copy; 2025, Yuhao Zhong</p>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>

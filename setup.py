@@ -6,13 +6,16 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name='BiFuncLib',
-    version='0.0.1',
+    version='0.0.4',
     description='A Python library for biclustering with functional data',
     author='Yuhao Zhong',
     author_email='Barry57@163.com',
     url='https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/',
     license='MIT',
     packages=find_packages(),
+    package_data={
+        'BiFuncLib': ['simulation_data/*'],
+    },
     install_requires=[
         'numpy',
         'pandas',
@@ -32,3 +35,5 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
 )
+
+

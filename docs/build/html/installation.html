@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>&lt;no title&gt; &mdash; BiFuncLib's documentation  documentation</title>
+    <meta itemprop="sphinx_documatt_theme" content="0.0.5"><title>installation &mdash; BiFuncLib's documentation  documentation</title>
 
     
         
@@ -37,8 +37,8 @@
     
             <link rel="index" title="Index" href="genindex.html"/>
             <link rel="search" title="Search" href="search.html"/>
-            <link rel="next" title="&lt;no title&gt;" href="methods.html"/>
-            <link rel="prev" title="&lt;no title&gt;" href="introduction.html"/>
+            <link rel="next" title="Methods and Main Functions" href="methods%20and%20main%20functions/methods%20and%20main%20functions.html"/>
+            <link rel="prev" title="introduction" href="introduction.html"/>
 
     
 
@@ -102,7 +102,7 @@
                         <li><a href="index.html">BiFuncLib's documentation</a></li>
                         
 
-    <li class="is-active">&lt;no title&gt;</li>
+    <li class="is-active">installation</li>
 
                     </ul>
                 </div>
@@ -146,9 +146,11 @@
                         
 <div class="content globaltoc">
     <p class="has-text-weight-bold">Table of Contents</p>
-    <ul>
-<li class="toctree-l1"><a class="reference internal" href="references.html">Main References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="references.html#other-references">Other References</a></li>
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="methods%20and%20main%20functions/methods%20and%20main%20functions.html">Methods and Main Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contribution.html">Contribution</a></li>
 </ul>
 
@@ -176,7 +178,63 @@
                         
                         <article class="content is-medium sphinx-body">
                             
-  
+  <section id="installation">
+<h1>installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h1>
+<section id="install-from-pypi">
+<h2>Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Link to this heading">¶</a></h2>
+<p>It is recommended to use <code class="docutils literal notranslate"><span class="pre">pip</span></code> for installation. You need to check the upgrade at the beginning:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+<p>Then you can instll this package using the code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>BiFuncLib
+</pre></div>
+</div>
+<p>You can also use the installation method for a specified version.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">BiFuncLib</span><span class="o">==</span><span class="m">0</span>.0.1
+</pre></div>
+</div>
+</section>
+<section id="install-from-source">
+<h2>Install from source<a class="headerlink" href="#install-from-source" title="Link to this heading">¶</a></h2>
+<p>If you want to work with the latest development version or wish to contribute to <strong>BiFuncLib</strong>, this way will be suitable.</p>
+<p>Clone the latest source code from GitHub and navigate into the directory of the cloned project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib.git
+<span class="nb">cd</span><span class="w"> </span>BiFuncLib
+</pre></div>
+</div>
+<p>Run the following command to install the project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Alternatively, if you want to install the project in development mode (which will install the project along with all development dependencies), you can use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>If you prefer to use the setup.py script to install, you can run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+</pre></div>
+</div>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
+<p>Dependencies and version control for running <strong>BiFuncLib</strong>:</p>
+<ul class="simple">
+<li><p>genetlib&gt;=1.2.4</p></li>
+<li><p>matplotlib&gt;=3.7.1</p></li>
+<li><p>networkx&gt;=2.8.4</p></li>
+<li><p>numpy==1.24.3</p></li>
+<li><p>pandas&gt;=1.5.3</p></li>
+<li><p>scikit_learn&gt;=1.2.2</p></li>
+<li><p>scikit-learn-extra</p></li>
+<li><p>scipy&gt;=1.10.1</p></li>
+<li><p>seaborn&gt;=0.13.2</p></li>
+<li><p>setuptools==67.8.0</p></li>
+</ul>
+<p>When you install using the <strong>pip install</strong> method, these dependencies will be automatically installed.</p>
+</section>
+</section>
+
 
 
                             
@@ -184,19 +242,31 @@
                                 <p class="has-text-weight-light is-size-6 my-4">
                                     Previous:
                                     <a href="introduction.html"
-                                       title="previous chapter">&lt;no title&gt;</a>
+                                       title="previous chapter">introduction</a>
                                 
                                     |
                                 
                                     Next:
-                                    <a href="methods.html"
-                                       title="next chapter">&lt;no title&gt;</a>
+                                    <a href="methods%20and%20main%20functions/methods%20and%20main%20functions.html"
+                                       title="next chapter">Methods and Main Functions</a>
                                 </p>
                             
                         </article>
                     </div>
                     <div class="column is-2 mt-2  is-family-sans-serif">
                         
+  <div class="content localtoc">
+    <p class="has-text-weight-bold">On this page</p>
+    <ul>
+<li><a class="reference internal" href="#">installation</a><ul>
+<li><a class="reference internal" href="#install-from-pypi">Install from PyPI</a></li>
+<li><a class="reference internal" href="#install-from-source">Install from source</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
                         
                     </div>
                 </div>

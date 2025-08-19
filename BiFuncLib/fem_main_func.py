@@ -138,19 +138,11 @@ def fem_main_func(fd, K, model='AkjBk', init='kmeans', lambda_=0, Tinit=None,
             if Linf_old is not None and (abs(Linf_new - Linf_old) < eps or np.isnan(Linf_new)):
                 break
     if graph:
-        plt.figure(figsize=(10, 5))
-        plt.subplot(1, 2, 1)
-        YV = np.dot(Y, V[:, :2])
-        colors = np.argmax(T, axis=1)
-        plt.scatter(np.array(YV[:, 0]), np.array(YV[:, 1]), c=colors, s=30, marker='o')
-        plt.tick_params(axis='both', labelsize=8)
-        plt.xlabel('axis 1')
-        plt.ylabel('axis 2')
-        plt.subplot(1, 2, 2)
+        plt.figure(figsize=(5, 3))
         plt.plot(Lobs[:i+2], 'r.')
         plt.tick_params(axis='both', labelsize=8)
-        plt.xlabel('iterations')
-        plt.ylabel('vraisemblance Espace observe')
+        plt.xlabel('Iterations')
+        plt.ylabel('Log-likelihood (observed)')
         plt.show()
     cls_ = np.argmax(T, axis=1)
     crit = criteria(Lobs[i+1], T, prms, n)
@@ -278,4 +270,6 @@ def mstep(fd, U, T, model):
             bk = max(bk, 1e-3)
             D[k, d:, d:] = np.eye(p - d) * bk
     return {'K': K, 'p': p, 'mean': mu, 'my': m, 'prop': prop, 'D': D, 'model': model}
+
+
 
