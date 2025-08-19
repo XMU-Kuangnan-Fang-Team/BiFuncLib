@@ -35,7 +35,7 @@ In this section, we detail their respective usage, as well as parameters, output
 
 bimax_sim_data
 ~~~~~~~~~~~~~~~
-**pf_sim_data** loads a binary matrix according to the Bimax model.
+**bimax_sim_data** loads a binary matrix according to the Bimax model.
 
 .. code-block:: python
 
