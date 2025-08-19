@@ -180,7 +180,7 @@ Example
                         np.array([1.02e-5]), np.array([2,3]), np.array([0.3,0.5]), opt=True)
 
 
-FDPlot.local_individuals_fdplot and FDPlot.local_center_fdplot
+FDPlot.local_individuals_fdplot & FDPlot.local_center_fdplot
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **FDPlot.local_individuals_fdplot** displays the raw functional data for all individuals,
 color-coded by their cluster membership as identified by the method.
