@@ -8,7 +8,8 @@ Method Description
 
 This method is developed by our team. We propose a **doubly-penalized fusion** framework that simultaneously estimates smooth functional curves and discovers **row (sample) and column (covariate) clusters** in a single optimization. The method is distribution-free and automatically determines the number of clusters. The key steps are listed below.
 
-1. **Functional Representation**  
+1. **Functional Representation** 
+
    Each observed curve is expanded with B-spline basis functions
 
    .. math::
@@ -63,6 +64,7 @@ Function
 --------------
 This method provides three core functions: **pf_sim_data**, **pf_bifunc** and **FDPlot.pf_fdplot**.
 In this section, we detail their respective usage, as well as parameters, output values and usage examples for each function. 
+
 
 pf_sim_data
 ~~~~~~~~~~~~~~~
