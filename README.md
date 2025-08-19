@@ -60,6 +60,7 @@ Below are individual usage examples for each method, including computational res
 ### FunFEM
 ``fem_bifunc`` performs FunFEM algorithm which allows to cluster functional data by modeling the curves within a common and discriminative functional subspace.
 ```Python
+import numpy as np
 from BiFuncLib.fem_bifunc import fem_bifunc
 from BiFuncLib.simulation_data import fem_sim_data
 from BiFuncLib.BsplineFunc import BsplineFunc
@@ -90,6 +91,7 @@ print(ari(lbm_res['row_clust'],lbm_simdata['row_clust']))
 
 `cc_bifunc_cv` provides a function for finding the best tunning delta.
 ```python
+import numpy as np
 from BiFuncLib.simulation_data import cc_sim_data
 from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
 delta_list = np.linspace(0.1, 20, num = 21)
