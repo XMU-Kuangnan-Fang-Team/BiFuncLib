@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from BiFuncLib.FDPlot import FDPlot
 from BiFuncLib.simulation_data import lbm_sim_data
 from BiFuncLib.lbm_bifunc import lbm_bifunc
 from BiFuncLib.lbm_main_func import ari
@@ -36,7 +37,12 @@ def test_lbm_bifunc_grid():
 def test_lbm_bifunc_user_init():
     lbm_sim = lbm_sim_data(n=30, p=30, t=10, seed=789)
     data = lbm_sim['data']
-    res0 = lbm_bifunc(data, K=3, L=2, display=True, init='kmeans')
+    res0 = lbm_bifunc(data, K=4, L=3, display=True, init='kmeans')
+    FDPlot(res0).lbm_fdplot('proportions')
+    FDPlot(res0).lbm_fdplot('evolution')
+    FDPlot(res0).lbm_fdplot('likelihood')
+    FDPlot(res0).lbm_fdplot('blocks')
+    FDPlot(res0).lbm_fdplot('means')
     res1 = lbm_bifunc(data, K=[res0['K']], L=[res0['L']],
                       init='user',
                       row_init=res0['row_clust'],
