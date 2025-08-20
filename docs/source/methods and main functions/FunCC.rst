@@ -187,6 +187,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+  import numpy as np
   from BiFuncLib.simulation_data import cc_sim_data
   from BiFuncLib.cc_bifunc import cc_bifunc, cc_bifunc_cv
   delta_list = np.linspace(0.1, 20, num = 21)
