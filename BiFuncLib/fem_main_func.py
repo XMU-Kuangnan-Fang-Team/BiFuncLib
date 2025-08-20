@@ -44,7 +44,7 @@ def criteria(loglik, T, prms, n):
 
 
 def estep(prms, fd, U):
-    Y = fd['coefs'].T
+    Y = np.asarray(fd['coefs'].T)
     n = Y.shape[0]
     p = Y.shape[1]
     K = prms['K']
@@ -81,7 +81,7 @@ def estep(prms, fd, U):
 def fstep(fd, T, lambda_):
     if np.min(np.sum(T, axis=0)) <= 1:
         raise ValueError("One cluster is almost empty!")
-    G = fd['coefs'].T
+    G = np.asarray(fd['coefs'].T)
     d = T.shape[1] - 1
     basisobj = fd['basis']
     W = inprod(basisobj, basisobj)    
@@ -94,15 +94,15 @@ def fstep(fd, T, lambda_):
             x_predict = X[:, i]
             enet = ElasticNet(alpha=lambda_, l1_ratio=0.5, fit_intercept=False)
             enet.fit(x_predict, G)
-            coef = enet.coef_.ravel()
-            Utilde[:, i] = coef / np.sqrt(np.sum(np.square(coef)))
+            coef = enet.coef_
+            Utilde[:, i] = (coef / np.sqrt(np.sum(np.square(coef)))).ravel()
         U = svd(Utilde, full_matrices=False)[0]
     return U
 
 
 def fem_main_func(fd, K, model='AkjBk', init='kmeans', lambda_=0, Tinit=None,
                   maxit=50, eps=1e-8, graph=False):
-    Y = fd['coefs'].T
+    Y = np.asarray(fd['coefs'].T)
     n = Y.shape[0]
     Lobs = np.full(maxit + 1, -np.inf)
     if init == 'user':
