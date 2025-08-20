@@ -69,9 +69,9 @@ Dependencies and version control for running **BiFuncLib**:
 
 - pandas>=1.5.3
 
-- scikit_learn>=1.2.2
+- scikit-learn>=1.2.2
 
-- scikit-learn-extra
+- scikit-learn-extra==0.0.3
 
 - scipy>=1.10.1
 
