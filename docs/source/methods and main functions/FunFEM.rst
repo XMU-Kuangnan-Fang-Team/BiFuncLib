@@ -159,7 +159,8 @@ If **graph=True**, a plot of the log-likelihood versus iteration number will be 
 Example
 ^^^^^^^^
 .. code-block:: python
-  
+
+    import numpy as np
     from BiFuncLib.fem_bifunc import fem_bifunc
     from BiFuncLib.simulation_data import fem_sim_data
     from BiFuncLib.BsplineFunc import BsplineFunc
@@ -175,6 +176,7 @@ Example
     # Another setting
     res2 = fem_bifunc(fdobj, K=[res['K']], model=['AkjBk', 'DkBk'], init='user', Tinit=res['P'], 
                     lambda_=0.01, disp=True, graph = True)
+
 
 FDPlot.fem_fdplot
 ~~~~~~~~~~~~~~~~~~
