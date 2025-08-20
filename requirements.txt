@@ -1,4 +1,4 @@
-genetlib==1.2.4
+genetlib==1.2.6
 matplotlib==3.7.1
 networkx==2.8.4
 numpy==1.24.3
@@ -8,5 +8,6 @@ scikit-learn-extra==0.3.0
 scipy==1.10.1
 seaborn==0.13.2
 setuptools==67.8.0
+
 
 
