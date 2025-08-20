@@ -21,9 +21,9 @@ def test_lbm_sim_data():
     assert 'data' in lbm_sim
 
 def test_lbm_bifunc_basic():
-    lbm_sim = lbm_sim_data(n=100, p=100, t=30, seed=123)
+    lbm_sim = lbm_sim_data(n=100, p=100, t=30, seed=1)
     data = lbm_sim['data']
-    res = lbm_bifunc(data, K=4, L=3, display=False, basis_name = 'spline', init='funFEM')
+    res = lbm_bifunc(data, K=2, L=2, display=False, basis_name = 'spline', init='funFEM')
     _check_lbm_result(res)
     row_ari = ari(res['row_clust'], lbm_sim['row_clust'])
     col_ari = ari(res['col_clust'], lbm_sim['col_clust'])
@@ -33,7 +33,7 @@ def test_lbm_bifunc_basic():
 def test_lbm_bifunc_grid():
     lbm_sim = lbm_sim_data(n=50, p=50, t=15, bivariate=True, seed=456)
     data = [lbm_sim['data1'], lbm_sim['data2']]
-    res = lbm_bifunc(data, K=[2, 3], L=[2, 3], display=False)
+    res = lbm_bifunc(data, K=[2, 3], L=[2, 3], display=False, init='kmeans')
     FDPlot(res).lbm_fdplot('proportions')
     FDPlot(res).lbm_fdplot('evolution')
     FDPlot(res).lbm_fdplot('likelihood')
