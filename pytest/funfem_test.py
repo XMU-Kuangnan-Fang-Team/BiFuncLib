@@ -5,6 +5,7 @@ from BiFuncLib.fem_bifunc import fem_bifunc
 from BiFuncLib.simulation_data import fem_sim_data
 from BiFuncLib.BsplineFunc import BsplineFunc
 from GENetLib.fda_func import basis_fd
+from BiFuncLib.FDPlot import FDPlot
 
 # Test fem_sim_data
 def test_fem_sim_data():
@@ -39,6 +40,7 @@ def test_fem_bifunc_with_init():
     assert isinstance(res2, dict)
     assert 'K' in res2
     assert 'P' in res2
+
 
 
 
