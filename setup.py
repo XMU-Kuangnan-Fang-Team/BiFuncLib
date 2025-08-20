@@ -17,13 +17,13 @@ setup(
         'BiFuncLib': ['simulation_data/*'],
     },
     install_requires=[
-        'numpy',
+        'numpy==1.24.3',
         'pandas',
         'matplotlib',
         'scipy',
-        'GENetLib',
-        'scikit-learn',
-        'scikit-learn-extra',
+        'GENetLib==1.2.4',
+        'scikit-learn==1.2.2',
+        'scikit-learn-extra==0.3.0',
         'seaborn',
         'networkx'
     ],
@@ -35,6 +35,7 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
 )
+
 
 
 
