@@ -5,8 +5,8 @@
 
 [![pypi](https://img.shields.io/pypi/v/BiFuncLib?logo=Pypi)](https://pypi.org/project/BiFuncLib)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-lightblue.svg)
-[![Build](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)](https://github.com/XMU-Kuangnan-Fang-Team/GENetLib/actions/workflows/CI.yml/badge.svg)
-[![codecov](https://codecov.io/github/XMU-Kuangnan-Fang-Team/GENetLib/graph/badge.svg?token=9J9QMN7L9Z)](https://codecov.io/github/XMU-Kuangnan-Fang-Team/BiFuncLib)
+[![Build](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/actions/workflows/CI.yml/badge.svg)](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/actions/workflows/CI.yml/badge.svg)
+[![codecov](https://codecov.io/github/XMU-Kuangnan-Fang-Team/BiFuncLib/graph/badge.svg?token=9J9QMN7L9Z)](https://codecov.io/github/XMU-Kuangnan-Fang-Team/BiFuncLib)
 [![License: MIT](https://img.shields.io/badge/License-MIT-darkgreen.svg)](https://opensource.org/licenses/MIT)
 [![Documentation Status](https://readthedocs.org/projects/bifunclib/badge/?version=latest)](https://bifunclib.readthedocs.io/en/latest/?badge=latest)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
