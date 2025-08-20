@@ -19,7 +19,7 @@ def test_fem_bifunc():
     fem_simdata = fem_sim_data()
     fdobj = BsplineFunc(basis).smooth_basis(time_grid, np.array(fem_simdata['data'].T))['fd']
     res1 = fem_bifunc(fdobj, K=[5, 6], model=['AkjBk', 'DkBk', 'DB'], crit='aic',
-                     init='kmeans', lambda_=0.01, disp=True)
+                         init='kmeans', lambda_=0, disp=False)
     res2 = fem_bifunc(fdobj, K=[5, 6], model=['DkB', 'DBk', 'AkjB'], crit='bic',
                  init='random', lambda_=0.01, disp=True)
     assert isinstance(res1, dict)
@@ -38,4 +38,5 @@ def test_fem_bifunc_with_init():
     assert isinstance(res2, dict)
     assert 'K' in res2
     assert 'P' in res2
+
 
