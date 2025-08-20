@@ -21,7 +21,7 @@ setup(
         'pandas',
         'matplotlib',
         'scipy',
-        'GENetLib==1.2.4',
+        'GENetLib==1.2.6',
         'scikit-learn==1.2.2',
         'scikit-learn-extra==0.3.0',
         'seaborn',
@@ -35,6 +35,7 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
 )
+
 
 
 
