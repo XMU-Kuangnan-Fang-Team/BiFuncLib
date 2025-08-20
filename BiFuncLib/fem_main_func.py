@@ -81,7 +81,7 @@ def estep(prms, fd, U):
 def fstep(fd, T, lambda_):
     if np.min(np.sum(T, axis=0)) <= 1:
         raise ValueError("One cluster is almost empty!")
-    G = np.asarray(fd['coefs'].T)
+    G = fd['coefs'].T
     d = T.shape[1] - 1
     basisobj = fd['basis']
     W = inprod(basisobj, basisobj)    
@@ -91,10 +91,10 @@ def fstep(fd, T, lambda_):
         X = G @ U
         Utilde = U.copy()
         for i in range(d):
-            x_predict = X[:, i].reshape(-1, 1)
+            x_predict = X[:, i]
             enet = ElasticNet(alpha=lambda_, l1_ratio=0.5, fit_intercept=False)
             enet.fit(x_predict, G)
-            coef = enet.coef_
+            coef = enet.coef_.ravel()
             Utilde[:, i] = coef / np.sqrt(np.sum(np.square(coef)))
         U = svd(Utilde, full_matrices=False)[0]
     return U
@@ -270,4 +270,6 @@ def mstep(fd, U, T, model):
             bk = max(bk, 1e-3)
             D[k, d:, d:] = np.eye(p - d) * bk
     return {'K': K, 'p': p, 'mean': mu, 'my': m, 'prop': prop, 'D': D, 'model': model}
+
+
 
