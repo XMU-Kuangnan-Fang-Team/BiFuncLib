@@ -18,7 +18,6 @@ def test_lbm_sim_data():
     assert lbm_sim['data'].shape == (50, 15)
 
 def test_lbm_bifunc_basic():
-    """最基本的 LBM 调用"""
     lbm_sim = lbm_sim_data(n=60, p=60, t=20, seed=123)
     data = lbm_sim['data']
     res = lbm_bifunc(data, K=4, L=3, display=False, basis_name = 'spline', init='funFEM')
