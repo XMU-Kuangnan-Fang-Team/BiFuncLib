@@ -29,8 +29,8 @@ def test_lbm_bifunc_basic():
     _check_lbm_result(res2)
     res3 = lbm_bifunc(data, K=2, L=2, display=True, init='funFEM')
     _check_lbm_result(res3)
-    row_ari = ari(res['row_clust'], lbm_sim['row_clust'])
-    col_ari = ari(res['col_clust'], lbm_sim['col_clust'])
+    row_ari = ari(res3['row_clust'], lbm_sim['row_clust'])
+    col_ari = ari(res3['col_clust'], lbm_sim['col_clust'])
     assert 0 <= row_ari <= 1
     assert 0 <= col_ari <= 1
 
