@@ -1,6 +1,9 @@
 import numpy as np
 import pytest
 from BiFuncLib.FDPlot import FDPlot
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from BiFuncLib.simulation_data import lbm_sim_data
 from BiFuncLib.lbm_bifunc import lbm_bifunc
 from BiFuncLib.lbm_main_func import ari
