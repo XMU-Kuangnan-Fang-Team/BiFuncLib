@@ -552,39 +552,13 @@ def get_msdrule(par, sds, comb_list, m1, m2, m3):
 
 
 def get_zero(mod, mu_fd=None):
-    if mu_fd is None:
-        mu = mod["parameters"]["mu"]
-        K = mu.shape[0]
-        if K != 1:
-            FullS = mod["FullS"]
-            nP = int((K - 1) * K // 2)
-            P = np.zeros((nP, K))
-            ind = [0, K - 1 - 1]
-            for ii in range(K - 1):
-                block_length = ind[1] - ind[0] + 1
-                P[ind[0]:ind[1]+1, ii] = 1
-                if block_length == 1:
-                    aa = -1
-                else:
-                    aa = -np.eye(block_length)
-                P[ind[0]:ind[1]+1, ii+1:K] = aa
-                new_ind0 = ind[0] + (K - 1) - ii
-                new_ind1 = ind[1] + (K - 1) - ii
-                new_ind0 = min(nP - 1, new_ind0)
-                new_ind1 = min(nP - 1, new_ind1)
-                ind = [new_ind0, new_ind1]
-            M = FullS @ (P @ mu).T
-            fraction = np.sum(np.abs(M) < 1e-4) / M.size
-            return fraction
-        else:
-            return np.nan
-    else:
-        grid = np.linspace(0, 1, 60)
-        mu_eval = mu_fd(grid)
-        K = mu_eval.shape[1]
+    mu = mod["parameters"]["mu"]
+    K = mu.shape[0]
+    if K != 1:
+        FullS = mod["FullS"]
         nP = int((K - 1) * K // 2)
         P = np.zeros((nP, K))
-        ind = [0, K - 2]
+        ind = [0, K - 1 - 1]
         for ii in range(K - 1):
             block_length = ind[1] - ind[0] + 1
             P[ind[0]:ind[1]+1, ii] = 1
@@ -598,8 +572,9 @@ def get_zero(mod, mu_fd=None):
             new_ind0 = min(nP - 1, new_ind0)
             new_ind1 = min(nP - 1, new_ind1)
             ind = [new_ind0, new_ind1]
-        M = P @ mu_eval.T
-        fraction = np.sum(np.abs(M) == 0) / M.size
+        M = FullS @ (P @ mu).T
+        fraction = np.sum(np.abs(M) < 1e-4) / M.size
         return fraction
-
+    else:
+        return np.nan
 
