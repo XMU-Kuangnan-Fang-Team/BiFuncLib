@@ -211,7 +211,7 @@ def loglik(parameters, data = None, X = None, timeindex = None, curve = None, gr
         else:
             p_pi = 0
         ploglk = loglk - p_l - p_s + p_pi
-        out = np.round(np.array([loglk[0,0], ploglk[0,0]]), 2)
+        out = np.round(np.array([loglk.item(), ploglk.item()]), 2)
     else:
         out = loglk
     return out
@@ -306,7 +306,7 @@ def sasfclust_init(data, pert = 0, grid = list(np.linspace(0.01, 1, 100)),
             gmm = GaussianMixture(n_components=G, covariance_type='spherical', max_iter=1000, random_state=42)
             class_ = gmm.fit_predict(points)
         elif init == 'hierarchical':
-            Z = linkage(points, method='ward')
+            Z = linkage(points, method='average')
             class_ = fcluster(Z, t=G, criterion='maxclust') - 1
         else:
             raise ValueError("Wrong initialization!")
@@ -428,7 +428,7 @@ def sasfclust_Mstep(parameters, data, vars_, S, tol, hard, lambda_s, lambda_l,
     sigma = get_sigma(data['x'], data['curve'], data['timeindex'], S, piigivej, gcov, n_i, gamma, mu)
     sigma = np.array(sigma) / n
     parameters['mu'] = mu
-    parameters['sigma'] = sigma[0]
+    parameters['sigma'] = sigma
     return parameters
 
 
@@ -601,5 +601,4 @@ def get_zero(mod, mu_fd=None):
         M = P @ mu_eval.T
         fraction = np.sum(np.abs(M) == 0) / M.size
         return fraction
-
 

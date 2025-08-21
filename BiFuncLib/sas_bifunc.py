@@ -81,7 +81,7 @@ def sas_bifunc(X = None, timeindex = None, curve = None, grid = None, q = 30, pa
         lk_i = loglik(parameters=parameters, data=data, vars_=vars_, FullS=FullS, 
                       W=W, AW_vec=AW_vec, P_tot=P_tot, lambda_s=lambda_s, lambda_l=lambda_l)
         lk_new = -lk_i[1]
-        sigma_new = parameters["sigma"][0]
+        sigma_new = parameters["sigma"]
         if trace:
             print(f"Iteration {ind}: Sigma = {sigma_new} loglk = {lk_i[0]} ploglk = {lk_i[1]}")
         if plot:
@@ -178,7 +178,7 @@ def sas_bifunc_cv(X = None, timeindex = None, curve = None, grid = None, q = 30,
                 l_val = loglik(parameters=mod['mod']["parameters"], X=X_i, timeindex=timeindex_i,
                                curve=curve_i, grid=grid_i, vars_=mod['mod']["vars"], FullS=mod['mod']["FullS"],
                                W=mod['mod']["W"], AW_vec=mod['mod']["AW_vec"], P_tot=mod['mod']["P_tot"])
-                l_list.append(l_val[0])
+                l_list.append(l_val)
                 zeros_list.append(get_zero(mod['mod']))
             mean_l = np.mean(l_list)
             sd_l = np.std(l_list, ddof=1) / np.sqrt(K_fold)
@@ -216,5 +216,4 @@ def sas_bifunc_cv(X = None, timeindex = None, curve = None, grid = None, q = 30,
            "zeros": zeros_all,
            "ms": (m1, m2, m3)}
     return out
-
 
