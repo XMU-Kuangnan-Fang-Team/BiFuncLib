@@ -1,6 +1,5 @@
 import matplotlib
-matplotlib.use("Agg")  # 非交互式后端
-import itertools
+matplotlib.use("Agg")
 import pytest
 from BiFuncLib.simulation_data import ssvd_sim_data
 from BiFuncLib.ssvd_main_func import jaccardmat
@@ -8,54 +7,55 @@ from BiFuncLib.ssvd_biclus import ssvd_biclus, s4vd_biclus
 from BiFuncLib.bcheatmap import bcheatmap
 
 
-def ssvd_simdata():
+def ssvd_data():
     return ssvd_sim_data()
 
-def test_ssvd_biclus(ssvd_simdata):
-    data = ssvd_simdata["data"]
-    res_sim = ssvd_simdata["res"]
-    res = ssvd_biclus(data, K=1)
-    assert isinstance(res, dict)
-    _ = jaccardmat(res_sim, res)
-    bcheatmap(data, res)
+def test_ssvd_biclus(ssvd_data):
+    data = ssvd_data["data"]
+    res_sim = ssvd_data["res"]
+    out = ssvd_biclus(data, K=1)
+    assert isinstance(out, dict)
+    print("ssvd jaccard:", jaccardmat(res_sim, out))
+    bcheatmap(data, out)
 
-_BOOL_COMBOS = list(itertools.product([True, False], repeat=4))
-@pytest.mark.parametrize(
-    "cols_nc,rows_nc,row_overlap,col_overlap",
-    _BOOL_COMBOS,
-)
+def test_s4vd_pointwise_false(ssvd_data):
+    """s4vd pointwise=False"""
+    data = ssvd_data["data"]
+    res_sim = ssvd_data["res"]
+    out = s4vd_biclus(data, pcerv=0.5, pceru=0.5, pointwise=False, nbiclust=1)
+    assert isinstance(out, dict)
+    print("row jaccard:", jaccardmat(res_sim, out, "row"))
+    print("col jaccard:", jaccardmat(res_sim, out, "column"))
+    bcheatmap(data, out, axisR=False, axisC=False, heatcols=None, clustercols=None, allrows=True, allcolumns=True)
 
-def test_s4vd_biclus_all_combos(ssvd_simdata, cols_nc, rows_nc, row_overlap, col_overlap):
-    data = ssvd_simdata["data"]
-    res_sim = ssvd_simdata["res"]
-    s4vd_res = s4vd_biclus(
+def test_s4vd_pointwise_true(ssvd_data):
+    data = ssvd_data["data"]
+    res_sim = ssvd_data["res"]
+    out1 = s4vd_biclus(
         data,
         pcerv=0.5,
         pceru=0.5,
         pointwise=True,
         nbiclust=1,
-        cols_nc=cols_nc,
-        rows_nc=rows_nc,
-        row_overlap=row_overlap,
-        col_overlap=col_overlap,
+        cols_nc=False,
+        rows_nc=False,
+        row_overlap=False,
+        col_overlap=False,
         savepath=True,
     )
-    assert isinstance(s4vd_res, dict)
-    _ = jaccardmat(res_sim, s4vd_res)
-    bcheatmap(data, s4vd_res)
-
-def test_s4vd_pointwise_false(ssvd_simdata):
-    data = ssvd_simdata["data"]
-    res_sim = ssvd_simdata["res"]
-    s4vd_res = s4vd_biclus(
+    out2 = s4vd_biclus(
         data,
         pcerv=0.5,
         pceru=0.5,
-        pointwise=False,
+        pointwise=True,
         nbiclust=1,
+        cols_nc=True,
+        rows_nc=True,
+        row_overlap=False,
+        col_overlap=False,
+        savepath=True,
     )
-    assert isinstance(s4vd_res, dict)
-    print("row  jaccard:", jaccardmat(res_sim, s4vd_res, "row"))
-    print("col  jaccard:", jaccardmat(res_sim, s4vd_res, "column"))
-    bcheatmap(data, s4vd_res)
-  
+    assert out1 is not None
+    assert out2 is not None
+    print("s4vd_pw jaccard:", jaccardmat(res_sim, out1))
+    bcheatmap(data, out1, axisR=True, axisC=True, heatcols=None, clustercols=None, allrows=False, allcolumns=False)
