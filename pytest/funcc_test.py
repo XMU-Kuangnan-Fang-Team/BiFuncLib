@@ -34,7 +34,7 @@ def test_cc_bifunc_with_shift():
     fun_mat = cc_sim_data()
     res = cc_bifunc(fun_mat, delta=10, alpha=0, beta=1, const_alpha=False, shift_alignment=True)
     _check_cc_result(res)
-    res = cc_bifunc(fun_mat, delta=10, alpha=1, beta=1, const_alpha=False, const_beta=True, shift_alignment=True)
+    res = cc_bifunc(fun_mat, delta=20, alpha=1, beta=1, const_alpha=False, const_beta=True, shift_alignment=True)
     _check_cc_result(res)
     FDPlot(res).cc_fdplot(fun_mat, only_mean=False, aligned=True, warping=True)
 
