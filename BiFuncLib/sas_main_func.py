@@ -278,7 +278,7 @@ def sasfclust_init(data, pert = 0, grid = list(np.linspace(0.01, 1, 100)),
                 Gcvsave[i] = np.sum(Sm_i['gcv'])
             lambda_s_sm = 10**loglam[np.argmin(Gcvsave)] if lambda_s_ini is None else lambda_s_ini
             fdPari = fdpar(fdobj = basis_start, Lfdobj=2, lambda_ = lambda_s_sm)
-            points = BsplineFunc(fdPari).smooth_basis(grid_i, X)['fd']['coefs'].T
+            points = np.asarray(BsplineFunc(fdPari).smooth_basis(grid_i, X)['fd']['coefs'].T)
         else:
             basis_start = basis
             loglam = np.arange(-3, 1.25, 0.25)
@@ -294,7 +294,7 @@ def sasfclust_init(data, pert = 0, grid = list(np.linspace(0.01, 1, 100)),
                     Gcvsave[i, l] = np.sum(Sm_i['gcv'])
                 lambda_s_i_vec[i] = 10**loglam[np.argmin(Gcvsave[i, :])] if lambda_s_ini is None else lambda_s_ini
                 fdPari = fdpar(fdobj = basis_start, Lfdobj=2, lambda_ = lambda_s_i_vec[i])
-                points[i, :] = BsplineFunc(fdPari).smooth_basis(grid_i, xi)['fd']['coefs']
+                points[i, :] = np.asarray(BsplineFunc(fdPari).smooth_basis(grid_i, xi)['fd']['coefs'])
     
     # Initialize clusters
     if G > 1:
@@ -601,4 +601,5 @@ def get_zero(mod, mu_fd=None):
         M = P @ mu_eval.T
         fraction = np.sum(np.abs(M) == 0) / M.size
         return fraction
+
 
