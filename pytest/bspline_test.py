@@ -49,7 +49,7 @@ def test_smooth_basis_multivariate(sample_data):
     argvals, y, basis = sample_data
     y3d = np.stack([y, y*2], axis=-1)[:, None, :]
     bsp = BsplineFunc(basisobj=basis, Lfdobj=1)
-    res = bsp.smooth_basis(argvals, y3d)
+    res = bsp.smooth_basis(argvals, y3d, method = 'qr')
     nbasis = basis['nbasis']
     assert res['fd']['coefs'].shape == (nbasis, 1, 2)
     assert res['gcv'] is not None
