@@ -226,6 +226,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+  import numpy as np
   from BiFuncLib.simulation_data import sas_sim_data
   from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
   sas_simdata = sas_sim_data(1, n_i = 20, var_e = 1, var_b = 0.25)
@@ -290,6 +291,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+    import numpy as np
     from BiFuncLib.FDPlot import FDPlot
     from BiFuncLib.simulation_data import sas_sim_data
     from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
