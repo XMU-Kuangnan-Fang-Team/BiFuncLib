@@ -200,7 +200,7 @@ class BsplineFunc:
                 if covariates is not None:
                     ind1 = np.arange(n)
                     ind2 = np.arange(nbasis, nbasis + q)
-                    basismat = np.asmatrix(basismat)
+                    basismat = np.asarray(basismat)
                     basismat = np.c_[basismat, np.zeros((basismat.shape[0], q))]
                     basismat[ind1[:, np.newaxis], ind2] = covariates
                 if matwt:
@@ -426,7 +426,7 @@ class BsplineFunc:
                 'reps': ynames,
                 'values': vnames}
         if len(dimy) < 3:
-            coef = np.asmatrix(coef)
+            coef = np.asarray(coef)
             fdobj = fd(coef[:nbasis, :], basisobj, fdnames)
         else:
             fdobj = fd(coef[:nbasis, :, :], basisobj, fdnames)
@@ -447,3 +447,4 @@ class BsplineFunc:
         }
         return smoothlist
     
+
