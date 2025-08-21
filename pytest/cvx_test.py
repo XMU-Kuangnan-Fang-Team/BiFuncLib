@@ -9,15 +9,18 @@ from BiFuncLib.cvx_main_func import gkn_weights
 from BiFuncLib.cvx_biclus import cvx_biclus_valid, cvx_biclus_missing
 
 
+@pytest.fixture(scope="session")
 def data():
     X = cvx_sim_data().copy()
     X -= np.mean(X)
     X /= np.linalg.norm(X, "fro")
     return X
 
+@pytest.fixture(scope="session")
 def weights(data):
     return gkn_weights(data, phi=0.5, k_row=5, k_col=5)
 
+@pytest.fixture(autouse=True)
 def _seed():
     random.seed(42)
     np.random.seed(42)
