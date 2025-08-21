@@ -86,6 +86,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+    import numpy as np
     from BiFuncLib.simulation_data import sparse_sim_data
     paramC = 0.7
     n = 100
@@ -141,6 +142,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+    import numpy as np
     from BiFuncLib.simulation_data import sparse_sim_data
     from BiFuncLib.sparse_bifunc import sparse_bifunc
     K = 2
@@ -201,6 +203,7 @@ Example
 ^^^^^^^^
 .. code-block:: python
 
+    import numpy as np
     from BiFuncLib.simulation_data import sparse_sim_data
     from BiFuncLib.sparse_bifunc import sparse_bifunc
     from BiFuncLib.FDPlot import FDPlot
