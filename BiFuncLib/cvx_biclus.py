@@ -39,14 +39,15 @@ def cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gamma, Lambda_row=None, L
 
     
 # Cluster with missing data
-def cvx_biclus_missing(data, E_row, E_col, w_row, w_col, gamma, Lambda_row, Lambda_col, Theta,
+def cvx_biclus_missing(data, E_row, E_col, w_row, w_col, gam, Lambda_row, Lambda_col, Theta,
                        max_iter=100, tol=1e-3, max_iter_inner=1000, tol_inner=1e-4,
                        plot_clus = True):
-    sol = cobra_pod(data, Lambda_row, Lambda_col, E_row, E_col, gamma*w_row, gamma*w_col, Theta,
+    sol = cobra_pod(data, Lambda_row, Lambda_col, E_row, E_col, gam*w_row, gam*w_col, Theta,
                     max_iter=max_iter, tol=tol, max_iter_inner=max_iter_inner,
                     tol_inner=tol_inner)
     if plot_clus == True:
         sns.clustermap(sol['U'], cmap="Blues", yticklabels=False, xticklabels=False)
         plt.show()
     return sol
+
 
