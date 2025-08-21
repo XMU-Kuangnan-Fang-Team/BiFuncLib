@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from BiFuncLib.BsplineFunc import BsplineFunc
-from GENetLib.fda_func import create_bspline_basis
+from GENetLib.fda_func import create_bspline_basis, create_fourier_basis
 
 
 @pytest.fixture
@@ -21,11 +21,14 @@ def test_create_bsplinefunc(sample_data):
 def test_penalty_matrix_shape(sample_data):
     argvals, y, basis = sample_data
     bsp = BsplineFunc(basisobj=basis, Lfdobj=2)
+    bsp2 = BsplineFunc(basisobj=create_fourier_basis(), Lfdobj=2)
     P = bsp.penalty_matrix(btype='spline')
+    P2 = bsp2.penalty_matrix(btype='fourier')
     nbasis = basis['nbasis']
     assert P.shape == (nbasis, nbasis)
     assert np.allclose(P, P.T)
     assert np.all(np.linalg.eigvalsh(P) != 0)
+    assert P2 is not None
 
 def test_smooth_basis_returns_dict(sample_data):
     argvals, y, basis = sample_data
@@ -50,4 +53,3 @@ def test_smooth_basis_multivariate(sample_data):
     nbasis = basis['nbasis']
     assert res['fd']['coefs'].shape == (nbasis, 1, 2)
     assert res['gcv'] is not None
-
