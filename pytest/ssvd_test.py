@@ -7,6 +7,7 @@ from BiFuncLib.ssvd_biclus import ssvd_biclus, s4vd_biclus
 from BiFuncLib.bcheatmap import bcheatmap
 
 
+@pytest.fixture(scope="session")
 def ssvd_data():
     return ssvd_sim_data()
 
