@@ -59,5 +59,5 @@ def test_s4vd_pointwise_true(ssvd_data):
     )
     assert out1 is not None
     assert out2 is not None
-    print("s4vd_pw jaccard:", jaccardmat(res_sim, out1))
-    bcheatmap(data, out1, axisR=True, axisC=True, heatcols=None, clustercols=None, allrows=False, allcolumns=False)
+    print("s4vd_pw jaccard:", jaccardmat(res_sim, out2))
+    bcheatmap(data, out2, axisR=True, axisC=True, heatcols=None, clustercols=None, allrows=False, allcolumns=False)
