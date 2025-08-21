@@ -16,7 +16,7 @@ def _check_pf_result(res):
 
 def test_pf_sim_data():
     pf_sim = pf_sim_data(n=60, T=10, nknots=3, order=3, seed=123)
-    assert isinstance(pf_sim, pd.DataFrame)
+    assert isinstance(pf_sim, dict)
     assert pf_sim['data'].ndim == 2
 
 def test_pf_bifunc_basic():
