@@ -21,7 +21,7 @@ def test_cc_sim_data():
 def test_cc_bifunc_cv_smoke():
     fun_mat = cc_sim_data()
     delta_list = np.linspace(0.1, 20, num=21)
-    res_cv = cc_bifunc_cv(fun_mat, delta_list=delta_list, alpha=1, beta=0, const_alpha=True)
+    res_cv = cc_bifunc_cv(fun_mat, delta_list=delta_list, alpha=1, beta=0, const_alpha=True, const_beta=True)
     assert isinstance(res_cv, pd.DataFrame)
 
 def test_cc_bifunc_no_shift():
@@ -32,9 +32,9 @@ def test_cc_bifunc_no_shift():
 
 def test_cc_bifunc_with_shift():
     fun_mat = cc_sim_data()
-    res = cc_bifunc(fun_mat, delta=10, alpha=0, beta=1, const_alpha=True, shift_alignment=True, plot=True)
+    res = cc_bifunc(fun_mat, delta=10, alpha=0, beta=1, const_alpha=False, shift_alignment=True)
     _check_cc_result(res)
-    res = cc_bifunc(fun_mat, delta=10, alpha=1, beta=1, const_alpha=False, shift_alignment=True, plot=True)
+    res = cc_bifunc(fun_mat, delta=10, alpha=1, beta=1, const_alpha=False, const_beta=True, shift_alignment=True)
     _check_cc_result(res)
     FDPlot(res).cc_fdplot(fun_mat, only_mean=False, aligned=True, warping=True)
 
