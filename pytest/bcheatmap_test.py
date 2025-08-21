@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 import matplotlib.pyplot as plt
 from unittest.mock import patch
-from bcheatmap import bcheatmap, ma_palette
+from BiFuncLib.bcheatmap import bcheatmap, ma_palette
 
 
 @pytest.fixture(scope='session', autouse=True)
