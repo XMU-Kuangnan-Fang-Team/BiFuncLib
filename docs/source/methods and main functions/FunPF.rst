@@ -141,9 +141,9 @@ Parameter
    * - **order**
      - integer, polynomial degree of the B-spline basis plus one (e.g., order 4 gives cubic splines).
    * - **gamma1**
-     - numeric, smoothness penalty tuning parameter that controls the trade-off between data fidelity and functional smoothness during estimation.
+     - numeric or list, smoothness penalty tuning parameter that controls the trade-off between data fidelity and functional smoothness during estimation.
    * - **gamma2**
-     - numeric, fusion penalty tuning parameter that governs the strength of clustering by penalizing differences between coefficient vectors.
+     - numeric or list, fusion penalty tuning parameter that governs the strength of clustering by penalizing differences between coefficient vectors.
    * - **opt**
      - bool, if True the function selects optimal (gamma1, gamma2) via a two-step BIC procedure; otherwise user-supplied values are used. Default is False.
    * - **theta**
@@ -186,7 +186,10 @@ Example
    from BiFuncLib.simulation_data import pf_sim_data
    pf_simdata = pf_sim_data(n = 60, T = 10, nknots = 3, order = 3, seed = 123)['data']
    pf_result = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = 0.023, gamma2 = 3, 
-                        theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
+                         theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
+   # Performs opt
+   pf_result_opt = pf_bifunc(pf_simdata, nknots = 3, order = 3, gamma1 = [0.023, 0.025], gamma2 = [2,3],
+                             opt = True, theta = 1, tau = 3, max_iter = 500, eps_abs = 1e-3, eps_rel = 1e-3)
 
 
 FDPlot.pf_fdplot
