@@ -133,6 +133,7 @@ FDPlot(sparse_res).sparse_fdplot(x, sparse_simdata)
 
 `sas_bifunc_cv` provides a function for finding the best tunning gamma.
 ```python
+import numpy as np
 from BiFuncLib.simulation_data import sas_sim_data
 from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
 sas_simdata_0 = sas_sim_data(0, n_i = 20, var_e = 1, var_b = 0.25)
