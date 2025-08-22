@@ -1,7 +1,7 @@
 Welcome to BiFuncLib's Documentation!
 =====================================
 
-.. image:: /_static/BiFuncLib_label.png
+.. image:: /BiFuncLib_label.png
    :width: 400
    :align: center
 
