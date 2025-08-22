@@ -20,7 +20,13 @@ You can also use the installation method for a specified version.
 
 .. code-block:: bash
 
-   pip install BiFuncLib==0.0.1
+   pip install BiFuncLib==x.y.z
+
+For faster installation, you can also use a mirror. For example, we use the Tsinghua mirror:
+
+.. code-block:: bash
+
+   pip install BiFuncLib==0.0.7 -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 
 Install from source
