@@ -45,7 +45,7 @@ BiFuncLib unifies these approaches into a comprehensive and easily extensible bi
 We provide a web-based documentation which introduces the meaning of function parameters, the usage of functions, detailed information about methods, and gives examples for each. The web page is available at
 [documentations](https://bifunclib.readthedocs.io/en/latest/).
 This package has been uploaded to PyPI with previous versions, and the web page is available at
-[PyPI package](https://pypi.org/project/genetlib/). Users can also check [releases](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/releases) to get historical versions.
+[PyPI package](https://pypi.org/project/bifunclib/). Users can also check [releases](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/releases) to get historical versions.
 
 ## Installation
 It is recommended to use ``pip`` for installation:
@@ -58,7 +58,7 @@ If you want to install a specific version, you can use:
 pip install BiFuncLib==x.y.z
 ```
 
-To get further information about installation and independencies, please move to [installation instructions](https://genetlib.readthedocs.io/en/latest/installation.html).
+To get further information about installation and independencies, please move to [installation instructions](https://bifunclib.readthedocs.io/en/latest/installation.html).
 
 ## Quick Start
 Below are individual usage examples for each method, including computational results and plots (where applicable).
@@ -247,7 +247,7 @@ E_col = wts["E_col"]
 cvx_res2 = cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gammaSeq, plot_error = False)
 ```
 
-For more information about the functions and methods, please check [main functions](https://genetlib.readthedocs.io/en/latest/main%20functions/main%20functions.html#).
+For more information about the functions and methods, please check [main functions](https://bifunclib.readthedocs.io/en/latest/methods%20and%20main%20functions/methods%20and%20main%20functions.html).
 
 ## Reference
 The main referenced papers of these methods are:
@@ -272,7 +272,7 @@ Lee M, Shen H, Huang J Z, et al. Biclustering via sparse singular value decompos
 ### CVX 
 Chi E C, Allen G I, Baraniuk R G. Convex biclustering[J]. Biometrics, 2017, 73(1): 10-19.
 
-Other referenced papers can be obtained in [references](https://genetlib.readthedocs.io/en/latest/references.html).
+Other referenced papers can be obtained in [references](https://biffunclib.readthedocs.io/en/latest/references.html).
 
 ## License
 BiFuncLib is licensed under the MIT License. See [LICENSE](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/blob/main/LICENSE) for details.
