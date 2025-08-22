@@ -52,6 +52,12 @@ It is recommended to use ``pip`` for installation:
 ```c
 pip install BiFuncLib
 ```
+
+If you want to install a specific version, you can use:
+```c
+pip install BiFuncLib==x.y.z
+```
+
 To get further information about installation and independencies, please move to [installation instructions](https://genetlib.readthedocs.io/en/latest/installation.html).
 
 ## Quick Start
