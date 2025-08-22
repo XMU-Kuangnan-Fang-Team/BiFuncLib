@@ -1,7 +1,6 @@
-<!--  
 <div align="center">
-<img src="image/overall_fig.png" alt="overall_fig.png" width="1000">
-</div> -->
+<img src="image/BiFuncLib_label.png" alt="BiFuncLib_label.png" width="1000">
+</div>
 
 [![pypi](https://img.shields.io/pypi/v/BiFuncLib?logo=Pypi)](https://pypi.org/project/BiFuncLib)
 ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-lightblue.svg)
