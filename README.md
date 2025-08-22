@@ -20,20 +20,20 @@ For functional data, in standard biclustering, each sample contains multiple fun
 ## Methods
 This package is capable of handling a variety of biclustering methods, by category:
 ### Functional data (biclustering)
-- FunFEM (EM algorithm)
-- FunLBM (Latent Block Model)
-- FunCC (Cheng and Church)
-- FunPF (Penalized Fusion)
+- FunFEM (EM algorithm) [^1]
+- FunLBM (Latent Block Model) [^2]
+- FunCC (Cheng and Church) [^3]
+- FunPF (Penalized Fusion) [^4]
 
 ### Functional data (local clustering)
-- FunSparse (Sparse clustering)
-- FunSAS (Sparse And Smooth)
-- FunLocal (Local clustering)
+- FunSparse (Sparse clustering) [^5]
+- FunSAS (Sparse And Smooth) [^6]
+- FunLocal (Local clustering) [^7]
 
 ### Scalar data
-- Bimax (divide-and-conquer algorithm)
-- SSVD (Sparse Singular Value Decomposition)
-- CVX (ConVeX biclustering)
+- Bimax (divide-and-conquer algorithm) [^8]
+- SSVD (Sparse Singular Value Decomposition) [^9]
+- CVX (ConVeX biclustering) [^10]
 
 BiFuncLib unifies these approaches into a comprehensive and easily extensible biclustering toolkit. The framework is shown below.
 
@@ -248,31 +248,6 @@ cvx_res2 = cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gammaSeq, plot_err
 
 For more information about the functions and methods, please check [main functions](https://bifunclib.readthedocs.io/en/latest/methods%20and%20main%20functions/methods%20and%20main%20functions.html).
 
-## Reference
-The main referenced papers of these methods are:
-### FunFEM
-Bouveyron C, Côme E, Jacques J. The discriminative functional mixture model for the analysis of bike sharing systems[J]. Preprint HAL, 2014 (01024186).
-### FunLBM
-Bouveyron C, Bozzi L, Jacques J, et al. The functional latent block model for the co-clustering of electricity consumption curves[J]. Journal of the Royal Statistical Society Series C: Applied Statistics, 2018, 67(4): 897-915.
-### FunCC
-Galvani M, Torti A, Menafoglio A, et al. FunCC: A new bi-clustering algorithm for functional data with misalignment[J]. Computational Statistics & Data Analysis, 2021, 160: 107219.
-### FunPF
-Fang K, Chen Y, Ma S, et al. Biclustering analysis of functionals via penalized fusion[J]. Journal of multivariate analysis, 2022, 189: 104874.
-### FunSparse
-Floriello D, Vitelli V. Sparse clustering of functional data[J]. Journal of Multivariate Analysis, 2017, 154: 1-18.
-### FunSAS
-Centofanti F, Lepore A, Palumbo B. Sparse and smooth functional data clustering[J]. Statistical Papers, 2024, 65(2): 795-825.
-### FunLocal
-Chen Y, Zhang Q, Ma S. Local clustering for functional data[J]. Journal of Computational and Graphical Statistics, 2025: 1-16.
-### Bimax
-Prelić A, Bleuler S, Zimmermann P, et al. A systematic comparison and evaluation of biclustering methods for gene expression data[J]. Bioinformatics, 2006, 22(9): 1122-1129.
-### SSVD
-Lee M, Shen H, Huang J Z, et al. Biclustering via sparse singular value decomposition[J]. Biometrics, 2010, 66(4): 1087-1095.
-### CVX 
-Chi E C, Allen G I, Baraniuk R G. Convex biclustering[J]. Biometrics, 2017, 73(1): 10-19.
-
-Other referenced papers can be obtained in [references](https://biffunclib.readthedocs.io/en/latest/references.html).
-
 ## License
 BiFuncLib is licensed under the MIT License. See [LICENSE](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/blob/main/LICENSE) for details.
 
@@ -281,3 +256,25 @@ BiFuncLib is licensed under the MIT License. See [LICENSE](https://github.com/XM
 - Send an email to Barry57@163.com to contact us.
 - Thanks for all the supports! 👏
 
+## Reference
+We list the main referenced papers of these methods below. Other referenced papers can be obtained in [references](https://biffunclib.readthedocs.io/en/latest/references.html).
+
+[^1]: Bouveyron C, Côme E, Jacques J. The discriminative functional mixture model for the analysis of bike sharing systems[J]. Preprint HAL, 2014 (01024186).
+
+[^2]: Bouveyron C, Bozzi L, Jacques J, et al. The functional latent block model for the co-clustering of electricity consumption curves[J]. Journal of the Royal Statistical Society Series C: Applied Statistics, 2018, 67(4): 897-915.
+
+[^3]: Galvani M, Torti A, Menafoglio A, et al. FunCC: A new bi-clustering algorithm for functional data with misalignment[J]. Computational Statistics & Data Analysis, 2021, 160: 107219.
+
+[^4]: Fang K, Chen Y, Ma S, et al. Biclustering analysis of functionals via penalized fusion[J]. Journal of multivariate analysis, 2022, 189: 104874.
+
+[^5]: Floriello D, Vitelli V. Sparse clustering of functional data[J]. Journal of Multivariate Analysis, 2017, 154: 1-18.
+
+[^6]: Centofanti F, Lepore A, Palumbo B. Sparse and smooth functional data clustering[J]. Statistical Papers, 2024, 65(2): 795-825.
+
+[^7]: Chen Y, Zhang Q, Ma S. Local clustering for functional data[J]. Journal of Computational and Graphical Statistics, 2025: 1-16.
+
+[^8]: Prelić A, Bleuler S, Zimmermann P, et al. A systematic comparison and evaluation of biclustering methods for gene expression data[J]. Bioinformatics, 2006, 22(9): 1122-1129.
+
+[^9]: Lee M, Shen H, Huang J Z, et al. Biclustering via sparse singular value decomposition[J]. Biometrics, 2010, 66(4): 1087-1095.
+
+[^10]: Chi E C, Allen G I, Baraniuk R G. Convex biclustering[J]. Biometrics, 2017, 73(1): 10-19.
