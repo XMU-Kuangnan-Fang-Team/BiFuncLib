@@ -26,8 +26,9 @@ For faster installation, you can also use a mirror. For example, we use the Tsin
 
 .. code-block:: bash
 
-   pip install BiFuncLib==0.0.7 -i https://pypi.tuna.tsinghua.edu.cn/simple
+   pip install BiFuncLib==x.y.z -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+For detailed version information, please refer to `releases <https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/releases>`_.
 
 Install from source
 ---------------------
