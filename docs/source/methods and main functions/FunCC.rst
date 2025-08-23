@@ -91,7 +91,7 @@ Example
   fun_mat = cc_sim_data()
 
 
-cc_bifunc and cc_bifunc_cv
+cc_bifunc & cc_bifunc_cv
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **cc_bifunc** performs model fitting, while **cc_bifunc_cv** selects the best delta for the algorithm.
 
