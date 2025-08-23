@@ -98,7 +98,7 @@ Example
     sas_simdata = sas_sim_data(1, n_i = 20, var_e = 1, var_b = 0.25)
 
 
-sas_bifunc and sas_bifunc_cv
+sas_bifunc & sas_bifunc_cv
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 **cc_bifunc** performs model fitting,
 while **cc_bifunc_cv** performs K-fold cross-validation procedure to choose the number of clusters and the tuning parameters for the model.
@@ -241,7 +241,7 @@ Example
                                 G_seq = G_seq, maxit = 20, K_fold = 2, q = 10)
 
 
-FDPlot.sas_fdplot and FDPlot.sas_cvplot
+FDPlot.sas_fdplot & FDPlot.sas_cvplot
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 When applied to **sas_bifunc** output, the **FDPlot.sas_fdplot** function plots the estimated cluster mean functions and the classified curves.
 
