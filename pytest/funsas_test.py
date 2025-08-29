@@ -13,7 +13,6 @@ def test_sas_full_story():
     sas_simdata_0 = sas_sim_data(0, n_i=20, var_e=1, var_b=0.25)
     sas_simdata_1 = sas_sim_data(1, n_i=20, var_e=1, var_b=0.25)
     sas_simdata_2 = sas_sim_data(2, n_i=20, var_e=1, var_b=0.25)
-  
     sas_result = sas_bifunc(
         X=sas_simdata_0["X"],
         grid=sas_simdata_0["grid"],
@@ -27,7 +26,6 @@ def test_sas_full_story():
         plot=True,
     )
     _check_sas_result(sas_result)
-  
     sas_result = sas_bifunc(
         X=sas_simdata_1["X"],
         grid=sas_simdata_1["grid"],
@@ -41,7 +39,6 @@ def test_sas_full_story():
         varcon="equal",
     )
     _check_sas_result(sas_result)
-
     lambda_s_seq = 10.0 ** np.arange(-4, -2, dtype=float)
     lambda_l_seq = 10.0 ** np.arange(-1, 1, dtype=float)
     G_seq = [2, 3]
