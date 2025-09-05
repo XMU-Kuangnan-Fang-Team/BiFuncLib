@@ -1,11 +1,6 @@
 Welcome to BiFuncLib's Documentation!
 =====================================
 
-.. image:: _static/BiFuncLib_label.png
-   :width: 700
-   :align: center
-
-
 **BiFuncLib** is a Python library that aggregates multiple biclustering methods mainly for functional data.
 This documentation aims to help users get a comprehensive understanding of all the methods, and get started quickly with this package.
 
