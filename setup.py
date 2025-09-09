@@ -17,7 +17,7 @@ setup(
         'BiFuncLib': ['simulation_data/*'],
     },
     install_requires=[
-        'numpy==1.24.3',
+        'numpy==1.26.3',
         'pandas',
         'matplotlib',
         'scipy',
@@ -35,6 +35,7 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
 )
+
 
 
 
