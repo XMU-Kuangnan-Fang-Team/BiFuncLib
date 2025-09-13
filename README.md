@@ -248,6 +248,7 @@ cvx_res2 = cvx_biclus_valid(data, E_row, E_col, w_row, w_col, gammaSeq, plot_err
 
 For more information about the functions and methods, please check [main functions](https://bifunclib.readthedocs.io/en/latest/methods%20and%20main%20functions/methods%20and%20main%20functions.html).
 
+
 ## License
 BiFuncLib is licensed under the MIT License. See [LICENSE](https://github.com/XMU-Kuangnan-Fang-Team/BiFuncLib/blob/main/LICENSE) for details.
 
