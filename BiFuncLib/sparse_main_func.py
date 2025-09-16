@@ -21,20 +21,20 @@ def GetWCSS(x, Cs, ws=None):
     n_features = x.shape[1]
     wcss_perfeature = np.zeros(n_features)
     for k in np.unique(Cs):
-        whichers = (Cs == k)
+        whichers = Cs == k
         if np.sum(whichers) > 1:
             subset = x[whichers, :]
             centered = subset - np.mean(subset, axis=0)
             wcss_perfeature += np.sum(centered**2, axis=0)
-    total_ss = np.sum((x - np.mean(x, axis=0))**2, axis=0)
+    total_ss = np.sum((x - np.mean(x, axis=0)) ** 2, axis=0)
     bcss_perfeature = total_ss - wcss_perfeature
     result = {
-        'wcss.perfeature': wcss_perfeature,
-        'wcss': np.sum(wcss_perfeature),
-        'bcss.perfeature': bcss_perfeature
+        "wcss.perfeature": wcss_perfeature,
+        "wcss": np.sum(wcss_perfeature),
+        "bcss.perfeature": bcss_perfeature,
     }
     if ws is not None:
-        result['wcss.ws'] = np.sum(wcss_perfeature * ws)
+        result["wcss.ws"] = np.sum(wcss_perfeature * ws)
     return result
 
 
@@ -48,61 +48,71 @@ def GetOptimalW(b, c_star):
     return w
 
 
-def GetOptimalClusters(data, K, w, method='kmea'):
+def GetOptimalClusters(data, K, w, method="kmea"):
     weighted_data = data * w
-    if method == 'kmea':
+    if method == "kmea":
         kmeans = KMeans(n_clusters=K)
         clusters = kmeans.fit_predict(weighted_data)
-    elif method == 'pam':
+    elif method == "pam":
         kmedoids = KMedoids(n_clusters=K, random_state=0)
         clusters = kmedoids.fit_predict(weighted_data)
-    elif method == 'hier':
-        Z = linkage(weighted_data, method='ward')
-        clusters = fcluster(Z, t=K, criterion='maxclust')
+    elif method == "hier":
+        Z = linkage(weighted_data, method="ward")
+        clusters = fcluster(Z, t=K, criterion="maxclust")
         clusters = clusters - 1
     else:
-        raise ValueError("Unknown method. Choose one of 'kmea', 'pam', or 'hier'.")    
+        raise ValueError(
+            "Unknown method. Choose one of 'kmea', 'pam', or 'hier'."
+        )
     return clusters
 
 
-def FKMSparseClustering(data, x, K, m, method='kmea', maxiter=50):
+def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
     mu = x[-1] - x[0]
     if m > mu:
         raise ValueError("m has to be less than the measure of the domain")
-    
+
     # Initial clustering based on the chosen method
-    if method == 'kmea':
+    if method == "kmea":
         initial_clusters = KMeans(n_clusters=K).fit_predict(data)
-    elif method == 'pam':
-        initial_clusters = KMedoids(n_clusters=K, random_state=0).fit_predict(data)
-    elif method == 'hier':
-        Z = linkage(data, method='ward')
-        initial_clusters = fcluster(Z, t=K, criterion='maxclust') - 1
+    elif method == "pam":
+        initial_clusters = KMedoids(n_clusters=K, random_state=0).fit_predict(
+            data
+        )
+    elif method == "hier":
+        Z = linkage(data, method="ward")
+        initial_clusters = fcluster(Z, t=K, criterion="maxclust") - 1
     else:
-        raise ValueError("Unknown method. Choose one of 'kmea', 'pam', or 'hier'.")
-    b_old = GetWCSS(data, initial_clusters)['bcss.perfeature']
+        raise ValueError(
+            "Unknown method. Choose one of 'kmea', 'pam', or 'hier'."
+        )
+    b_old = GetWCSS(data, initial_clusters)["bcss.perfeature"]
     perc = m / mu
     b_ord = np.sort(b_old)
     index = math.ceil(len(b_ord) * perc) - 1
     c_star = b_ord[index]
     niter = 1
     w = np.zeros(len(x))
-    
+
     # Initialize k with zeros (same length as number of samples)
     k = np.zeros(len(initial_clusters), dtype=int)
     b = np.zeros(len(x))
     cluster_difference = np.sum(np.abs(initial_clusters - k))
     epsilon = 1e-6
     w_old = np.ones(len(x))
-    
+
     # Iterative updates
-    while (np.linalg.norm(w - w_old) >= epsilon and cluster_difference > 0 and niter < maxiter):
+    while (
+        np.linalg.norm(w - w_old) >= epsilon
+        and cluster_difference > 0
+        and niter < maxiter
+    ):
         niter += 1
         w_old = w.copy()
         k_old = k.copy()
         w = GetOptimalW(b_old, c_star)
         k = GetOptimalClusters(data, K, w, method)
-        b = GetWCSS(data, k)['bcss.perfeature']
+        b = GetWCSS(data, k)["bcss.perfeature"]
         b_old = b.copy()
         b_ord = np.sort(b_old)
         index = math.ceil(len(b_ord) * perc) - 1
@@ -112,7 +122,9 @@ def FKMSparseClustering(data, x, K, m, method='kmea', maxiter=50):
     return {"w": w, "cluster": k, "obj": obj, "iteration": niter}
 
 
-def FKMSparseClustering_permute(data, x, K, mbound=None, method='kmea', nperm=20, maxiter=50):
+def FKMSparseClustering_permute(
+    data, x, K, mbound=None, method="kmea", nperm=20, maxiter=50
+):
     mu = x[-1] - x[0]
     n, p = data.shape
     if mbound is not None:
@@ -124,18 +136,21 @@ def FKMSparseClustering_permute(data, x, K, mbound=None, method='kmea', nperm=20
     qualim = np.linspace(2 * np.min(np.diff(x)), mbound, num=num_points)
     GAP = np.zeros(len(qualim))
     for i, m in enumerate(qualim):
-        resTRUE = FKMSparseClustering(data, x, K, m, method=method, maxiter=maxiter)['obj']
+        resTRUE = FKMSparseClustering(
+            data, x, K, m, method=method, maxiter=maxiter
+        )["obj"]
         resPERM = []
         for _ in range(nperm):
             dataperm = data.copy()
             for j in range(p):
                 perm_indices = np.random.permutation(n)
                 dataperm[:, j] = data[perm_indices, j]
-            res_perm = FKMSparseClustering(dataperm, x, K, m, method=method, maxiter=maxiter)['obj']
+            res_perm = FKMSparseClustering(
+                dataperm, x, K, m, method=method, maxiter=maxiter
+            )["obj"]
             resPERM.append(res_perm)
         GAP[i] = np.log(resTRUE) - np.mean(np.log(resPERM))
     max_gap = np.max(GAP)
     best_index = np.argmax(GAP)
     best_m = qualim[best_index]
     return {"GAP": max_gap, "m": best_m}
-

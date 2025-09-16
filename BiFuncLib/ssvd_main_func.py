@@ -8,26 +8,38 @@ import gc
 from BiFuncLib.BiclustResult import BiclustResult
 
 
-def thresh(z, delta, thredtype = 1, a = 3.7):
+def thresh(z, delta, thredtype=1, a=3.7):
     z = np.asarray(z)
     if thredtype == 1:
-        return np.sign(z) * ((np.abs(z) >= delta).astype(float)) * (np.abs(z) - delta)
+        return (
+            np.sign(z)
+            * ((np.abs(z) >= delta).astype(float))
+            * (np.abs(z) - delta)
+        )
     elif thredtype == 2:
         return z * ((np.abs(z) > delta).astype(float))
     elif thredtype == 3:
-        term1 = np.sign(z) * ((np.abs(z) >= delta).astype(float)) * (np.abs(z) - delta) * ((np.abs(z) <= 2 * delta).astype(float))
-        term2 = (((a - 1) * z - np.sign(z) * a * delta) / (a - 2)) * (((2 * delta < np.abs(z)).astype(float)) * ((np.abs(z) <= a * delta).astype(float)))
+        term1 = (
+            np.sign(z)
+            * ((np.abs(z) >= delta).astype(float))
+            * (np.abs(z) - delta)
+            * ((np.abs(z) <= 2 * delta).astype(float))
+        )
+        term2 = (((a - 1) * z - np.sign(z) * a * delta) / (a - 2)) * (
+            ((2 * delta < np.abs(z)).astype(float))
+            * ((np.abs(z) <= a * delta).astype(float))
+        )
         term3 = z * ((np.abs(z) > a * delta).astype(float))
         return term1 + term2 + term3
 
 
-def initial_svd(X, nu = 1, nv = 1):
+def initial_svd(X, nu=1, nv=1):
     n, d = X.shape
     if min(n, d) < 500:
         U, s, Vt = np.linalg.svd(X, full_matrices=False)
         return U[:, :nu], Vt[:nv, :].T
     else:
-        u, s, vt = svds(X, k=1, which='LM')
+        u, s, vt = svds(X, k=1, which="LM")
         return u, vt.T
 
 
@@ -36,7 +48,8 @@ def jaccardmat(res1, res2, mode=None):
         intersection = A & B
         denom = len(A) + len(B) - len(intersection)
         return len(intersection) / denom if denom != 0 else 0
-    if mode == 'row':
+
+    if mode == "row":
         if res1.Number > 0 and res2.Number > 0:
             mat = np.zeros((res1.Number, res2.Number))
             for i in range(res1.Number):
@@ -49,7 +62,7 @@ def jaccardmat(res1, res2, mode=None):
             return pd.DataFrame(mat, index=rownames, columns=colnames)
         else:
             return pd.DataFrame([[0]])
-    elif mode == 'column':
+    elif mode == "column":
         nclus1 = res1.NumberxCol.shape[0]
         nclus2 = res2.NumberxCol.shape[0]
         if nclus1 > 0 and nclus2 > 0:
@@ -69,10 +82,14 @@ def jaccardmat(res1, res2, mode=None):
             mat = np.zeros((res1.Number, res2.Number))
             for i in range(res1.Number):
                 for j in range(res2.Number):
-                    product1 = np.outer(res1.RowxNumber[:, i], res1.NumberxCol[i, :])
-                    product2 = np.outer(res2.RowxNumber[:, j], res2.NumberxCol[j, :])
-                    flat1 = np.ravel(product1 > 0, order='F')
-                    flat2 = np.ravel(product2 > 0, order='F')
+                    product1 = np.outer(
+                        res1.RowxNumber[:, i], res1.NumberxCol[i, :]
+                    )
+                    product2 = np.outer(
+                        res2.RowxNumber[:, j], res2.NumberxCol[j, :]
+                    )
+                    flat1 = np.ravel(product1 > 0, order="F")
+                    flat2 = np.ravel(product2 > 0, order="F")
                     A = set(np.nonzero(flat1)[0])
                     B = set(np.nonzero(flat2)[0])
                     mat[i, j] = jaccard_sets(A, B)
@@ -83,7 +100,9 @@ def jaccardmat(res1, res2, mode=None):
             return pd.DataFrame([[0]])
 
 
-def ssvd(X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter=100):
+def ssvd(
+    X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter=100
+):
     X = deepcopy(X)
     n, d = X.shape
     if u0 is None or v0 is None:
@@ -111,11 +130,15 @@ def ssvd(X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter
             lvc = tv[-i]
             delta = lvc / winv[ind_v]
             z_subset = z[ind_v]
-            temp2 = np.sign(z_subset) * ((np.abs(z_subset) >= delta).astype(float)) * (np.abs(z_subset) - delta)
+            temp2 = (
+                np.sign(z_subset)
+                * ((np.abs(z_subset) >= delta).astype(float))
+                * (np.abs(z_subset) - delta)
+            )
             vc = np.zeros_like(z)
             vc[ind_v] = temp2
             Bv[i] = np.sum((z - vc) ** 2) / sigsq + i * math.log(n * d)
-        candidate_Bv = Bv[1:int(rv) + 1]
+        candidate_Bv = Bv[1 : int(rv) + 1]
         Iv = np.argmin(candidate_Bv) + 1
         lv = tv[-Iv]
         v_temp = thresh(z[ind_v], thredtype=threv, delta=lv / winv[ind_v])
@@ -136,11 +159,15 @@ def ssvd(X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter
             luc = tu[-i]
             delta = luc / winu[ind_u]
             z_subset = z[ind_u]
-            temp2 = np.sign(z_subset) * ((np.abs(z_subset) >= delta).astype(float)) * (np.abs(z_subset) - delta)
+            temp2 = (
+                np.sign(z_subset)
+                * ((np.abs(z_subset) >= delta).astype(float))
+                * (np.abs(z_subset) - delta)
+            )
             uc = np.zeros_like(z)
             uc[ind_u] = temp2
             Bu[i] = np.sum((z - uc) ** 2) / sigsq + i * math.log(n * d)
-        candidate_Bu = Bu[1:int(ru) + 1]
+        candidate_Bu = Bu[1 : int(ru) + 1]
         Iu = np.argmin(candidate_Bu) + 1
         lu = tu[-Iu]
         u_temp = thresh(z[ind_u], delta=lu / winu[ind_u])
@@ -169,21 +196,39 @@ def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     current_X = deepcopy(X)
     actual_K = K
     for k in range(K):
-        current_res = ssvd(current_X, threu=threu, threv=threv,
-                           gamu=gamu, gamv=gamv, merr=merr, niter=niter)
+        current_res = ssvd(
+            current_X,
+            threu=threu,
+            threv=threv,
+            gamu=gamu,
+            gamv=gamv,
+            merr=merr,
+            niter=niter,
+        )
         res.append(current_res)
         if current_res.get("stop", False):
             actual_K = k
             break
-        RowxNumber[:, k] = (current_res["u"] != 0)
-        NumberxCol[k, :] = (current_res["v"] != 0)
-        d_val = float(np.dot(current_res["u"].T, np.dot(current_X, current_res["v"])))
+        RowxNumber[:, k] = current_res["u"] != 0
+        NumberxCol[k, :] = current_res["v"] != 0
+        d_val = float(
+            np.dot(current_res["u"].T, np.dot(current_X, current_res["v"]))
+        )
         current_res["d"] = d_val
-        current_X = current_X - d_val * np.outer(current_res["u"], current_res["v"])
+        current_X = current_X - d_val * np.outer(
+            current_res["u"], current_res["v"]
+        )
     RowxNumber = RowxNumber[:, :actual_K]
     NumberxCol = NumberxCol[:actual_K, :]
-    params = {"K": actual_K, "threu": threu, "threv": threv,
-              "gamu": gamu, "gamv": gamv, "merr": merr, "niter": niter}
+    params = {
+        "K": actual_K,
+        "threu": threu,
+        "threv": threv,
+        "gamu": gamu,
+        "gamv": gamv,
+        "merr": merr,
+        "niter": niter,
+    }
     Number = actual_K
     info = {"res": res}
     return BiclustResult(params, RowxNumber, NumberxCol.T, Number, info)
@@ -192,8 +237,12 @@ def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
 def adalasso_nc(X, b, lam, steps, size, gamm=0):
     n = len(b)
     m = int(n * size)
-    subsets = np.column_stack([np.random.choice(n, size=m, replace=False) for _ in range(steps)])
-    results = np.array([adalassosteps_nc(i, subsets, X, b, lam, gamm) for i in range(steps)]).T
+    subsets = np.column_stack(
+        [np.random.choice(n, size=m, replace=False) for _ in range(steps)]
+    )
+    results = np.array(
+        [adalassosteps_nc(i, subsets, X, b, lam, gamm) for i in range(steps)]
+    ).T
     return results
 
 
@@ -201,7 +250,9 @@ def adalassosteps_nc(index, subsets, X, b, lam, gamm):
     subset = subsets[:, index]
     ols = X[:, subset] @ b[subset]
     delta = lam / (np.abs(ols) ** gamm)
-    ols_thresholded = np.sign(ols) * np.where(np.abs(ols) >= delta, np.abs(ols) - delta, 0)
+    ols_thresholded = np.sign(ols) * np.where(
+        np.abs(ols) >= delta, np.abs(ols) - delta, 0
+    )
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
 
@@ -209,8 +260,12 @@ def adalassosteps_nc(index, subsets, X, b, lam, gamm):
 def adalasso(X, b, lam, steps, size, gamm=0):
     n = len(b)
     m = int(n * size)
-    subsets = np.column_stack([np.random.choice(n, size=m, replace=False) for _ in range(steps)])
-    results = np.array([adalassosteps(i, subsets, X, b, lam, gamm) for i in range(steps)]).T
+    subsets = np.column_stack(
+        [np.random.choice(n, size=m, replace=False) for _ in range(steps)]
+    )
+    results = np.array(
+        [adalassosteps(i, subsets, X, b, lam, gamm) for i in range(steps)]
+    ).T
     return results
 
 
@@ -218,17 +273,23 @@ def adalassosteps(index, subsets, X, b, lam, gamm):
     subset = subsets[:, index]
     ols = X[:, subset] @ b[subset]
     delta = lam / (np.abs(ols) ** gamm)
-    ols_thresholded = np.sign(ols) * np.where(np.abs(ols) >= delta, np.abs(ols) - delta, 0)
+    ols_thresholded = np.sign(ols) * np.where(
+        np.abs(ols) >= delta, np.abs(ols) - delta, 0
+    )
     ols_thresholded = np.nan_to_num(ols_thresholded)
     mostof = np.sign(np.sum(np.sign(ols_thresholded)))
     if mostof == 0:
         mostof = 1
-    ols_thresholded = np.where(np.sign(ols_thresholded) == mostof, ols_thresholded, 0)
+    ols_thresholded = np.where(
+        np.sign(ols_thresholded) == mostof, ols_thresholded, 0
+    )
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
 
 
-def update_v(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, savepath=False):
+def update_v(
+    X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, savepath=False
+):
     n_ini = X.shape[1]
     n = n_ini
     err = pcer * n_ini
@@ -243,24 +304,24 @@ def update_v(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, savep
     if cols_nc:
         for l in range(len(lambdas)):
             temp = adalasso_nc(X.T, u0, lambdas[l], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
             if savepath:
                 selprobpath[:, l] = sp
-            thrall[l] = ((qs[l]**2 / (err * n_ini)) + 1) / 2
+            thrall[l] = ((qs[l] ** 2 / (err * n_ini)) + 1) / 2
             if thrall[l] >= ss_thr[0]:
                 ls_index = l
                 break
     else:
         for l in range(len(lambdas)):
             temp = adalasso(X.T, u0, lambdas[l], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
             if savepath:
                 selprobpath[:, l] = sp
-            thrall[l] = ((qs[l]**2 / (err * n_ini)) + 1) / 2
+            thrall[l] = ((qs[l] ** 2 / (err * n_ini)) + 1) / 2
             if thrall[l] >= ss_thr[0]:
                 ls_index = l
                 break
@@ -277,16 +338,47 @@ def update_v(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, savep
         stop_flag = True
     vc = np.zeros(n)
     delta = lambdas[ls_index] / (np.abs(ols) ** gamm)
-    vc = np.sign(ols) * ((np.abs(ols) >= delta).astype(float)) * (np.abs(ols) - delta)
+    vc = (
+        np.sign(ols)
+        * ((np.abs(ols) >= delta).astype(float))
+        * (np.abs(ols) - delta)
+    )
     if savepath:
-        return {"vc": vc, "sp": sp, "stop": stop_flag, "qs": qs,
-                "thr": thr, "l": ls_index, "delta": delta, "selprobpath": selprobpath}
+        return {
+            "vc": vc,
+            "sp": sp,
+            "stop": stop_flag,
+            "qs": qs,
+            "thr": thr,
+            "l": ls_index,
+            "delta": delta,
+            "selprobpath": selprobpath,
+        }
     else:
-        return {"vc": vc, "sp": sp, "stop": stop_flag, "qs": qs,
-                "thr": thr, "l": ls_index, "delta": delta}
+        return {
+            "vc": vc,
+            "sp": sp,
+            "stop": stop_flag,
+            "qs": qs,
+            "thr": thr,
+            "l": ls_index,
+            "delta": delta,
+        }
 
 
-def update_u(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, savepath=False, start=False):
+def update_u(
+    X,
+    v0,
+    pcer,
+    p_ini,
+    ss_thr,
+    steps,
+    size,
+    gamm,
+    rows_nc=False,
+    savepath=False,
+    start=False,
+):
     p_ini = X.shape[0]
     p = p_ini
     err = pcer * p_ini
@@ -301,24 +393,24 @@ def update_u(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, savep
     if rows_nc:
         for l in range(len(lambdas)):
             temp = adalasso_nc(X, v0, lambdas[l], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
             if savepath:
                 selprobpath[:, l] = sp
-            thrall[l] = ((qs[l]**2 / (err * p_ini)) + 1) / 2
+            thrall[l] = ((qs[l] ** 2 / (err * p_ini)) + 1) / 2
             if thrall[l] >= ss_thr[0]:
                 ls_index = l
                 break
     else:
         for l in range(len(lambdas)):
             temp = adalasso(X, v0, lambdas[l], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
             if savepath:
                 selprobpath[:, l] = sp
-            thrall[l] = ((qs[l]**2 / (err * p_ini)) + 1) / 2
+            thrall[l] = ((qs[l] ** 2 / (err * p_ini)) + 1) / 2
             if thrall[l] >= ss_thr[0]:
                 ls_index = l
                 break
@@ -335,16 +427,47 @@ def update_u(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, savep
         stop_flag = True
     uc = np.zeros(p)
     delta = lambdas[ls_index] / (np.abs(ols) ** gamm)
-    uc = np.sign(ols) * ((np.abs(ols) >= delta).astype(float)) * (np.abs(ols) - delta)
+    uc = (
+        np.sign(ols)
+        * ((np.abs(ols) >= delta).astype(float))
+        * (np.abs(ols) - delta)
+    )
     if savepath:
-        return {"uc": uc, "sp": sp, "stop": stop_flag, "qs": qs,
-                "thr": thr, "l": ls_index, "delta": delta, "selprobpath": selprobpath}
+        return {
+            "uc": uc,
+            "sp": sp,
+            "stop": stop_flag,
+            "qs": qs,
+            "thr": thr,
+            "l": ls_index,
+            "delta": delta,
+            "selprobpath": selprobpath,
+        }
     else:
-        return {"uc": uc, "sp": sp, "stop": stop_flag, "qs": qs,
-                "thr": thr, "l": ls_index, "delta": delta}
+        return {
+            "uc": uc,
+            "sp": sp,
+            "stop": stop_flag,
+            "qs": qs,
+            "thr": thr,
+            "l": ls_index,
+            "delta": delta,
+        }
 
 
-def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_val=None, start=False):
+def update_v_pw(
+    X,
+    u0,
+    pcer,
+    n_ini,
+    ss_thr,
+    steps,
+    size,
+    gamm,
+    cols_nc=False,
+    l_val=None,
+    start=False,
+):
     n_ini = X.shape[1]
     n = n_ini
     err = pcer * n_ini
@@ -355,7 +478,7 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
     thrall = np.zeros(len(lambdas))
     ls_index = len(lambdas) - 1
     if l_val is None:
-        median_val = np.quantile(lambdas, 0.5, interpolation='linear')
+        median_val = np.quantile(lambdas, 0.5, interpolation="linear")
         indices = np.where(np.isclose(lambdas, median_val))[0]
         if len(indices) > 0:
             l_val = indices[0]
@@ -367,10 +490,10 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
     if cols_nc:
         for g in range(len(lambdas)):
             temp = adalasso_nc(X.T, u0, lambdas[l_idx], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l_idx] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
-            thrall[l_idx] = ((qs[l_idx]**2 / (err * n_ini)) + 1) / 2
+            thrall[l_idx] = ((qs[l_idx] ** 2 / (err * n_ini)) + 1) / 2
             if ss_thr[0] <= thrall[l_idx] <= ss_thr[1]:
                 ls_index = l_idx
                 break
@@ -378,17 +501,25 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
                 l_min = l_idx
                 if l_idx == len(lambdas) - 1:
                     break
-                if thrall[l_idx+1] > ss_thr[1]:
+                if thrall[l_idx + 1] > ss_thr[1]:
                     ls_index = l_idx + 1
-                    if thrall[l_idx+1] > 1:
+                    if thrall[l_idx + 1] > 1:
                         ls_index = l_idx
-                    temp = adalasso_nc(X.T, u0, lambdas[ls_index], steps, size, gamm)
-                    t_bool = (temp != 0)
+                    temp = adalasso_nc(
+                        X.T, u0, lambdas[ls_index], steps, size, gamm
+                    )
+                    t_bool = temp != 0
                     qs[ls_index] = np.mean(np.sum(t_bool, axis=0))
                     sp = np.mean(t_bool, axis=1)
-                    thrall[ls_index] = ((qs[ls_index]**2 / (err * n_ini)) + 1) / 2
+                    thrall[ls_index] = (
+                        (qs[ls_index] ** 2 / (err * n_ini)) + 1
+                    ) / 2
                     break
-                l_idx = min(len(lambdas) - 1, l_max, l_idx + int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = min(
+                    len(lambdas) - 1,
+                    l_max,
+                    l_idx + int(math.ceil(len(lambdas) / (g + 1))),
+                )
                 while thrall[l_idx] != 0:
                     l_idx -= 1
                     if l_idx == 0:
@@ -397,10 +528,16 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
                 l_max = l_idx
                 if l_idx == 0:
                     break
-                if l_idx - 1 >= 0 and thrall[l_idx-1] < ss_thr[0] and thrall[l_idx-1] != 0:
+                if (
+                    l_idx - 1 >= 0
+                    and thrall[l_idx - 1] < ss_thr[0]
+                    and thrall[l_idx - 1] != 0
+                ):
                     ls_index = l_idx
                     break
-                l_idx = max(0, l_min, l_idx - int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = max(
+                    0, l_min, l_idx - int(math.ceil(len(lambdas) / (g + 1)))
+                )
                 while thrall[l_idx] != 0:
                     l_idx += 1
                     if l_idx == len(lambdas):
@@ -408,10 +545,10 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
     else:
         for g in range(len(lambdas)):
             temp = adalasso(X.T, u0, lambdas[l_idx], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l_idx] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
-            thrall[l_idx] = ((qs[l_idx]**2 / (err * n_ini)) + 1) / 2
+            thrall[l_idx] = ((qs[l_idx] ** 2 / (err * n_ini)) + 1) / 2
             if ss_thr[0] <= thrall[l_idx] <= ss_thr[1]:
                 ls_index = l_idx
                 break
@@ -419,17 +556,25 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
                 l_min = l_idx
                 if l_idx == len(lambdas) - 1:
                     break
-                if thrall[l_idx+1] > ss_thr[1]:
+                if thrall[l_idx + 1] > ss_thr[1]:
                     ls_index = l_idx + 1
-                    if thrall[l_idx+1] > 1:
+                    if thrall[l_idx + 1] > 1:
                         ls_index = l_idx
-                    temp = adalasso(X.T, u0, lambdas[ls_index], steps, size, gamm)
-                    t_bool = (temp != 0)
+                    temp = adalasso(
+                        X.T, u0, lambdas[ls_index], steps, size, gamm
+                    )
+                    t_bool = temp != 0
                     qs[ls_index] = np.mean(np.sum(t_bool, axis=0))
                     sp = np.mean(t_bool, axis=1)
-                    thrall[ls_index] = ((qs[ls_index]**2 / (err * n_ini)) + 1) / 2
+                    thrall[ls_index] = (
+                        (qs[ls_index] ** 2 / (err * n_ini)) + 1
+                    ) / 2
                     break
-                l_idx = min(len(lambdas) - 1, l_max, l_idx + int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = min(
+                    len(lambdas) - 1,
+                    l_max,
+                    l_idx + int(math.ceil(len(lambdas) / (g + 1))),
+                )
                 while thrall[l_idx] != 0:
                     l_idx -= 1
                     if l_idx == 0:
@@ -438,25 +583,55 @@ def update_v_pw(X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, l_
                 l_max = l_idx
                 if l_idx == 0:
                     break
-                if l_idx - 1 >= 0 and thrall[l_idx-1] < ss_thr[0] and thrall[l_idx-1] != 0:
+                if (
+                    l_idx - 1 >= 0
+                    and thrall[l_idx - 1] < ss_thr[0]
+                    and thrall[l_idx - 1] != 0
+                ):
                     ls_index = l_idx
                     break
-                l_idx = max(0, l_min, l_idx - int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = max(
+                    0, l_min, l_idx - int(math.ceil(len(lambdas) / (g + 1)))
+                )
                 while thrall[l_idx] != 0:
                     l_idx += 1
                     if l_idx == len(lambdas):
                         break
-    thr = ((qs[ls_index]**2 / ((pcer * n_ini) * n_ini)) + 1) / 2
+    thr = ((qs[ls_index] ** 2 / ((pcer * n_ini) * n_ini)) + 1) / 2
     stable = np.where(sp >= thr)[0]
     if stable.size == 0:
         stop_flag = True
     vc = np.zeros(n)
     delta = lambdas[l_idx] / (np.abs(ols) ** gamm)
-    vc = np.sign(ols) * ((np.abs(ols) >= delta).astype(float)) * (np.abs(ols) - delta)
-    return {"vc": vc, "sp": sp, "stop": stop_flag, "qs": qs, "thr": thr, "l": ls_index, "delta": delta}
+    vc = (
+        np.sign(ols)
+        * ((np.abs(ols) >= delta).astype(float))
+        * (np.abs(ols) - delta)
+    )
+    return {
+        "vc": vc,
+        "sp": sp,
+        "stop": stop_flag,
+        "qs": qs,
+        "thr": thr,
+        "l": ls_index,
+        "delta": delta,
+    }
 
 
-def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_val=None, start=False):
+def update_u_pw(
+    X,
+    v0,
+    pcer,
+    p_ini,
+    ss_thr,
+    steps,
+    size,
+    gamm,
+    rows_nc=False,
+    l_val=None,
+    start=False,
+):
     p_ini = X.shape[0]
     p = p_ini
     err = pcer * p_ini
@@ -467,7 +642,7 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
     thrall = np.zeros(len(lambdas))
     ls_index = len(lambdas) - 1
     if l_val is None:
-        median_val = np.quantile(lambdas, 0.5, interpolation='linear')
+        median_val = np.quantile(lambdas, 0.5, interpolation="linear")
         indices = np.where(np.isclose(lambdas, median_val))[0]
         if len(indices) > 0:
             l_val = indices[0]
@@ -479,10 +654,10 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
     if rows_nc:
         for g in range(len(lambdas)):
             temp = adalasso_nc(X, v0, lambdas[l_idx], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l_idx] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
-            thrall[l_idx] = ((qs[l_idx]**2 / (err * p_ini)) + 1) / 2
+            thrall[l_idx] = ((qs[l_idx] ** 2 / (err * p_ini)) + 1) / 2
             if ss_thr[0] <= thrall[l_idx] <= ss_thr[1]:
                 ls_index = l_idx
                 break
@@ -490,17 +665,25 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
                 l_min = l_idx
                 if l_idx == len(lambdas) - 1:
                     break
-                if thrall[l_idx+1] > ss_thr[1]:
+                if thrall[l_idx + 1] > ss_thr[1]:
                     ls_index = l_idx + 1
-                    if thrall[l_idx+1] > 1:
+                    if thrall[l_idx + 1] > 1:
                         ls_index = l_idx
-                    temp = adalasso_nc(X, v0, lambdas[ls_index], steps, size, gamm)
-                    t_bool = (temp != 0)
+                    temp = adalasso_nc(
+                        X, v0, lambdas[ls_index], steps, size, gamm
+                    )
+                    t_bool = temp != 0
                     qs[ls_index] = np.mean(np.sum(t_bool, axis=0))
                     sp = np.mean(t_bool, axis=1)
-                    thrall[ls_index] = ((qs[ls_index]**2 / (err * p_ini)) + 1) / 2
+                    thrall[ls_index] = (
+                        (qs[ls_index] ** 2 / (err * p_ini)) + 1
+                    ) / 2
                     break
-                l_idx = min(len(lambdas) - 1, l_max, l_idx + int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = min(
+                    len(lambdas) - 1,
+                    l_max,
+                    l_idx + int(math.ceil(len(lambdas) / (g + 1))),
+                )
                 while thrall[l_idx] != 0:
                     l_idx -= 1
                     if l_idx == 0:
@@ -509,10 +692,16 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
                 l_max = l_idx
                 if l_idx == 0:
                     break
-                if l_idx - 1 >= 0 and thrall[l_idx-1] < ss_thr[0] and thrall[l_idx-1] != 0:
+                if (
+                    l_idx - 1 >= 0
+                    and thrall[l_idx - 1] < ss_thr[0]
+                    and thrall[l_idx - 1] != 0
+                ):
                     ls_index = l_idx
                     break
-                l_idx = max(0, l_min, l_idx - int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = max(
+                    0, l_min, l_idx - int(math.ceil(len(lambdas) / (g + 1)))
+                )
                 while thrall[l_idx] != 0:
                     l_idx += 1
                     if l_idx == len(lambdas):
@@ -520,10 +709,10 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
     else:
         for g in range(len(lambdas)):
             temp = adalasso(X, v0, lambdas[l_idx], steps, size, gamm)
-            t_bool = (temp != 0)
+            t_bool = temp != 0
             qs[l_idx] = np.mean(np.sum(t_bool, axis=0))
             sp = np.mean(t_bool, axis=1)
-            thrall[l_idx] = ((qs[l_idx]**2 / (err * p_ini)) + 1) / 2
+            thrall[l_idx] = ((qs[l_idx] ** 2 / (err * p_ini)) + 1) / 2
             if ss_thr[0] <= thrall[l_idx] <= ss_thr[1]:
                 ls_index = l_idx
                 break
@@ -531,17 +720,23 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
                 l_min = l_idx
                 if l_idx == len(lambdas) - 1:
                     break
-                if thrall[l_idx+1] > ss_thr[1]:
+                if thrall[l_idx + 1] > ss_thr[1]:
                     ls_index = l_idx + 1
-                    if thrall[l_idx+1] > 1:
+                    if thrall[l_idx + 1] > 1:
                         ls_index = l_idx
                     temp = adalasso(X, v0, lambdas[ls_index], steps, size, gamm)
-                    t_bool = (temp != 0)
+                    t_bool = temp != 0
                     qs[ls_index] = np.mean(np.sum(t_bool, axis=0))
                     sp = np.mean(t_bool, axis=1)
-                    thrall[ls_index] = ((qs[ls_index]**2 / (err * p_ini)) + 1) / 2
+                    thrall[ls_index] = (
+                        (qs[ls_index] ** 2 / (err * p_ini)) + 1
+                    ) / 2
                     break
-                l_idx = min(len(lambdas) - 1, l_max, l_idx + int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = min(
+                    len(lambdas) - 1,
+                    l_max,
+                    l_idx + int(math.ceil(len(lambdas) / (g + 1))),
+                )
                 while thrall[l_idx] != 0:
                     l_idx -= 1
                     if l_idx == 0:
@@ -550,28 +745,63 @@ def update_u_pw(X, v0, pcer, p_ini, ss_thr, steps, size, gamm, rows_nc=False, l_
                 l_max = l_idx
                 if l_idx == 0:
                     break
-                if l_idx - 1 >= 0 and thrall[l_idx-1] < ss_thr[0] and thrall[l_idx-1] != 0:
+                if (
+                    l_idx - 1 >= 0
+                    and thrall[l_idx - 1] < ss_thr[0]
+                    and thrall[l_idx - 1] != 0
+                ):
                     ls_index = l_idx
                     break
-                l_idx = max(0, l_min, l_idx - int(math.ceil(len(lambdas) / (g+1))))
+                l_idx = max(
+                    0, l_min, l_idx - int(math.ceil(len(lambdas) / (g + 1)))
+                )
                 while thrall[l_idx] != 0:
                     l_idx += 1
                     if l_idx == len(lambdas):
                         break
-    thr = ((qs[ls_index]**2 / ((pcer * p_ini) * p_ini)) + 1) / 2
+    thr = ((qs[ls_index] ** 2 / ((pcer * p_ini) * p_ini)) + 1) / 2
     stable = np.where(sp >= thr)[0]
     if stable.size == 0:
         stop_flag = True
     uc = np.zeros(p)
     delta = lambdas[l_idx] / (np.abs(ols) ** gamm)
-    uc = np.sign(ols) * ((np.abs(ols) >= delta).astype(float)) * (np.abs(ols) - delta)
-    return {"uc": uc, "sp": sp, "stop": stop_flag, "qs": qs, "thr": thr, "l": ls_index, "delta": delta}
+    uc = (
+        np.sign(ols)
+        * ((np.abs(ols) >= delta).astype(float))
+        * (np.abs(ols) - delta)
+    )
+    return {
+        "uc": uc,
+        "sp": sp,
+        "stop": stop_flag,
+        "qs": qs,
+        "thr": thr,
+        "l": ls_index,
+        "delta": delta,
+    }
 
 
-def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=0,
-         iters=100, nbiclust=10, merr=1e-3, cols_nc=True, rows_nc=True,
-         row_overlap=True, col_overlap=True, row_min=1, col_min=1, pointwise=True,
-         start_iter=3, savepath=False):
+def s4vd(
+    X,
+    steps=100,
+    pcerv=0.1,
+    pceru=0.1,
+    ss_thr=(0.6, 0.65),
+    size=0.5,
+    gamm=0,
+    iters=100,
+    nbiclust=10,
+    merr=1e-3,
+    cols_nc=True,
+    rows_nc=True,
+    row_overlap=True,
+    col_overlap=True,
+    row_min=1,
+    col_min=1,
+    pointwise=True,
+    start_iter=3,
+    savepath=False,
+):
     X = deepcopy(X)
     startX = deepcopy(X)
     p_ini = X.shape[0]
@@ -586,7 +816,7 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
     uc_dict = {}
     for k in range(nbiclust):
         gc.collect()
-        print("Bicluster", k+1)
+        print("Bicluster", k + 1)
         rows = np.zeros(startX.shape[0], dtype=bool)
         cols = np.zeros(startX.shape[1], dtype=bool)
         if X.shape[0] == 0 or X.shape[1] == 0:
@@ -606,11 +836,33 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
             break
         if pointwise:
             for i in range(iters):
-                uc_dict = update_u_pw(X, v0, pceru, p_ini, ss_thr, steps, size, gamm, rows_nc, l_val=uc_dict.get("l"))
+                uc_dict = update_u_pw(
+                    X,
+                    v0,
+                    pceru,
+                    p_ini,
+                    ss_thr,
+                    steps,
+                    size,
+                    gamm,
+                    rows_nc,
+                    l_val=uc_dict.get("l"),
+                )
                 norm_u = np.linalg.norm(uc_dict["uc"])
                 u1 = uc_dict["uc"] / norm_u if norm_u != 0 else uc_dict["uc"]
                 u1 = np.nan_to_num(u1)
-                vc_dict = update_v_pw(X, u1, pcerv, n_ini, ss_thr, steps, size, gamm, cols_nc, l_val=vc_dict.get("l"))
+                vc_dict = update_v_pw(
+                    X,
+                    u1,
+                    pcerv,
+                    n_ini,
+                    ss_thr,
+                    steps,
+                    size,
+                    gamm,
+                    cols_nc,
+                    l_val=vc_dict.get("l"),
+                )
                 norm_v = np.linalg.norm(vc_dict["vc"])
                 v1 = vc_dict["vc"] / norm_v if norm_v != 0 else vc_dict["vc"]
                 v1 = np.nan_to_num(v1)
@@ -631,11 +883,33 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
                     break
         else:
             for i in range(iters):
-                uc_dict = update_u(X, v0, pceru, p_ini, ss_thr, steps, size, gamm, rows_nc, savepath)
+                uc_dict = update_u(
+                    X,
+                    v0,
+                    pceru,
+                    p_ini,
+                    ss_thr,
+                    steps,
+                    size,
+                    gamm,
+                    rows_nc,
+                    savepath,
+                )
                 norm_u = np.linalg.norm(uc_dict["uc"])
                 u1 = uc_dict["uc"] / norm_u if norm_u != 0 else uc_dict["uc"]
                 u1 = np.nan_to_num(u1)
-                vc_dict = update_v(X, u1, pcerv, n_ini, ss_thr, steps, size, gamm, cols_nc, savepath)
+                vc_dict = update_v(
+                    X,
+                    u1,
+                    pcerv,
+                    n_ini,
+                    ss_thr,
+                    steps,
+                    size,
+                    gamm,
+                    cols_nc,
+                    savepath,
+                )
                 norm_v = np.linalg.norm(vc_dict["vc"])
                 v1 = vc_dict["vc"] / norm_v if norm_v != 0 else vc_dict["vc"]
                 v1 = np.nan_to_num(v1)
@@ -654,13 +928,13 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
                 u0 = u1
                 if min(ud, vd) < merr and i > start_iter:
                     break
-        stableu = (uc_dict["sp"] >= uc_dict["thr"])
-        stablev = (vc_dict["sp"] >= vc_dict["thr"])
+        stableu = uc_dict["sp"] >= uc_dict["thr"]
+        stablev = vc_dict["sp"] >= vc_dict["thr"]
         d0 = float(np.dot(u0.T, np.dot(X, v0)))
         u0[~stableu] = 0
         v0[~stablev] = 0
-        rows[rowsin] = (u0 != 0)
-        cols[colsin] = (v0 != 0)
+        rows[rowsin] = u0 != 0
+        cols[colsin] = v0 != 0
         Rows.append(rows)
         Cols.append(cols)
         if stop:
@@ -692,10 +966,24 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
     if not stop:
         number = nbiclust
     params = {
-        "steps": steps, "pcerv": pcerv, "pceru": pceru, "iter": iters, "ss_thr": ss_thr, "size": size, "gamm": gamm,
-        "row_overlap": row_overlap, "col_overlap": col_overlap, "rows_nc": rows_nc, "cols_nc": cols_nc,
-        "nbiclust": nbiclust, "merr": merr, "row_min": row_min, "col_min": col_min, "pointwise": pointwise,
-        "start_iter": start_iter, "savepath": savepath
+        "steps": steps,
+        "pcerv": pcerv,
+        "pceru": pceru,
+        "iter": iters,
+        "ss_thr": ss_thr,
+        "size": size,
+        "gamm": gamm,
+        "row_overlap": row_overlap,
+        "col_overlap": col_overlap,
+        "rows_nc": rows_nc,
+        "cols_nc": cols_nc,
+        "nbiclust": nbiclust,
+        "merr": merr,
+        "row_min": row_min,
+        "col_min": col_min,
+        "pointwise": pointwise,
+        "start_iter": start_iter,
+        "savepath": savepath,
     }
     if len(Rows) > 0:
         RowxNumber = np.column_stack(Rows)
@@ -708,5 +996,3 @@ def s4vd(X, steps=100, pcerv=0.1, pceru=0.1, ss_thr=(0.6, 0.65), size=0.5, gamm=
     info.append(params)
     Number = number
     return BiclustResult(params, RowxNumber, NumberxCol, Number, info)
-
-

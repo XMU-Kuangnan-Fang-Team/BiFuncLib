@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib
+
 matplotlib.use("Agg")
 from BiFuncLib.simulation_data import sas_sim_data
 from BiFuncLib.sas_bifunc import sas_bifunc, sas_bifunc_cv
@@ -8,6 +9,7 @@ from BiFuncLib.FDPlot import FDPlot
 
 def _check_sas_result(res):
     assert isinstance(res, dict)
+
 
 def test_sas_full_story():
     sas_simdata_0 = sas_sim_data(0, n_i=20, var_e=1, var_b=0.25)

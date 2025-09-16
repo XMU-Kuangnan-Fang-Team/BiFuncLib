@@ -27,7 +27,7 @@ def spmm(M, X):
     Y = np.zeros((m, p), dtype=float)
     for i in range(p):
         for j in range(n):
-            for k in range(M["column_ptr"][j], M["column_ptr"][j+1]):
+            for k in range(M["column_ptr"][j], M["column_ptr"][j + 1]):
                 row_ind = M["row_indices"][k]
                 Y[row_ind, i] += M["values"][k] * X[j, i]
     return Y
@@ -39,7 +39,7 @@ def spmtm(M, X):
     Y = np.zeros((n, p), dtype=float)
     for i in range(p):
         for j in range(n):
-            for k in range(M["column_ptr"][j], M["column_ptr"][j+1]):
+            for k in range(M["column_ptr"][j], M["column_ptr"][j + 1]):
                 row_ind = M["row_indices"][k]
                 Y[j, i] += M["values"][k] * X[row_ind, i]
     return Y
@@ -52,7 +52,7 @@ def spmmt(M, X):
     Y = np.zeros((m, p), dtype=float)
     for i in range(p):
         for j in range(n):
-            for k in range(M["column_ptr"][j], M["column_ptr"][j+1]):
+            for k in range(M["column_ptr"][j], M["column_ptr"][j + 1]):
                 row_ind = M["row_indices"][k]
                 Y[row_ind, i] += M["values"][k] * X[i, j]
     return Y
@@ -64,18 +64,20 @@ def convex_cluster_dual(XT, UT):
 
 
 def convex_cluster_primal(XT, UT, VT, Phi, w):
-    primal = 0.5 * np.sum((XT - UT)**2)
+    primal = 0.5 * np.sum((XT - UT) ** 2)
     VT[:] = spmm(Phi, UT)
     penalty = np.sum(w * np.sqrt(np.sum(VT**2, axis=1)))
     return primal + penalty
 
 
-def convex_bicluster_primal(XT, UT, VT_row, VT_col, Phi_row, Phi_col, w_row, w_col):
+def convex_bicluster_primal(
+    XT, UT, VT_row, VT_col, Phi_row, Phi_col, w_row, w_col
+):
     primal = 0.5 * np.sum((XT - UT) ** 2)
     VT_row[:] = spmmt(Phi_row, UT)
     VT_col[:] = spmm(Phi_col, UT)
-    penalty_row = np.sum(w_row * np.sqrt(np.sum(VT_row ** 2, axis=1)))
-    penalty_col = np.sum(w_col * np.sqrt(np.sum(VT_col ** 2, axis=1)))
+    penalty_row = np.sum(w_row * np.sqrt(np.sum(VT_row**2, axis=1)))
+    penalty_col = np.sum(w_col * np.sqrt(np.sum(VT_col**2, axis=1)))
     return primal + penalty_row + penalty_col
 
 
@@ -131,14 +133,14 @@ def update_LambdaT(LambdaT, UT, Phi, nu, w):
 
 def update_VT_row(U, LambdaT, Phi, w, nu):
     tau = w / nu
-    VT_temp = spmm(Phi, U) - (1/nu) * LambdaT
+    VT_temp = spmm(Phi, U) - (1 / nu) * LambdaT
     VT_row = prox_L2(VT_temp, tau)
     return VT_row
 
 
 def update_VT_col(UT, LambdaT, Phi, w, nu):
     tau = w / nu
-    VT_temp = spmm(Phi, UT) - (1/nu) * LambdaT
+    VT_temp = spmm(Phi, UT) - (1 / nu) * LambdaT
     VT_col = prox_L2(VT_temp, tau)
     return VT_col
 
@@ -149,7 +151,9 @@ def tri2vec(i, j, n):
 
 def vec2tri(k, n):
     k = np.asarray(k)
-    i = np.ceil(0.5 * (2 * n - 1 - np.sqrt((2 * n - 1) ** 2 - 8 * k))).astype(int)
+    i = np.ceil(0.5 * (2 * n - 1 - np.sqrt((2 * n - 1) ** 2 - 8 * k))).astype(
+        int
+    )
     j = k - n * (i - 1) + (i * (i - 1)) // 2 + i
     return np.column_stack((i, j))
 
@@ -170,8 +174,14 @@ def gkn_weights(X, phi=0.5, k_row=5, k_col=5):
     A_col = weights_graph(w_col, n)
     nRowComp = len(find_clusters(A_row)["size"])
     nColComp = len(find_clusters(A_col)["size"])
-    return {"w_row": w_row.data, "w_col": w_col.data, "E_row": E_row, "E_col": E_col,
-            "nRowComp": nRowComp, "nColComp": nColComp}
+    return {
+        "w_row": w_row.data,
+        "w_col": w_col.data,
+        "E_row": E_row,
+        "E_col": E_col,
+        "nRowComp": nRowComp,
+        "nColComp": nColComp,
+    }
 
 
 def knn_weights(w, k, n):
@@ -261,7 +271,7 @@ def update_majorization(MT, UT, Theta, nMissing):
     MT = np.asfortranarray(MT)
     UT = np.asfortranarray(UT)
     for idx in Theta[:nMissing]:
-        MT.ravel(order='F')[idx] = UT.ravel(order='F')[idx]
+        MT.ravel(order="F")[idx] = UT.ravel(order="F")[idx]
     return MT
 
 
@@ -288,7 +298,7 @@ def get_subgroup_means_full(X, clusters_row, clusters_col):
 
 def get_subgroup_means(X, Theta, clusters_row, clusters_col):
     Y = X.copy()
-    Y.to_numpy().ravel(order='F')[Theta] = np.nan
+    Y.to_numpy().ravel(order="F")[Theta] = np.nan
     return get_subgroup_means_full(Y, clusters_row, clusters_col)
 
 
@@ -299,14 +309,28 @@ def get_validation(p, n, fraction=0.1, seed=123):
     ix = random.sample(range(total), num)
     ix1 = np.array(ix) + 1
     rows = np.ceil(ix1 / n).astype(int)
-    cols = ix1 - n*(rows - 1)
+    cols = ix1 - n * (rows - 1)
     ThetaM = np.column_stack((rows, cols))
     ThetaV = ix1
     return {"ThetaM": ThetaM, "ThetaV": ThetaV}
 
 
-def convex_cluster_fasta(XT, UT, VT, LambdaT, LambdaT_temp, LambdaT_old,
-                         dLambdaT, gLambdaT, gLambdaT_old, Phi, w, nu, max_iter, tol):
+def convex_cluster_fasta(
+    XT,
+    UT,
+    VT,
+    LambdaT,
+    LambdaT_temp,
+    LambdaT_old,
+    dLambdaT,
+    gLambdaT,
+    gLambdaT_old,
+    Phi,
+    w,
+    nu,
+    max_iter,
+    tol,
+):
     m = LambdaT.shape[0]
     p = LambdaT.shape[1]
     M = 10
@@ -354,7 +378,7 @@ def convex_cluster_fasta(XT, UT, VT, LambdaT, LambdaT_temp, LambdaT_old,
         gLambdaT[:] = grad_LambdaT(UT, Phi)
         dLambdaSq = np.sum(dLambdaT**2)
         dLambdaDotdGrad = np.sum(dLambdaT * (gLambdaT - gLambdaT_old))
-        dGradSq = np.sum((gLambdaT - gLambdaT_old)**2)
+        dGradSq = np.sum((gLambdaT - gLambdaT_old) ** 2)
         nu_s = dLambdaSq / dLambdaDotdGrad if dLambdaDotdGrad != 0 else nu
         nu_m = dLambdaDotdGrad / dGradSq if dGradSq != 0 else nu
         if 2.0 * nu_m > nu_s:
@@ -366,11 +390,35 @@ def convex_cluster_fasta(XT, UT, VT, LambdaT, LambdaT_temp, LambdaT_old,
     return nu, its, primal_hist, dual_hist
 
 
-def convex_bicluster_dlpa(XT, LambdaT_row, LambdaT_temp_row, LambdaT_old_row, dLambdaT_row,
-                          gLambdaT_row, gLambdaT_old_row, LambdaT_col, LambdaT_temp_col,
-                          LambdaT_old_col, dLambdaT_col, gLambdaT_col, gLambdaT_old_col,
-                          VT_row, VT_col, UT, YT, PT, QT, Phi_row, Phi_col,
-                          w_row, w_col, nu_row, nu_col, max_iter, tol):
+def convex_bicluster_dlpa(
+    XT,
+    LambdaT_row,
+    LambdaT_temp_row,
+    LambdaT_old_row,
+    dLambdaT_row,
+    gLambdaT_row,
+    gLambdaT_old_row,
+    LambdaT_col,
+    LambdaT_temp_col,
+    LambdaT_old_col,
+    dLambdaT_col,
+    gLambdaT_col,
+    gLambdaT_old_col,
+    VT_row,
+    VT_col,
+    UT,
+    YT,
+    PT,
+    QT,
+    Phi_row,
+    Phi_col,
+    w_row,
+    w_col,
+    nu_row,
+    nu_col,
+    max_iter,
+    tol,
+):
     n = Phi_col["Ncol"]
     p = Phi_row["Ncol"]
     UP = np.zeros((p, n))
@@ -385,25 +433,53 @@ def convex_bicluster_dlpa(XT, LambdaT_row, LambdaT_temp_row, LambdaT_old_row, dL
     dual_col_hist = []
     UT[:] = XT.copy()
     for its in range(max_iter):
-        UP = (UT.T + PT.T)
-        nu_row, iter_row, primal_row_local, dual_row_local = convex_cluster_fasta(
-            UP, YT, VT_row, LambdaT_row, LambdaT_temp_row, LambdaT_old_row,
-            dLambdaT_row, gLambdaT_row, gLambdaT_old_row, Phi_row, w_row, nu_row,
-            max_iter_row, tol)
+        UP = UT.T + PT.T
+        nu_row, iter_row, primal_row_local, dual_row_local = (
+            convex_cluster_fasta(
+                UP,
+                YT,
+                VT_row,
+                LambdaT_row,
+                LambdaT_temp_row,
+                LambdaT_old_row,
+                dLambdaT_row,
+                gLambdaT_row,
+                gLambdaT_old_row,
+                Phi_row,
+                w_row,
+                nu_row,
+                max_iter_row,
+                tol,
+            )
+        )
         VT_row[:] = update_VT_row(YT, LambdaT_row, Phi_row, w_row, nu_row)
         for i in range(n):
             for j in range(p):
                 PT[i, j] += UT[i, j] - YT[j, i]
                 YQ[i, j] = YT[j, i] + QT[j, i]
-        nu_col, iter_col, primal_col_local, dual_col_local = convex_cluster_fasta(
-            YQ, UT, VT_col, LambdaT_col, LambdaT_temp_col, LambdaT_old_col,
-            dLambdaT_col, gLambdaT_col, gLambdaT_old_col,
-            Phi_col, w_col, nu_col, max_iter_col, tol)
+        nu_col, iter_col, primal_col_local, dual_col_local = (
+            convex_cluster_fasta(
+                YQ,
+                UT,
+                VT_col,
+                LambdaT_col,
+                LambdaT_temp_col,
+                LambdaT_old_col,
+                dLambdaT_col,
+                gLambdaT_col,
+                gLambdaT_old_col,
+                Phi_col,
+                w_col,
+                nu_col,
+                max_iter_col,
+                tol,
+            )
+        )
         VT_col[:] = update_VT_col(UT, LambdaT_col, Phi_col, w_col, nu_col)
         for i in range(p):
             for j in range(n):
                 QT[i, j] += YT[i, j] - UT[j, i]
-        diff = sqrt(np.sum((UT - YT.T)**2))
+        diff = sqrt(np.sum((UT - YT.T) ** 2))
         if iter_row < len(primal_row_local):
             primal_row_hist.append(primal_row_local[iter_row])
             dual_row_hist.append(dual_row_local[iter_row])
@@ -413,84 +489,149 @@ def convex_bicluster_dlpa(XT, LambdaT_row, LambdaT_temp_row, LambdaT_old_row, dL
         if diff < tol * n * p:
             break
     its = its + 1
-    return {"UT": UT,
-            "YT": YT,
-            "LambdaT_row": LambdaT_row,
-            "VT_row": VT_row,
-            "LambdaT_col": LambdaT_col,
-            "VT_col": VT_col,
-            "nu_row": nu_row,
-            "nu_col": nu_col,
-            "primal_row": primal_row_hist,
-            "dual_row": dual_row_hist,
-            "primal_col": primal_col_hist,
-            "dual_col": dual_col_hist,
-            "iter": its}
+    return {
+        "UT": UT,
+        "YT": YT,
+        "LambdaT_row": LambdaT_row,
+        "VT_row": VT_row,
+        "LambdaT_col": LambdaT_col,
+        "VT_col": VT_col,
+        "nu_row": nu_row,
+        "nu_col": nu_col,
+        "primal_row": primal_row_hist,
+        "dual_row": dual_row_hist,
+        "primal_col": primal_col_hist,
+        "dual_col": dual_col_hist,
+        "iter": its,
+    }
 
 
-def convex_bicluster_impute(MT, UT, LambdaT_row, LambdaT_col, VT_row, VT_col,
-                            Phi_row, Phi_col, Theta, nMissing, w_row, w_col,
-                            nu_row, nu_col, max_iter, tol, max_iter_inner, tol_inner):
+def convex_bicluster_impute(
+    MT,
+    UT,
+    LambdaT_row,
+    LambdaT_col,
+    VT_row,
+    VT_col,
+    Phi_row,
+    Phi_col,
+    Theta,
+    nMissing,
+    w_row,
+    w_col,
+    nu_row,
+    nu_col,
+    max_iter,
+    tol,
+    max_iter_inner,
+    tol_inner,
+):
     m_row = Phi_row["Nrow"]
     m_col = Phi_col["Nrow"]
     n = Phi_col["Ncol"]
     p = Phi_row["Ncol"]
-    YT    = np.zeros((p, n))
-    PT    = np.zeros((n, p))
-    QT    = np.zeros((p, n))
+    YT = np.zeros((p, n))
+    PT = np.zeros((n, p))
+    QT = np.zeros((p, n))
     VT_temp_row = np.zeros((m_row, n))
     VT_temp_col = np.zeros((m_col, p))
     LambdaT_temp_row = np.zeros((m_row, n))
-    LambdaT_old_row  = np.zeros((m_row, n))
-    dLambdaT_row     = np.zeros((m_row, n))
-    gLambdaT_row     = np.zeros((m_row, n))
+    LambdaT_old_row = np.zeros((m_row, n))
+    dLambdaT_row = np.zeros((m_row, n))
+    gLambdaT_row = np.zeros((m_row, n))
     gLambdaT_old_row = np.zeros((m_row, n))
     LambdaT_temp_col = np.zeros((m_col, p))
-    LambdaT_old_col  = np.zeros((m_col, p))
-    dLambdaT_col     = np.zeros((m_col, p))
-    gLambdaT_col     = np.zeros((m_col, p))
+    LambdaT_old_col = np.zeros((m_col, p))
+    dLambdaT_col = np.zeros((m_col, p))
+    gLambdaT_col = np.zeros((m_col, p))
     gLambdaT_old_col = np.zeros((m_col, p))
     MT = update_majorization(MT, UT, Theta, nMissing)
-    mm_loss_last = convex_bicluster_primal(MT, UT, VT_temp_row, VT_temp_col, Phi_row, Phi_col, w_row, w_col)
+    mm_loss_last = convex_bicluster_primal(
+        MT, UT, VT_temp_row, VT_temp_col, Phi_row, Phi_col, w_row, w_col
+    )
     mm_loss_history = [mm_loss_last]
     for its in range(1, max_iter):
         res = convex_bicluster_dlpa(
             MT,
-            LambdaT_row, LambdaT_temp_row, LambdaT_old_row, dLambdaT_row,
-            gLambdaT_row, gLambdaT_old_row,
-            LambdaT_col, LambdaT_temp_col, LambdaT_old_col, dLambdaT_col,
-            gLambdaT_col, gLambdaT_old_col,
-            VT_row, VT_col,
-            UT, YT, PT, QT,
-            Phi_row, Phi_col,
-            w_row, w_col,
-            nu_row, nu_col,
-            max_iter_inner, tol_inner
+            LambdaT_row,
+            LambdaT_temp_row,
+            LambdaT_old_row,
+            dLambdaT_row,
+            gLambdaT_row,
+            gLambdaT_old_row,
+            LambdaT_col,
+            LambdaT_temp_col,
+            LambdaT_old_col,
+            dLambdaT_col,
+            gLambdaT_col,
+            gLambdaT_old_col,
+            VT_row,
+            VT_col,
+            UT,
+            YT,
+            PT,
+            QT,
+            Phi_row,
+            Phi_col,
+            w_row,
+            w_col,
+            nu_row,
+            nu_col,
+            max_iter_inner,
+            tol_inner,
         )
-        MT= update_majorization(MT, UT, Theta, nMissing)
-        mm_loss_temp = convex_bicluster_primal(MT, UT, VT_temp_row, VT_temp_col, Phi_row, Phi_col, w_row, w_col)
+        MT = update_majorization(MT, UT, Theta, nMissing)
+        mm_loss_temp = convex_bicluster_primal(
+            MT, UT, VT_temp_row, VT_temp_col, Phi_row, Phi_col, w_row, w_col
+        )
         mm_loss_history.append(mm_loss_temp)
-        if mm_loss_last >= mm_loss_temp and (mm_loss_last - mm_loss_temp) < tol * (1.0 + mm_loss_last):
+        if mm_loss_last >= mm_loss_temp and (
+            mm_loss_last - mm_loss_temp
+        ) < tol * (1.0 + mm_loss_last):
             break
         mm_loss_last = mm_loss_temp
     iter_count = its + 1
-    return (iter_count, 
-            mm_loss_history, 
-            UT, 
-            res['LambdaT_row'], 
-            res['VT_row'], 
-            res['LambdaT_col'], 
-            res['VT_col'], 
-            res['nu_row'], 
-            res['nu_col'])
+    return (
+        iter_count,
+        mm_loss_history,
+        UT,
+        res["LambdaT_row"],
+        res["VT_row"],
+        res["LambdaT_col"],
+        res["VT_col"],
+        res["nu_row"],
+        res["nu_col"],
+    )
 
 
-def test_convex_bicluster_impute(mt, ut, lambdat_row, lambdat_col, vt_row, vt_col,
-                                 column_ptr_row, row_indices_row, values_row,
-                                 column_ptr_col, row_indices_col, values_col,
-                                 m_row, m_col, n, p, Theta, nMissing,
-                                 w_row, w_col, nu_row, nu_col, max_iter, tol,
-                                 max_iter_inner, tol_inner):
+def test_convex_bicluster_impute(
+    mt,
+    ut,
+    lambdat_row,
+    lambdat_col,
+    vt_row,
+    vt_col,
+    column_ptr_row,
+    row_indices_row,
+    values_row,
+    column_ptr_col,
+    row_indices_col,
+    values_col,
+    m_row,
+    m_col,
+    n,
+    p,
+    Theta,
+    nMissing,
+    w_row,
+    w_col,
+    nu_row,
+    nu_col,
+    max_iter,
+    tol,
+    max_iter_inner,
+    tol_inner,
+):
     MT = np.array(mt, dtype=float).reshape((n, p))
     UT = np.array(ut, dtype=float).reshape((n, p))
     LambdaT_row = np.array(lambdat_row, dtype=float).reshape((m_row, n))
@@ -502,14 +643,14 @@ def test_convex_bicluster_impute(mt, ut, lambdat_row, lambdat_col, vt_row, vt_co
         "Ncol": p,
         "column_ptr": np.array(column_ptr_row, dtype=np.int32),
         "row_indices": np.array(row_indices_row, dtype=np.int32),
-        "values": np.array(values_row, dtype=float)
+        "values": np.array(values_row, dtype=float),
     }
     Phi_col = {
         "Nrow": m_col,
         "Ncol": n,
         "column_ptr": np.array(column_ptr_col, dtype=np.int32),
         "row_indices": np.array(row_indices_col, dtype=np.int32),
-        "values": np.array(values_col, dtype=float)
+        "values": np.array(values_col, dtype=float),
     }
     w_row = np.array(w_row, dtype=float)
     w_col = np.array(w_col, dtype=float)
@@ -519,13 +660,42 @@ def test_convex_bicluster_impute(mt, ut, lambdat_row, lambdat_col, vt_row, vt_co
     tol = float(tol)
     max_iter_inner = int(max_iter_inner)
     tol_inner = float(tol_inner)
-    return convex_bicluster_impute(MT, UT, LambdaT_row, LambdaT_col, VT_row, VT_col,
-                                   Phi_row, Phi_col, Theta, nMissing, w_row, w_col,
-                                   nu_row, nu_col, max_iter, tol, max_iter_inner, tol_inner)
+    return convex_bicluster_impute(
+        MT,
+        UT,
+        LambdaT_row,
+        LambdaT_col,
+        VT_row,
+        VT_col,
+        Phi_row,
+        Phi_col,
+        Theta,
+        nMissing,
+        w_row,
+        w_col,
+        nu_row,
+        nu_col,
+        max_iter,
+        tol,
+        max_iter_inner,
+        tol_inner,
+    )
 
 
-def cobra_pod(X, Lambda_row, Lambda_col, E_row, E_col, w_row, w_col, Theta,
-              max_iter=100, tol=1e-3, max_iter_inner=1000, tol_inner=1e-4):
+def cobra_pod(
+    X,
+    Lambda_row,
+    Lambda_col,
+    E_row,
+    E_col,
+    w_row,
+    w_col,
+    Theta,
+    max_iter=100,
+    tol=1e-3,
+    max_iter_inner=1000,
+    tol_inner=1e-4,
+):
     m_row = E_row.shape[0]
     m_col = E_col.shape[0]
     n = X.shape[1]
@@ -553,20 +723,44 @@ def cobra_pod(X, Lambda_row, Lambda_col, E_row, E_col, w_row, w_col, Theta,
     max_iter_inner = int(max_iter_inner)
     tol_inner = float(tol_inner)
     sol = test_convex_bicluster_impute(
-        mt=XT, ut=UT,
+        mt=XT,
+        ut=UT,
         lambdat_row=LambdaT_row.ravel(),
         lambdat_col=LambdaT_col.ravel(),
-        vt_row=VT_row.ravel(), vt_col=VT_col.ravel(),
-        column_ptr_row=column_ptr_row, row_indices_row=row_indices_row, values_row=values_row,
-        column_ptr_col=column_ptr_col, row_indices_col=row_indices_col, values_col=values_col,
-        m_row=m_row, m_col=m_col, n=n, p=p,
-        Theta=Theta, nMissing=nMissing,
-        w_row=w_row, w_col=w_col,
-        nu_row=nu_row, nu_col=nu_col,
-        max_iter=max_iter, tol=tol,
-        max_iter_inner=max_iter_inner, tol_inner=tol_inner
-    )  
-    iter_count, mm_loss_history, UT, LambdaT_row, VT_row, LambdaT_col, VT_col, nu_row, nu_col = sol
+        vt_row=VT_row.ravel(),
+        vt_col=VT_col.ravel(),
+        column_ptr_row=column_ptr_row,
+        row_indices_row=row_indices_row,
+        values_row=values_row,
+        column_ptr_col=column_ptr_col,
+        row_indices_col=row_indices_col,
+        values_col=values_col,
+        m_row=m_row,
+        m_col=m_col,
+        n=n,
+        p=p,
+        Theta=Theta,
+        nMissing=nMissing,
+        w_row=w_row,
+        w_col=w_col,
+        nu_row=nu_row,
+        nu_col=nu_col,
+        max_iter=max_iter,
+        tol=tol,
+        max_iter_inner=max_iter_inner,
+        tol_inner=tol_inner,
+    )
+    (
+        iter_count,
+        mm_loss_history,
+        UT,
+        LambdaT_row,
+        VT_row,
+        LambdaT_col,
+        VT_col,
+        nu_row,
+        nu_col,
+    ) = sol
     return {
         "U": UT.T,
         "Lambda_row": LambdaT_row.T,
@@ -576,12 +770,25 @@ def cobra_pod(X, Lambda_row, Lambda_col, E_row, E_col, w_row, w_col, Theta,
         "nu_row": nu_row,
         "nu_col": nu_col,
         "mm_loss": mm_loss_history,
-        "iter": iter_count
+        "iter": iter_count,
     }
 
 
-def cobra_validate(X, E_row, E_col, w_row, w_col, gamma_seq, Lambda_row=None, Lambda_col=None,
-                   fraction=0.1, max_iter=100, tol=1e-3, max_iter_inner=1000, tol_inner=1e-4):
+def cobra_validate(
+    X,
+    E_row,
+    E_col,
+    w_row,
+    w_col,
+    gamma_seq,
+    Lambda_row=None,
+    Lambda_col=None,
+    fraction=0.1,
+    max_iter=100,
+    tol=1e-3,
+    max_iter_inner=1000,
+    tol_inner=1e-4,
+):
     n_samples = X.shape[1]
     p_features = X.shape[0]
     ThetaOut = get_validation(p_features, n_samples, fraction)
@@ -600,10 +807,20 @@ def cobra_validate(X, E_row, E_col, w_row, w_col, gamma_seq, Lambda_row=None, La
     if Lambda_col is None:
         Lambda_col = np.zeros((p_features, E_col.shape[0]))
     for ig, gam in enumerate(gamma_seq):
-        sol = cobra_pod(X, Lambda_row, Lambda_col, E_row, E_col,
-                        (gam * np.array(w_row)), (gam * np.array(w_col)), ThetaV,
-                        max_iter=max_iter, tol=tol, max_iter_inner=max_iter_inner,
-                        tol_inner=tol_inner)
+        sol = cobra_pod(
+            X,
+            Lambda_row,
+            Lambda_col,
+            E_row,
+            E_col,
+            (gam * np.array(w_row)),
+            (gam * np.array(w_col)),
+            ThetaV,
+            max_iter=max_iter,
+            tol=tol,
+            max_iter_inner=max_iter_inner,
+            tol_inner=tol_inner,
+        )
         UHx[ig] = sol["U"]
         VrHx[ig] = sol["V_row"]
         VcHx[ig] = sol["V_col"]
@@ -614,30 +831,37 @@ def cobra_validate(X, E_row, E_col, w_row, w_col, gamma_seq, Lambda_row=None, La
         linear_idx = (ThetaM[:, 0] - 1) + p_features * (ThetaM[:, 1] - 1)
         MM = get_subgroup_means(X, linear_idx, clusters_row, clusters_col)
         MM = np.nan_to_num(MM)
-        ixi = clusters_row['cluster'][ThetaM[:, 0] - 1]
-        ixj = clusters_col['cluster'][ThetaM[:, 1] - 1]
+        ixi = clusters_row["cluster"][ThetaM[:, 0] - 1]
+        ixj = clusters_col["cluster"][ThetaM[:, 1] - 1]
         errors = np.zeros(ThetaM.shape[0])
         for i in range(ThetaM.shape[0]):
-            errors[i] = MM[ixi[i]-1, ixj[i]-1] - XT.to_numpy().ravel(order='F')[ThetaV[i]-1]
+            errors[i] = (
+                MM[ixi[i] - 1, ixj[i] - 1]
+                - XT.to_numpy().ravel(order="F")[ThetaV[i] - 1]
+            )
         validation_error[ig] = math.sqrt(np.sum(errors**2))
         print(f"***** Completed gamma = {ig+1} *****")
-    return {"U": UHx, "V_row": VrHx, "V_col": VcHx,
-            "ThetaM": ThetaM, "ThetaV": ThetaV,
-            "groups_row": groups_row, "groups_col": groups_col,
-            "validation_error": validation_error}
+    return {
+        "U": UHx,
+        "V_row": VrHx,
+        "V_col": VcHx,
+        "ThetaM": ThetaM,
+        "ThetaV": ThetaV,
+        "groups_row": groups_row,
+        "groups_col": groups_col,
+        "validation_error": validation_error,
+    }
 
 
 def biclust_smooth(X, clusters_row, clusters_col):
     p, n = X.shape
     Y = np.full((p, n), np.nan)
     M = get_subgroup_means_full(X, clusters_row, clusters_col)
-    num_clusters_row = len(clusters_row['size'])
-    num_clusters_col = len(clusters_col['size'])
+    num_clusters_row = len(clusters_row["size"])
+    num_clusters_col = len(clusters_col["size"])
     for i in range(num_clusters_row):
-        ix_row = np.where(clusters_row['cluster'] == (i + 1))[0]
+        ix_row = np.where(clusters_row["cluster"] == (i + 1))[0]
         for j in range(num_clusters_col):
-            ix_col = np.where(clusters_col['cluster'] == (j + 1))[0]
+            ix_col = np.where(clusters_col["cluster"] == (j + 1))[0]
             Y[np.ix_(ix_row, ix_col)] = M[i, j]
     return Y
-
-
