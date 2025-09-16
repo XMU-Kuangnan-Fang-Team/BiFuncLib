@@ -3,6 +3,7 @@ import random
 import numpy as np
 import pytest
 import matplotlib
+
 matplotlib.use("Agg")
 from BiFuncLib.simulation_data import cvx_sim_data
 from BiFuncLib.cvx_main_func import gkn_weights
@@ -16,14 +17,17 @@ def data():
     X /= np.linalg.norm(X, "fro")
     return X
 
+
 @pytest.fixture(scope="session")
 def weights(data):
     return gkn_weights(data, phi=0.5, k_row=5, k_col=5)
+
 
 @pytest.fixture(autouse=True)
 def _seed():
     random.seed(42)
     np.random.seed(42)
+
 
 def test_cvx_biclus_missing(data, weights):
     n, p = data.shape[1], data.shape[0]
@@ -44,6 +48,7 @@ def test_cvx_biclus_missing(data, weights):
     )
     assert res is not None
 
+
 def test_cvx_biclus_valid_example2(data, weights):
     gammaSeq = 10 ** np.linspace(0, 3, 5)
     res = cvx_biclus_valid(
@@ -56,6 +61,7 @@ def test_cvx_biclus_valid_example2(data, weights):
         plot_error=False,
     )
     assert res is not None
+
 
 def test_cvx_biclus_valid_example3(data, weights):
     gammaSeq = 10 ** np.linspace(0, 1, 7)

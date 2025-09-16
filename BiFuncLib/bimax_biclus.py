@@ -29,18 +29,20 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
         n = len(prev_L)
         for a in range(n):
             items_a, mask_a, _ = prev_L[a]
-            for b in range(a+1, n):
+            for b in range(a + 1, n):
                 items_b, mask_b, _ = prev_L[b]
-                if items_a[:k-1] == items_b[:k-1]:
+                if items_a[: k - 1] == items_b[: k - 1]:
                     new_items = tuple(sorted(set(items_a) | set(items_b)))
-                    if len(new_items) != k+1:
+                    if len(new_items) != k + 1:
                         continue
                     new_mask = 0
                     for c in new_items:
                         new_mask |= 1 << c
                     if new_items in Ck:
                         continue
-                    sup = sum(1 for rm in row_masks if (rm & new_mask) == new_mask)
+                    sup = sum(
+                        1 for rm in row_masks if (rm & new_mask) == new_mask
+                    )
                     if sup >= minr:
                         Ck[new_items] = (new_items, new_mask, sup)
         k += 1
@@ -59,7 +61,7 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
     for items, mask, sup in maximal:
         rows_res = [i for i, rm in enumerate(row_masks) if (rm & mask) == mask]
         cols_res = list(items)
-        biclusters.append({'rows': rows_res, 'cols': cols_res})
+        biclusters.append({"rows": rows_res, "cols": cols_res})
     return biclusters
 
 
@@ -69,16 +71,21 @@ def bimax_biclus(matrix, minr=2, minc=2, number=100):
     R = len(matrix)
     C = len(matrix[0]) if R else 0
     RowxNumber = [[False] * bic_n for _ in range(R)]
-    NumberxCol = [[False] * C     for _ in range(bic_n)]
+    NumberxCol = [[False] * C for _ in range(bic_n)]
     for idx, bc in enumerate(raw):
-        for r in bc['rows']:
+        for r in bc["rows"]:
             RowxNumber[r][idx] = True
-        for c in bc['cols']:
+        for c in bc["cols"]:
             NumberxCol[idx][c] = True
-    return BiclustResult({
-            'Algorithm':     'Apriori-Bimax',
-            'minr':          minr,
-            'minc':          minc,
-            'MaxBiclusters': number
-        }, pd.DataFrame(RowxNumber), pd.DataFrame(NumberxCol).T, bic_n, {})
-
+    return BiclustResult(
+        {
+            "Algorithm": "Apriori-Bimax",
+            "minr": minr,
+            "minc": minc,
+            "MaxBiclusters": number,
+        },
+        pd.DataFrame(RowxNumber),
+        pd.DataFrame(NumberxCol).T,
+        bic_n,
+        {},
+    )

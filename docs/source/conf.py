@@ -7,21 +7,18 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "BiFuncLib's documentation"
-copyright = '2025, Yuhao Zhong'
-author = 'Yuhao Zhong'
+copyright = "2025, Yuhao Zhong"
+author = "Yuhao Zhong"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    'sphinx_documatt_theme'
-]
+extensions = ["sphinx_documatt_theme"]
 
-bibtex_default_style = 'plain'
+bibtex_default_style = "plain"
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 html_static_path = ["_static"]
-
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -29,16 +26,16 @@ html_static_path = ["_static"]
 
 html_theme = "sphinx_documatt_theme"
 
-html_logo = html_favicon = ''
+html_logo = html_favicon = ""
 
 html_theme_options = {
-    'header_text': 'BiFuncLib',
+    "header_text": "BiFuncLib",
     "header_logo_style": "height: 0em",
     "footer_logo_style": "height: 0em",
-    "motto": "BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data."
+    "motto": "BiFuncLib is a Python package that aggregates multiple biclustering methods mainly for functional data.",
 }
 
 html_sidebars = {
-    'index': ['globaltoc.html', 'sourcelink.html', 'searchbox.html'],
-    '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html'],
+    "index": ["globaltoc.html", "sourcelink.html", "searchbox.html"],
+    "**": ["globaltoc.html", "sourcelink.html", "searchbox.html"],
 }

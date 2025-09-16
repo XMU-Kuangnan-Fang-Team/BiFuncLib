@@ -1,4 +1,5 @@
 import matplotlib
+
 matplotlib.use("Agg")
 import pytest
 from BiFuncLib.simulation_data import bimax_sim_data
@@ -15,5 +16,23 @@ def test_bimax_full_story():
         number=10,
     )
     assert bimax_res is not None
-    bcheatmap(bimax_simdata, bimax_res, axisR=False, axisC=False, heatcols=None, clustercols=None, allrows=True, allcolumns=True)
-    bcheatmap(bimax_simdata, bimax_res, axisR=True, axisC=True, heatcols=None, clustercols=None, allrows=False, allcolumns=False)
+    bcheatmap(
+        bimax_simdata,
+        bimax_res,
+        axisR=False,
+        axisC=False,
+        heatcols=None,
+        clustercols=None,
+        allrows=True,
+        allcolumns=True,
+    )
+    bcheatmap(
+        bimax_simdata,
+        bimax_res,
+        axisR=True,
+        axisC=True,
+        heatcols=None,
+        clustercols=None,
+        allrows=False,
+        allcolumns=False,
+    )
