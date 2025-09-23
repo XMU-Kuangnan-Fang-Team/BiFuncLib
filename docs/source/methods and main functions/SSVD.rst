@@ -85,7 +85,7 @@ Example
 
 
 
-s4vd_biclus and ssvd_biclus
+s4vd_biclus & ssvd_biclus
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The **ssvd_biclus** function performs biclustering of the data matrix using sparse singular value decomposition, while **s4vd_biclus** builds upon this by incorporating nested stability selection for enhanced biclustering results.
 
