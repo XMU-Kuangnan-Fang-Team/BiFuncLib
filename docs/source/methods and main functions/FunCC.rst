@@ -225,7 +225,7 @@ Parameter
    * - **only_mean**
      - bool, if True, only the template functions for each bi-cluster is displayed. Default is False.
    * - **aligned**
-     - bool, if True, the alignemd functions are displayed. Default is False.
+     - bool, if True, the aligned functions are displayed. Default is False.
    * - **warping**
      - bool, if True, a figure representing the warping functions are displayed. Default is False.
 
@@ -251,7 +251,7 @@ Here we illustrate the outputs of the plot function in different settings.
    :width: 250px
 
 
-- alignemd function
+- aligned function
 
 .. image:: /_static/cc_aligned.png
    :width: 400
