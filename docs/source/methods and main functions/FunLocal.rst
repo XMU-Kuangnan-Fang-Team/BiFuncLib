@@ -187,13 +187,13 @@ color-coded by their cluster membership as identified by the method.
 
 .. code-block:: python
 
-    FDPlot(result).pf_fdplot()
+    FDPlot(opt_res).local_individuals_fdplot()
 
 **FDPlot.local_center_fdplot** visualizes the estimated mean curves for two distinct clusters identified by the method. 
 
 .. code-block:: python
 
-    FDPlot(result).pf_fdplot()
+      FDPlot(opt_res).local_center_fdplot()
 
 
 Parameter
