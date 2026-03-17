@@ -22,7 +22,7 @@ def cc_bifunc(
     max_iter_align=100,
 ):
 
-    # Check inputs
+    # Validate input parameters
     if len(data.shape) != 3:
         raise ValueError("Error: data should be an array of three dimensions")
     if template_type == "medoid" and (alpha != 0 or beta != 0):
@@ -50,7 +50,7 @@ def cc_bifunc(
     if delta < 0:
         raise ValueError("Error: delta must be a number greater than 0")
 
-    # Initialize parameters
+    # Initialize algorithm parameters and matrices
     n, m, p = data.shape
     parameter_input = {
         "delta": [delta],
@@ -64,6 +64,7 @@ def cc_bifunc(
         "shift_max": [shift_max],
         "max_iter_align": [max_iter_align],
     }
+    # Determine constraint mode based on alpha/beta settings
     if alpha == 0 and beta == 0:
         only_one = "True"
     elif alpha == 0 and beta != 0:
@@ -72,6 +73,7 @@ def cc_bifunc(
         only_one = "True_alpha"
     elif alpha != 0 and beta != 0:
         only_one = "False"
+    # Initialize membership matrices
     x = np.full((n, number), False, dtype=bool)
     y = np.full((number, m), False, dtype=bool)
     xy = np.zeros((n, m), dtype=int)
@@ -89,6 +91,7 @@ def cc_bifunc(
             submat = data[logr, :, 0][:, logc]
             rows_with_all_nan = np.all(np.isnan(submat), axis=1)
             logr[logr] = ~rows_with_all_nan
+        # Check stopping conditions based on constraint mode
         if (
             (
                 only_one == "False"
@@ -128,6 +131,7 @@ def cc_bifunc(
             submat = data[logr, :, 0][:, logc]
             cols_with_all_nan = np.all(np.isnan(submat), axis=0)
             logc[logc] = ~cols_with_all_nan
+        # Check stopping conditions
         if (
             (
                 only_one == "False"
@@ -163,6 +167,7 @@ def cc_bifunc(
             )
         ):
             break
+        # Apply Cheng-Church algorithm to current submatrix
         fun_mat_temp = data[logr][:, logc, :]
         erg = bigcc_fun(
             fun_mat_temp,
@@ -190,12 +195,14 @@ def cc_bifunc(
             logc = np.full(xy.shape[1], False, dtype=bool)
             logc[np.array(clus_col)[cl - 1, :]] = True
         else:
+            # Store found bicluster
             k += 1
             true_rows = np.where(logr)[0]
             x[true_rows, k - 1] = erg[0]
             true_cols = np.where(logc)[0]
             y[k - 1, true_cols] = erg[1]
             xy = xy + np.outer(x[:, k - 1].astype(int), y[k - 1, :].astype(int))
+            # Find overlapping biclusters using Bimax
             if only_one == "False":
                 res = bimax_biclus(1 - xy, minr=2, minc=2, number=100)
             elif only_one == "True":
@@ -210,6 +217,7 @@ def cc_bifunc(
                 break
             clus_row = res.RowxNumber
             clus_col = res.NumberxCol
+            # Filter out single-element biclusters
             d_rows = np.sum(clus_row, axis=0)
             d_cols = np.sum(clus_col, axis=1)
             dimensioni = d_rows * d_cols
@@ -222,6 +230,7 @@ def cc_bifunc(
                 clus_col = np.array(clus_col)[if_oneone, :]
             if n_clust == 0:
                 break
+            # Sort biclusters by size (descending)
             if n_clust > 1:
                 d = np.sum(clus_row, axis=0) * np.sum(clus_col, axis=1)
                 sorted_idx = np.argsort(-d)
@@ -232,7 +241,7 @@ def cc_bifunc(
             logc = np.full(xy.shape[1], False, dtype=bool)
             logc[np.array(clus_col)[0, :]] = True
 
-    # Return results
+    # Sort final biclusters by size
     clus_row_final = x[:, :k]
     clus_col_final = y[:k, :]
     if k > 1:
@@ -248,7 +257,7 @@ def cc_bifunc(
     }
     return result
 
-
+# Cross-validation for delta parameter selection
 def cc_bifunc_cv(
     data,
     delta_list,
@@ -288,11 +297,13 @@ def cc_bifunc_cv(
             shift_max=shift_max,
             max_iter_align=max_iter_align,
         )
+        # Handle no clusters found
         if res_fun["Number"] == 0:
             Htot_all_mean_list.append(np.nan)
             Htot_sum_list.append(np.nan)
             num_clust_list.append(0)
             not_assigned_list.append(data.shape[0] * data.shape[1])
+        # Evaluate single bicluster
         elif res_fun["Number"] == 1:
             row_mask = res_fun["RowxNumber"]
             col_mask = res_fun["NumberxCol"]
@@ -316,6 +327,7 @@ def cc_bifunc_cv(
             Htot_all_mean_list.append(Htot_d)
             Htot_sum_list.append(np.sum(H_cl))
             num_clust_list.append(1)
+        # Evaluate multiple biclusters
         elif res_fun["Number"] > 1:
             num_clust_list.append(res_fun["Number"])
             H_cl = []
