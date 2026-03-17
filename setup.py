@@ -17,7 +17,7 @@ setup(
         "BiFuncLib": ["simulation_data/*"],
     },
     install_requires=[
-        "numpy>=1.21.0,<2",
+        "numpy==1.24.3",
         "pandas",
         "matplotlib",
         "scipy",
