@@ -3,7 +3,7 @@ from scipy.optimize import minimize_scalar
 from scipy.interpolate import interp1d
 from scipy.spatial.distance import pdist, squareform
 
-
+# Compute medoid-based template using pairwise distances
 def medoid_evaluation(fun_mat, a, b, const_a, const_b):
     n, m, p = fun_mat.shape
     fun_per_medoid = fun_mat.reshape(n * m, p)
@@ -16,7 +16,7 @@ def medoid_evaluation(fun_mat, a, b, const_a, const_b):
     new_fun = np.tile(medoid_fun, (n, m, 1))
     return new_fun
 
-
+# Compute medoid template for selected rows/columns only
 def medoid_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
     n, m, p = fun_mat.shape
     filtered_fun_mat = fun_mat[logr, :, :][:, logc, :]
@@ -31,7 +31,7 @@ def medoid_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
     new_fun = np.tile(medoid_fun, (n, m, 1))
     return new_fun
 
-
+# Compute mean-based template with row and column effects
 def template_evaluation(fun_mat, a, b, const_a, const_b):
     n, m, p = fun_mat.shape
     count_null = np.sum(np.isnan(fun_mat), axis=2)
@@ -65,7 +65,7 @@ def template_evaluation(fun_mat, a, b, const_a, const_b):
     new_fun = fun_mean_mat + b * beta_fun_mat + a * alpha_fun_mat
     return new_fun
 
-
+# Compute mean template for selected rows/columns with additive effects
 def template_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
     n, m, p = fun_mat.shape
     count_null = np.sum(np.isnan(fun_mat), axis=2)
@@ -112,6 +112,7 @@ def warping_function(
     shift_max,
     max_iter,
 ):
+    # Compute distance between warped data and template
     def warping_shift(coeff):
         st = x_reg + coeff
         template_t = new_fun[i, j, :]
@@ -183,6 +184,7 @@ def warping_function_add(
     shift_max,
     max_iter,
 ):
+    # Compute distance for warped data against template
     def warping_shift(coeff):
         st = x_reg + coeff
         template_t = new_fun[i, j, :]
@@ -322,28 +324,28 @@ def evaluate_mat_dist_add(
         mat_dist = np.sum((fun_mat - new_fun) ** 2, axis=2) / p
     return mat_dist
 
-
+# Compute overall Cheng-Church score as mean distance
 def ccscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist)
     return score_fun
 
-
+# Compute row-wise mean distances
 def rowscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist, axis=1)
     return score_fun
 
-
+# Compute column-wise mean distances
 def colscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist, axis=0)
     return score_fun
 
-
+# Compute row scores for selected columns
 def addrowscore_fun(mat_dist, logc):
     selected_cols = mat_dist[:, logc]
     score_fun = np.nanmean(selected_cols, axis=1)
     return score_fun
 
-
+# Compute column scores for selected rows
 def addcolscore_fun(mat_dist, logr):
     selected_rows = mat_dist[logr, :]
     score_fun = np.nanmean(selected_rows, axis=0)
@@ -365,6 +367,7 @@ def cc1_fun(
     max_iter,
     only_one,
 ):
+    # Phase 1: Remove worst rows/columns until score <= delta
     logr = logr.copy()
     logc = logc.copy()
     sub_mat = fun_mat[np.ix_(logr, logc, [True] * fun_mat.shape[2])]
@@ -478,6 +481,7 @@ def cc2_fun(
     shift_max,
     max_iter,
 ):
+    # Phase 2: Multiple row/column removal using theta threshold
     logr = logr.copy()
     logc = logc.copy()
     mdi = 1
@@ -565,6 +569,7 @@ def cc3_fun(
     shift_max,
     max_iter,
 ):
+    # Phase 3: Add rows/columns back to expand bicluster
     logr = logr.copy()
     logc = logc.copy()
     br = 1
@@ -647,6 +652,7 @@ def bigcc_fun(
     max_iter,
     only_one,
 ):
+    # Main Cheng-Church algorithm: 3-phase iterative refinement
     n, m, p = fun_mat.shape
     logr = np.ones(n, dtype=bool)
     logc = np.ones(m, dtype=bool)
