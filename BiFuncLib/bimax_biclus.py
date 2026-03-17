@@ -4,8 +4,10 @@ from BiFuncLib.BiclustResult import BiclustResult
 
 
 def apriori_bimax(matrix, minr=2, minc=2, number=100):
+    # Get matrix dimensions
     rows = len(matrix)
     cols = len(matrix[0]) if rows else 0
+    # Convert each row to a bitmask for efficient column intersection
     row_masks = []
     for row in matrix:
         m = 0
@@ -13,6 +15,7 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
             if v:
                 m |= 1 << j
         row_masks.append(m)
+    # Generate frequent 1-itemsets (single columns meeting min row support)
     L1 = []
     for j in range(cols):
         bit = 1 << j
@@ -22,11 +25,13 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
     freq_sets = []
     if minc <= 1:
         freq_sets.extend(L1)
+    # Apriori algorithm: iteratively build larger itemsets from smaller ones
     k = 1
     prev_L = L1
     while prev_L and k < cols:
         Ck = {}
         n = len(prev_L)
+        # Join step: combine itemsets that share (k-1) prefix
         for a in range(n):
             items_a, mask_a, _ = prev_L[a]
             for b in range(a + 1, n):
@@ -49,6 +54,7 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
         prev_L = list(Ck.values())
         if k >= minc:
             freq_sets.extend(prev_L)
+    # Sort by itemset size (descending) then support (descending)
     freq_sets.sort(key=lambda x: (len(x[0]), x[2]), reverse=True)
     maximal = []
     for items, mask, sup in freq_sets:
@@ -57,6 +63,7 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
             maximal.append((items, mask, sup))
         if len(maximal) >= number:
             break
+    # Convert to bicluster format with row and column indices
     biclusters = []
     for items, mask, sup in maximal:
         rows_res = [i for i, rm in enumerate(row_masks) if (rm & mask) == mask]
@@ -66,17 +73,21 @@ def apriori_bimax(matrix, minr=2, minc=2, number=100):
 
 
 def bimax_biclus(matrix, minr=2, minc=2, number=100):
+    # Run Apriori-Bimax to get raw biclusters
     raw = apriori_bimax(matrix, minr, minc, number)
     bic_n = len(raw)
     R = len(matrix)
     C = len(matrix[0]) if R else 0
+    # Build RowxNumber matrix: rows x biclusters membership
     RowxNumber = [[False] * bic_n for _ in range(R)]
+    # Build NumberxCol matrix: biclusters x columns membership
     NumberxCol = [[False] * C for _ in range(bic_n)]
     for idx, bc in enumerate(raw):
         for r in bc["rows"]:
             RowxNumber[r][idx] = True
         for c in bc["cols"]:
             NumberxCol[idx][c] = True
+    # Return structured bicluster result object
     return BiclustResult(
         {
             "Algorithm": "Apriori-Bimax",
