@@ -6,7 +6,7 @@ from sklearn.linear_model import ElasticNet
 from GENetLib.fda_func import inprod
 from scipy.cluster.hierarchy import linkage, cut_tree
 
-
+# Compute information criteria (AIC, BIC, ICL) for model selection
 def criteria(loglik, T, prms, n):
     K = prms["K"]
     p = prms["p"]
@@ -58,7 +58,7 @@ def criteria(loglik, T, prms, n):
     icl = loglik - 0.5 * comp * np.log(n) - np.sum(T * np.log(T))
     return {"aic": aic, "bic": bic, "icl": icl, "nbprm": comp}
 
-
+# E-step: compute posterior probabilities and log-likelihood
 def estep(prms, fd, U):
     Y = np.asarray(fd["coefs"].T)
     n = Y.shape[0]
@@ -106,7 +106,7 @@ def estep(prms, fd, U):
         )
     return {"T": T, "loglik": loglik}
 
-
+# F-step: update discriminant subspace with optional sparsity
 def fstep(fd, T, lambda_):
     if np.min(np.sum(T, axis=0)) <= 1:
         raise ValueError("One cluster is almost empty!")
@@ -131,7 +131,7 @@ def fstep(fd, T, lambda_):
         U = svd(Utilde, full_matrices=False)[0]
     return U
 
-
+# Main funFEM algorithm: EM for functional data clustering
 def fem_main_func(
     fd,
     K,
@@ -146,6 +146,7 @@ def fem_main_func(
     Y = np.asarray(fd["coefs"].T)
     n = Y.shape[0]
     Lobs = np.full(maxit + 1, -np.inf)
+    # Initialize cluster assignments
     if init == "user":
         T = Tinit
     elif init == "kmeans":
@@ -160,6 +161,7 @@ def fem_main_func(
         ind = cut_tree(Z, n_clusters=K).flatten()
         T = np.zeros((n, K))
         T[np.arange(n), ind] = 1
+    # EM iterations
     V = fstep(fd, T, lambda_)
     prms = mstep(fd, V, T, model=model)
     res_estep = estep(prms, fd, V)
@@ -180,6 +182,7 @@ def fem_main_func(
                 abs(Linf_new - Linf_old) < eps or np.isnan(Linf_new)
             ):
                 break
+    # Plot convergence if requested
     if graph:
         plt.figure(figsize=(5, 3))
         plt.plot(Lobs[: i + 2], "r.")
@@ -187,6 +190,7 @@ def fem_main_func(
         plt.xlabel("Iterations")
         plt.ylabel("Log-likelihood (observed)")
         plt.show()
+    # Return final results with criteria
     cls_ = np.argmax(T, axis=1)
     crit = criteria(Lobs[i + 1], T, prms, n)
     W = inprod(fd["basis"], fd["basis"])
@@ -206,7 +210,7 @@ def fem_main_func(
         "nbprm": crit["nbprm"],
     }
 
-
+# M-step: update model parameters given cluster assignments
 def mstep(fd, U, T, model):
     Y = fd["coefs"].T
     n = Y.shape[0]
@@ -238,6 +242,7 @@ def mstep(fd, U, T, model):
         YY = Y - np.tile(m[k, :], (n, 1))
         Ck = (T[:, k].reshape(-1, 1) * np.array(YY)).T @ np.array(YY) / (nk - 1)
         C = np.cov(Y, rowvar=False)
+        # Model-specific covariance parameterization
         if model == "DkBk":
             D[k, :d, :d] = (Ck @ U).T @ U
             bk = (np.trace(Ck) - np.trace((Ck @ U).T @ U)) / (p - d)
