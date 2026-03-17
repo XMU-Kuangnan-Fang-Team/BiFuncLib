@@ -126,9 +126,9 @@ Parameter
    * - **L**
      - integer or list, the number of column clusters. If It is a list, the function performs grid search for best L.
    * - **maxit**
-     - integer, the maximum number of iterations of the SEM-Gibbs algorithm. Default is 100.
+     - integer, the maximum number of iterations of the SEM-Gibbs algorithm. Default is 50.
    * - **burn**
-     - integer, the number of of iterations of the burn-in period. Default is 50.
+     - integer, the number of of iterations of the burn-in period. Default is 25.
    * - **basis_name**
      - str, the name('fourier' or 'spline') of the basis functions used for the decomposition of the functions. Default is 'fourier'.
    * - **nbasis**
