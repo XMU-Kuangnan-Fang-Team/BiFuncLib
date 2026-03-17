@@ -20,6 +20,7 @@ def fem_bifunc(
     lambda_=0,
     graph=False,
 ):
+    # Initialize storage for all model-K combinations
     resultat = [None] * (len(K) * len(model))
     bic = [None] * (len(K) * len(model))
     aic = [None] * (len(K) * len(model))
@@ -27,6 +28,7 @@ def fem_bifunc(
     nbprm = [None] * (len(K) * len(model))
     ll = [None] * (len(K) * len(model))
     it = 0
+    # Grid search over K values and model types
     for k_idx in range(len(K)):
         current_K = K[k_idx]
         if disp:
@@ -44,6 +46,7 @@ def fem_bifunc(
                 lambda_=lambda_,
                 graph=graph,
             )
+            # Store information criteria if optimization succeeded
             if resultat[it] is not None:
                 bic[it] = resultat[it]["bic"]
                 aic[it] = resultat[it]["aic"]
@@ -64,10 +67,12 @@ def fem_bifunc(
                             f"{current_model}\t:\t icl = {resultat[it]['icl']}"
                         )
             it += 1
+    # Validate that at least one model succeeded
     if all(v is None for v in bic):
         raise ValueError(
             "No reliable results to return (empty clusters in all partitions)!"
         )
+    # Select best model based on chosen criterion
     if crit == "bic":
         id_max = bic.index(max([v for v in bic if v is not None]))
         crit_max = resultat[id_max]["bic"]
@@ -82,6 +87,7 @@ def fem_bifunc(
         print(
             f"The best model is {res['model']} with K = {res['K']} ({crit} = {crit_max})"
         )
+    # Add metadata and all criterion values to result
     res["crit"] = crit
     nm = len(model)
     res["allCriterions"] = {
