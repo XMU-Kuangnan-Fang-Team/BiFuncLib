@@ -8,7 +8,7 @@ from GENetLib.fda_func import inprod
 from GENetLib.BsplineFunc import BsplineFunc
 from BiFuncLib.fem_bifunc import fem_bifunc
 
-
+# Compute Adjusted Rand Index for clustering comparison
 def ari(x, y):
     x = np.array(x).flatten()
     y = np.array(y).flatten()
@@ -28,12 +28,12 @@ def ari(x, y):
     ari_value = (a - q) / ((ni + nj) / 2 - q)
     return ari_value
 
-
+# Create dummy (one-hot) encoding from cluster labels
 def dummy(Z, K):
     Z = np.asarray(Z).astype(int)
     return np.eye(K, dtype=int)[Z - 1]
 
-
+# Check and fix empty clusters by reassigning points
 def empty_class_check(W, Pw=None, display=False):
     nb = 0
     while np.min(np.sum(W, axis=0)) < 1 and nb < 10:
@@ -52,7 +52,7 @@ def empty_class_check(W, Pw=None, display=False):
         nb += 1
     return W
 
-
+# Functional PCA for dimensionality reduction
 def mypca_fd(fdobj_, center=True):
     fdobj = copy.deepcopy(fdobj_)
     if isinstance(fdobj, list):
@@ -128,7 +128,7 @@ def mypca_fd(fdobj_, center=True):
             "Wmat": W,
         }
 
-
+# Cattell scree test to determine number of components
 def cattell(x, thd=0.01):
     sc = np.abs(np.diff(x))
     p = len(x)
@@ -139,7 +139,7 @@ def cattell(x, thd=0.01):
             break
     return d
 
-
+# Compute cost for row cluster assignment
 def estep_Z_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     nbasis = xx.shape[1]
     Qkl = np.dot(Wmat[k][l], Q[k][l])
@@ -158,7 +158,7 @@ def estep_Z_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     )
     return A.T
 
-
+# Compute cost for column cluster assignment
 def estep_W_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     nbasis = xx.shape[1]
     Qkl = np.dot(Wmat[k][l], Q[k][l])
@@ -177,7 +177,7 @@ def estep_W_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     )
     return A.T
 
-
+# Compute log-likelihood cost for given block
 def estep_lik_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     nbasis = xx.shape[1]
     Qkl = Wmat[k][l] @ np.array(Q[k][l])
@@ -196,7 +196,7 @@ def estep_lik_cost(xx, alpha, beta, mu, a, b, d, Q, k, l, Wmat):
     )
     return A.T
 
-
+# E-step: update row cluster probabilities
 def estep_Z(X, alpha, beta, mu, a, b, d, Q, W, Wmat):
     K = len(alpha)
     L = len(beta)
@@ -224,7 +224,7 @@ def estep_Z(X, alpha, beta, mu, a, b, d, Q, W, Wmat):
     ).reshape(P.shape)
     return P
 
-
+# E-step: update column cluster probabilities
 def estep_W(X, alpha, beta, mu, a, b, d, Q, Z, Wmat):
     K = len(alpha)
     L = len(beta)
@@ -252,7 +252,7 @@ def estep_W(X, alpha, beta, mu, a, b, d, Q, Z, Wmat):
     ).reshape(P.shape)
     return P
 
-
+# Compute complete data log-likelihood
 def compute_complete_likelihood(X, alpha, beta, mu, a, b, d, Q, Z, W, Wmat):
     K, L = len(alpha), len(beta)
     lik = np.sum(Z @ np.log(alpha)) + np.sum(W @ np.log(beta))
@@ -274,13 +274,13 @@ def compute_complete_likelihood(X, alpha, beta, mu, a, b, d, Q, Z, W, Wmat):
             )
     return lik
 
-
+# Compute mode (most frequent value) along axis
 def mode(x):
     ux = np.unique(x)
     counts = np.array([np.sum(x == u) for u in ux])
     return ux[np.argmax(counts)]
 
-
+# Main funLBM algorithm for functional biclustering
 def lbm_main_func(
     data,
     K,
