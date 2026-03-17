@@ -17,16 +17,18 @@ def lbm_bifunc(
     display=False,
     init="funFEM",
 ):
+    # Ensure K and L are iterable for grid search
     if not hasattr(K, "__iter__"):
         K = [K]
     if not hasattr(L, "__iter__"):
         L = [L]
 
-    # With grid search
+    # Grid search over K and L values
     if len(K) > 1 or len(L) > 1:
         models = list(itertools.product(K, L))
         RES = []
         outNA = {"K": None, "icl": None}
+        # Evaluate all K-L combinations
         for model in models:
             try:
                 res_temp = lbm_main_func(
@@ -44,6 +46,7 @@ def lbm_bifunc(
             except Exception:
                 res_temp = outNA
             RES.append(res_temp)
+        # Extract ICL values for model selection
         models_with_icl = []
         for i, model in enumerate(models):
             try:
@@ -51,6 +54,7 @@ def lbm_bifunc(
             except Exception:
                 icl_value = None
             models_with_icl.append((model[0], model[1], icl_value))
+        # Select best model by ICL
         best_model_index = None
         best_icl = -np.inf
         for i, (_k, _l, icl_value) in enumerate(models_with_icl):
@@ -71,7 +75,7 @@ def lbm_bifunc(
         out["allRes"] = RES
         out["criteria"] = models_with_icl
 
-    # Without grid search
+    # Single model evaluation (no grid search)
     else:
         out = lbm_main_func(
             data=data,
