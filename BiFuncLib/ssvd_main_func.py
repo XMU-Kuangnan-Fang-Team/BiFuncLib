@@ -7,7 +7,7 @@ import gc
 
 from BiFuncLib.BiclustResult import BiclustResult
 
-
+# Thresholding operator for sparse estimation
 def thresh(z, delta, thredtype=1, a=3.7):
     z = np.asarray(z)
     if thredtype == 1:
@@ -32,7 +32,7 @@ def thresh(z, delta, thredtype=1, a=3.7):
         term3 = z * ((np.abs(z) > a * delta).astype(float))
         return term1 + term2 + term3
 
-
+# Compute initial SVD for sparse SVD algorithm
 def initial_svd(X, nu=1, nv=1):
     n, d = X.shape
     if min(n, d) < 500:
@@ -42,7 +42,7 @@ def initial_svd(X, nu=1, nv=1):
         u, s, vt = svds(X, k=1, which="LM")
         return u, vt.T
 
-
+# Compute Jaccard similarity matrix between biclustering results
 def jaccardmat(res1, res2, mode=None):
     def jaccard_sets(A, B):
         intersection = A & B
@@ -99,7 +99,7 @@ def jaccardmat(res1, res2, mode=None):
         else:
             return pd.DataFrame([[0]])
 
-
+# Sparse SVD with adaptive Lasso penalty
 def ssvd(
     X, threu=1, threv=1, gamu=0, gamv=0, u0=None, v0=None, merr=1e-4, niter=100
 ):
@@ -186,7 +186,7 @@ def ssvd(
         v0 = v1
     return {"u": u1, "v": v1, "iter": iteration, "stop": stop}
 
-
+# Sparse SVD-based biclustering (SSVD)
 def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     X = deepcopy(X)
     res = []
@@ -233,7 +233,7 @@ def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     info = {"res": res}
     return BiclustResult(params, RowxNumber, NumberxCol.T, Number, info)
 
-
+# Adaptive Lasso with non-concave penalty
 def adalasso_nc(X, b, lam, steps, size, gamm=0):
     n = len(b)
     m = int(n * size)
@@ -256,7 +256,7 @@ def adalassosteps_nc(index, subsets, X, b, lam, gamm):
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
 
-
+# Adaptive Lasso with subsampling
 def adalasso(X, b, lam, steps, size, gamm=0):
     n = len(b)
     m = int(n * size)
@@ -286,7 +286,7 @@ def adalassosteps(index, subsets, X, b, lam, gamm):
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
 
-
+# Update column loadings with stability selection
 def update_v(
     X, u0, pcer, n_ini, ss_thr, steps, size, gamm, cols_nc=False, savepath=False
 ):
@@ -365,7 +365,7 @@ def update_v(
             "delta": delta,
         }
 
-
+# Update row loadings with stability selection
 def update_u(
     X,
     v0,
@@ -454,7 +454,7 @@ def update_u(
             "delta": delta,
         }
 
-
+# Pointwise update for column loadings
 def update_v_pw(
     X,
     u0,
@@ -618,7 +618,7 @@ def update_v_pw(
         "delta": delta,
     }
 
-
+# Pointwise update for row loadings
 def update_u_pw(
     X,
     v0,
@@ -780,7 +780,7 @@ def update_u_pw(
         "delta": delta,
     }
 
-
+# Sparse SVD with stability selection (S4VD) for biclustering
 def s4vd(
     X,
     steps=100,
