@@ -6,7 +6,7 @@ from scipy.sparse import csr_matrix
 
 from GENetLib.BsplineFunc import BsplineFunc
 
-
+# Estimate noise variance sigma
 def get_sigma(x, curve, time, S, piigivej, gcov, n_i, gamma, mu):
     N = piigivej.shape[0]
     K = piigivej.shape[1]
@@ -31,7 +31,7 @@ def get_sigma(x, curve, time, S, piigivej, gcov, n_i, gamma, mu):
             sigma_val += piigivej[i, j] * (dot_term + trace_term)
     return np.array(sigma_val)
 
-
+# Compute numerator and denominator for mu update
 def get_numden(x, curve, time, S, piigivej, gcov, n_i, gamma):
     N = piigivej.shape[0]
     K = piigivej.shape[1]
@@ -67,7 +67,7 @@ def get_numden(x, curve, time, S, piigivej, gcov, n_i, gamma):
         sum_den = sum_den + matp @ (Si_mat.T @ Si_mat)
     return sum_num, sum_den
 
-
+# E-step: update posterior probabilities and random effects
 def get_Estep(par, data, vars_, S, hard, n_i):
     gamma = vars_["gamma"]
     N = gamma.shape[0]
@@ -122,7 +122,7 @@ def get_Estep(par, data, vars_, S, hard, n_i):
         gcov[:, i * q : (i + 1) * q] = Cgamma
     return gamma, piigivej, gprod, gcov
 
-
+# Compute log-likelihood with optional penalties
 def loglik(
     parameters,
     data=None,
@@ -244,7 +244,7 @@ def loglik(
         out = loglk
     return out
 
-
+# Algorithm init
 def sasfclust_init(
     data,
     pert=0,
@@ -494,7 +494,7 @@ def sasfclust_init(
         "basis": basis,
     }
 
-
+# M-step: update parameters given posterior probabilities
 def sasfclust_Mstep(
     parameters,
     data,
@@ -565,6 +565,7 @@ def sasfclust_Mstep(
     z_int = 1
     diff_inter = 100
     mu_old = mu.copy()
+    # LQA optimization for mu with fusion penalty
     while diff_inter > par_LQA["eps_LQA"] and z_int <= par_LQA["MAX_iter_LQA"]:
         mu_vec = np.ravel(mu.T, order="F")
         diff_mat = np.abs(P_tot @ mu_vec)
@@ -599,7 +600,7 @@ def sasfclust_Mstep(
     parameters["sigma"] = sigma
     return parameters
 
-
+# Wrapper for E-step computation
 def sasfclust_Estep(parameters, data, vars_, S, hard):
     unique_curves = np.unique(data["curve"])
     n_i = [np.sum(data["curve"] == uc) for uc in unique_curves]
@@ -610,7 +611,7 @@ def sasfclust_Estep(parameters, data, vars_, S, hard):
     vars_["gcov"] = aa[3]
     return vars_
 
-
+# Assign curves to clusters based on posterior probabilities
 def classify(mod, data_new=None):
     parameters = mod["parameters"]
     vars_ = mod["vars"]
@@ -658,7 +659,7 @@ def classify(mod, data_new=None):
     classes = np.argmax(po_pr, axis=1)
     return {"classes": classes, "po_pr": po_pr}
 
-
+# Multi-stage decision rule for parameter selection
 def get_msdrule(par, sds, comb_list, m1, m2, m3):
     comb_list = np.asarray(comb_list)
     par = np.asarray(par)
@@ -731,7 +732,7 @@ def get_msdrule(par, sds, comb_list, m1, m2, m3):
     lambda_l_opt = new_comb_list3[2]
     return (num_clusters_opt, lambda_s_opt, lambda_l_opt)
 
-
+# Compute fraction of zero differences (sparsity measure)
 def get_zero(mod, mu_fd=None):
     mu = mod["parameters"]["mu"]
     K = mu.shape[0]
