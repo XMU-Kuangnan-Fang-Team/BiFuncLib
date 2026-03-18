@@ -16,7 +16,7 @@ def cer(P, Q):
     cer_comp /= (len(P) * (len(P) - 1)) / 2
     return cer_comp
 
-
+# Compute within-cluster sum of squares per feature
 def GetWCSS(x, Cs, ws=None):
     n_features = x.shape[1]
     wcss_perfeature = np.zeros(n_features)
@@ -37,7 +37,7 @@ def GetWCSS(x, Cs, ws=None):
         result["wcss.ws"] = np.sum(wcss_perfeature * ws)
     return result
 
-
+# Compute optimal sparse weights via soft thresholding
 def GetOptimalW(b, c_star):
     b_star = np.array(b, copy=True)
     b_star[b <= c_star] = 0
@@ -47,7 +47,7 @@ def GetOptimalW(b, c_star):
     w = b_star / norm_b_star
     return w
 
-
+# Cluster weighted data using specified method
 def GetOptimalClusters(data, K, w, method="kmea"):
     weighted_data = data * w
     if method == "kmea":
@@ -66,7 +66,7 @@ def GetOptimalClusters(data, K, w, method="kmea"):
         )
     return clusters
 
-
+# Sparse clustering with feature weighting
 def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
     mu = x[-1] - x[0]
     if m > mu:
@@ -121,7 +121,7 @@ def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
     obj = np.sum(w * b)
     return {"w": w, "cluster": k, "obj": obj, "iteration": niter}
 
-
+# Select sparsity parameter via GAP statistic with permutations
 def FKMSparseClustering_permute(
     data, x, K, mbound=None, method="kmea", nperm=20, maxiter=50
 ):
