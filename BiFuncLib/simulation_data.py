@@ -11,7 +11,7 @@ from GENetLib.fda_func import eval_fd
 from BiFuncLib.AuxFunc import AuxFunc
 from BiFuncLib.BiclustResult import BiclustResult
 
-
+# FunPF
 def pf_sim_data(n, T, nknots, order, seed=123):
     np.random.seed(seed)
     q = 9
@@ -209,7 +209,7 @@ def pf_sim_data(n, T, nknots, order, seed=123):
         ],
     }
 
-
+# FunLocal
 def local_sim_data(n, T, sigma, seed=123):
     np.random.seed(seed)
     times = np.linspace(0, 1, T)
@@ -260,7 +260,7 @@ def local_sim_data(n, T, sigma, seed=123):
         "sample cluster": [set(class1), set(class2)],
     }
 
-
+# FunCC
 def cc_sim_data():
     current_file_path = Path(__file__).resolve()
     current_dir = current_file_path.parent
@@ -278,7 +278,7 @@ def cc_sim_data():
     cc_data = np.transpose(cc_data, (1, 2, 0))
     return cc_data
 
-
+# FunFEM
 def fem_sim_data():
     current_file_path = Path(__file__).resolve()
     current_dir = current_file_path.parent
@@ -301,7 +301,7 @@ def fem_sim_data():
     }
     return velib
 
-
+# FunLBM
 def lbm_sim_data(n=100, p=100, t=30, bivariate=False, noise=None, seed=111):
     np.random.seed(seed)
     long_ = t
@@ -401,7 +401,7 @@ def lbm_sim_data(n=100, p=100, t=30, bivariate=False, noise=None, seed=111):
     else:
         return {"data": X, "row_clust": Z - 1, "col_clust": W - 1}
 
-
+# FunSAS
 def sas_sim_data(
     scenario, n_i=50, nbasis=30, length_tot=50, var_e=1, var_b=1, seed=123
 ):
@@ -522,7 +522,7 @@ def sas_sim_data(
         "clus": clus_true,
     }
 
-
+# FunSparse
 def sparse_sim_data(n, x, paramC, plot=False):
     x = np.asarray(x)
     bpert = 0.5
@@ -552,7 +552,7 @@ def sparse_sim_data(n, x, paramC, plot=False):
         plt.show()
     return {"data": data, "cluster": clusters}
 
-
+# CVX
 def cvx_sim_data():
     current_file_path = Path(__file__).resolve()
     current_dir = current_file_path.parent
@@ -560,7 +560,7 @@ def cvx_sim_data():
     cvx_data = pd.read_csv(data_path)
     return cvx_data
 
-
+# SSVD
 def ssvd_sim_data():
     u = np.array([10, 9, 8, 7, 6, 5, 4, 3] + [2] * 17 + [0] * 75)
     v = np.array([10, -10, 8, -8, 5, -5] + [3] * 5 + [-3] * 5 + [0] * 34)
@@ -578,7 +578,7 @@ def ssvd_sim_data():
     res_sim = BiclustResult(params, RowxNumber, NumberxCol, Number, info)
     return {"data": ssvd_data, "res": res_sim}
 
-
+# Bimax
 def bimax_sim_data():
     current_file_path = Path(__file__).resolve()
     current_dir = current_file_path.parent
