@@ -45,6 +45,7 @@ def sas_bifunc(
     pert = None
     if G == 1:
         lambda_l = 0
+    # Process input data format
     if X is not None:
         if X.ndim == 2:
             n_t, n_obs = X.shape
@@ -121,7 +122,7 @@ def sas_bifunc(
         )
     lk_new = lk_temp[1]
 
-    # Loop for updating parameters
+    # EM loop for updating parameters
     while abs(lk_old - lk_new) > tol and (ind <= maxit):
         parameters = sasfclust_Mstep(
             parameters,
@@ -183,7 +184,7 @@ def sas_bifunc(
     out = {"mod": mod, "mean_fd": mean_fd, "clus": clus}
     return out
 
-
+# Cross-validation for parameter selection
 def sas_bifunc_cv(
     X=None,
     timeindex=None,
@@ -236,12 +237,14 @@ def sas_bifunc_cv(
         N = len(np.unique(curve))
     else:
         raise ValueError("No data provided")
+    # Generate parameter combinations
     comb_list = []
     G_seq_list = list(G_seq) if hasattr(G_seq, "__iter__") else [G_seq]
     for g, ls, ll in itertools.product(G_seq_list, lambda_s_seq, lambda_l_seq):
         comb_list.append((g, ls, ll))
+    # K-fold CV or train-test split
     if X_test is None:
-
+        
         def parr_fun(ii):
             G_i, lambda_s_i, lambda_l_i = comb_list[ii]
             ran_seq = np.random.permutation(np.arange(N))
