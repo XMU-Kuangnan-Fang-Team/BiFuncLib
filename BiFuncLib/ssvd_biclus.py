@@ -1,6 +1,6 @@
 from BiFuncLib.ssvd_main_func import ssvd_bc, s4vd
 
-
+# Wrapper for S4VD biclustering with iterative refinement
 def s4vd_biclus(
     data,
     steps=100,
@@ -45,7 +45,7 @@ def s4vd_biclus(
     )
     return res
 
-
+# Wrapper for sparse SVD biclustering
 def ssvd_biclus(
     data, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100
 ):
