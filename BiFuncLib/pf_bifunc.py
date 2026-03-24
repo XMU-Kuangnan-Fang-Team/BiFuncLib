@@ -38,7 +38,7 @@ def pf_bifunc(
         return (time - min_time) / (max_time - min_time)
 
     for measurement in data["measurement"].unique():
-        current_measurement_df = data[data["measurement"] == measurement]
+        current_measurement_df = data[data["measurement"] == measurement].copy()
         current_measurement_df["time"] = time_mapping(
             current_measurement_df["time"]
         )
