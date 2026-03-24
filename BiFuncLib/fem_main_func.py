@@ -6,6 +6,7 @@ from sklearn.linear_model import ElasticNet
 from GENetLib.fda_func import inprod
 from scipy.cluster.hierarchy import linkage, cut_tree
 
+
 # Compute information criteria (AIC, BIC, ICL) for model selection
 def criteria(loglik, T, prms, n):
     K = prms["K"]
@@ -58,6 +59,7 @@ def criteria(loglik, T, prms, n):
     icl = loglik - 0.5 * comp * np.log(n) - np.sum(T * np.log(T))
     return {"aic": aic, "bic": bic, "icl": icl, "nbprm": comp}
 
+
 # E-step: compute posterior probabilities and log-likelihood
 def estep(prms, fd, U):
     Y = np.asarray(fd["coefs"].T)
@@ -106,6 +108,7 @@ def estep(prms, fd, U):
         )
     return {"T": T, "loglik": loglik}
 
+
 # F-step: update discriminant subspace with optional sparsity
 def fstep(fd, T, lambda_):
     if np.min(np.sum(T, axis=0)) <= 1:
@@ -130,6 +133,7 @@ def fstep(fd, T, lambda_):
             Utilde[:, i] = (coef / np.sqrt(np.sum(np.square(coef)))).ravel()
         U = svd(Utilde, full_matrices=False)[0]
     return U
+
 
 # Main funFEM algorithm: EM for functional data clustering
 def fem_main_func(
@@ -209,6 +213,7 @@ def fem_main_func(
         "ll": Lobs[i + 1],
         "nbprm": crit["nbprm"],
     }
+
 
 # M-step: update model parameters given cluster assignments
 def mstep(fd, U, T, model):

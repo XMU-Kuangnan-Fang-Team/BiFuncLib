@@ -15,6 +15,7 @@ def cer(P, Q):
     cer_comp /= (len(P) * (len(P) - 1)) / 2
     return cer_comp
 
+
 # Compute within-cluster sum of squares per feature
 def GetWCSS(x, Cs, ws=None):
     n_features = x.shape[1]
@@ -36,6 +37,7 @@ def GetWCSS(x, Cs, ws=None):
         result["wcss.ws"] = np.sum(wcss_perfeature * ws)
     return result
 
+
 # Compute optimal sparse weights via soft thresholding
 def GetOptimalW(b, c_star):
     b_star = np.array(b, copy=True)
@@ -45,6 +47,7 @@ def GetOptimalW(b, c_star):
         raise ValueError("Norm of b_star is zero; cannot compute optimal w.")
     w = b_star / norm_b_star
     return w
+
 
 # Cluster weighted data using specified method
 def GetOptimalClusters(data, K, w, method="kmea"):
@@ -57,10 +60,9 @@ def GetOptimalClusters(data, K, w, method="kmea"):
         clusters = fcluster(Z, t=K, criterion="maxclust")
         clusters = clusters - 1
     else:
-        raise ValueError(
-            "Unknown method. Choose one of 'kmea' or 'hier'."
-        )
+        raise ValueError("Unknown method. Choose one of 'kmea' or 'hier'.")
     return clusters
+
 
 # Sparse clustering with feature weighting
 def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
@@ -75,9 +77,7 @@ def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
         Z = linkage(data, method="ward")
         initial_clusters = fcluster(Z, t=K, criterion="maxclust") - 1
     else:
-        raise ValueError(
-            "Unknown method. Choose one of 'kmea' or 'hier'."
-        )
+        raise ValueError("Unknown method. Choose one of 'kmea' or 'hier'.")
     b_old = GetWCSS(data, initial_clusters)["bcss.perfeature"]
     perc = m / mu
     b_ord = np.sort(b_old)
@@ -112,6 +112,7 @@ def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
         cluster_difference = np.sum(np.abs(k_old - k))
     obj = np.sum(w * b)
     return {"w": w, "cluster": k, "obj": obj, "iteration": niter}
+
 
 # Select sparsity parameter via GAP statistic with permutations
 def FKMSparseClustering_permute(

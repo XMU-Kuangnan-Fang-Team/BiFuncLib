@@ -3,6 +3,7 @@ from scipy.optimize import minimize_scalar
 from scipy.interpolate import interp1d
 from scipy.spatial.distance import pdist, squareform
 
+
 # Compute medoid-based template using pairwise distances
 def medoid_evaluation(fun_mat, a, b, const_a, const_b):
     n, m, p = fun_mat.shape
@@ -15,6 +16,7 @@ def medoid_evaluation(fun_mat, a, b, const_a, const_b):
     medoid_fun = fun_per_medoid[rep_curve]
     new_fun = np.tile(medoid_fun, (n, m, 1))
     return new_fun
+
 
 # Compute medoid template for selected rows/columns only
 def medoid_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
@@ -30,6 +32,7 @@ def medoid_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
     medoid_fun = fun_per_medoid[rep_curve]
     new_fun = np.tile(medoid_fun, (n, m, 1))
     return new_fun
+
 
 # Compute mean-based template with row and column effects
 def template_evaluation(fun_mat, a, b, const_a, const_b):
@@ -64,6 +67,7 @@ def template_evaluation(fun_mat, a, b, const_a, const_b):
     alpha_fun_mat = np.where(np.isnan(alpha_fun_mat), 0, alpha_fun_mat)
     new_fun = fun_mean_mat + b * beta_fun_mat + a * alpha_fun_mat
     return new_fun
+
 
 # Compute mean template for selected rows/columns with additive effects
 def template_evaluation_add(fun_mat, logr, logc, a, b, const_a, const_b):
@@ -324,26 +328,31 @@ def evaluate_mat_dist_add(
         mat_dist = np.sum((fun_mat - new_fun) ** 2, axis=2) / p
     return mat_dist
 
+
 # Compute overall Cheng-Church score as mean distance
 def ccscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist)
     return score_fun
+
 
 # Compute row-wise mean distances
 def rowscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist, axis=1)
     return score_fun
 
+
 # Compute column-wise mean distances
 def colscore_fun(mat_dist):
     score_fun = np.nanmean(mat_dist, axis=0)
     return score_fun
+
 
 # Compute row scores for selected columns
 def addrowscore_fun(mat_dist, logc):
     selected_cols = mat_dist[:, logc]
     score_fun = np.nanmean(selected_cols, axis=1)
     return score_fun
+
 
 # Compute column scores for selected rows
 def addcolscore_fun(mat_dist, logr):

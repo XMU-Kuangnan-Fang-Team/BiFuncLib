@@ -257,6 +257,7 @@ def cc_bifunc(
     }
     return result
 
+
 # Cross-validation for delta parameter selection
 def cc_bifunc_cv(
     data,

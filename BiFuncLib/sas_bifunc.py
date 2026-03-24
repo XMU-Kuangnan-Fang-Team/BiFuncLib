@@ -184,6 +184,7 @@ def sas_bifunc(
     out = {"mod": mod, "mean_fd": mean_fd, "clus": clus}
     return out
 
+
 # Cross-validation for parameter selection
 def sas_bifunc_cv(
     X=None,
@@ -244,7 +245,7 @@ def sas_bifunc_cv(
         comb_list.append((g, ls, ll))
     # K-fold CV or train-test split
     if X_test is None:
-        
+
         def parr_fun(ii):
             G_i, lambda_s_i, lambda_l_i = comb_list[ii]
             ran_seq = np.random.permutation(np.arange(N))

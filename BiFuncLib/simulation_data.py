@@ -11,6 +11,7 @@ from GENetLib.fda_func import eval_fd
 from BiFuncLib.AuxFunc import AuxFunc
 from BiFuncLib.BiclustResult import BiclustResult
 
+
 # FunPF
 def pf_sim_data(n, T, nknots, order, seed=123):
     np.random.seed(seed)
@@ -209,6 +210,7 @@ def pf_sim_data(n, T, nknots, order, seed=123):
         ],
     }
 
+
 # FunLocal
 def local_sim_data(n, T, sigma, seed=123):
     np.random.seed(seed)
@@ -260,6 +262,7 @@ def local_sim_data(n, T, sigma, seed=123):
         "sample cluster": [set(class1), set(class2)],
     }
 
+
 # FunCC
 def cc_sim_data():
     current_file_path = Path(__file__).resolve()
@@ -277,6 +280,7 @@ def cc_sim_data():
     cc_data = np.array(sorted_values)
     cc_data = np.transpose(cc_data, (1, 2, 0))
     return cc_data
+
 
 # FunFEM
 def fem_sim_data():
@@ -300,6 +304,7 @@ def fem_sim_data():
         "names": df_names,
     }
     return velib
+
 
 # FunLBM
 def lbm_sim_data(n=100, p=100, t=30, bivariate=False, noise=None, seed=111):
@@ -400,6 +405,7 @@ def lbm_sim_data(n=100, p=100, t=30, bivariate=False, noise=None, seed=111):
         return {"data1": X, "data2": X2, "row_clust": Z - 1, "col_clust": W - 1}
     else:
         return {"data": X, "row_clust": Z - 1, "col_clust": W - 1}
+
 
 # FunSAS
 def sas_sim_data(
@@ -522,6 +528,7 @@ def sas_sim_data(
         "clus": clus_true,
     }
 
+
 # FunSparse
 def sparse_sim_data(n, x, paramC, plot=False):
     x = np.asarray(x)
@@ -552,6 +559,7 @@ def sparse_sim_data(n, x, paramC, plot=False):
         plt.show()
     return {"data": data, "cluster": clusters}
 
+
 # CVX
 def cvx_sim_data():
     current_file_path = Path(__file__).resolve()
@@ -559,6 +567,7 @@ def cvx_sim_data():
     data_path = current_dir / "simulation_data" / "cvx_sim_data.csv"
     cvx_data = pd.read_csv(data_path)
     return cvx_data
+
 
 # SSVD
 def ssvd_sim_data():
@@ -577,6 +586,7 @@ def ssvd_sim_data():
     Number = 1
     res_sim = BiclustResult(params, RowxNumber, NumberxCol, Number, info)
     return {"data": ssvd_data, "res": res_sim}
+
 
 # Bimax
 def bimax_sim_data():

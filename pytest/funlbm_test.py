@@ -27,9 +27,7 @@ def test_lbm_sim_data():
 def test_lbm_bifunc_basic():
     lbm_sim = lbm_sim_data(n=100, p=100, t=30, seed=1)
     data = lbm_sim["data"]
-    res1 = lbm_bifunc(
-        data, K=4, L=3, display=False, init="funFEM"
-    )
+    res1 = lbm_bifunc(data, K=4, L=3, display=False, init="funFEM")
     _check_lbm_result(res1)
     res2 = lbm_bifunc(
         data, K=4, L=3, display=True, basis_name="spline", init="kmeans"

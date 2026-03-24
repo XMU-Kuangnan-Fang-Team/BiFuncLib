@@ -5,6 +5,7 @@ import networkx as nx
 import random
 import math
 
+
 # Compute Gaussian kernel weights for all pairs of columns
 def kernel_weights(X, phi):
     p, n = X.shape
@@ -19,6 +20,7 @@ def kernel_weights(X, phi):
             k += 1
     return w
 
+
 # Sparse matrix-matrix multiplication: M * X
 def spmm(M, X):
     m = M["Nrow"]
@@ -32,6 +34,7 @@ def spmm(M, X):
                 Y[row_ind, i] += M["values"][k] * X[j, i]
     return Y
 
+
 # Sparse matrix transpose multiplication: M^T * X
 def spmtm(M, X):
     n = M["Ncol"]
@@ -43,6 +46,7 @@ def spmtm(M, X):
                 row_ind = M["row_indices"][k]
                 Y[j, i] += M["values"][k] * X[row_ind, i]
     return Y
+
 
 # Sparse matrix multiply with transpose: M * X^T
 def spmmt(M, X):
@@ -57,10 +61,12 @@ def spmmt(M, X):
                 Y[row_ind, i] += M["values"][k] * X[i, j]
     return Y
 
+
 # Compute dual objective for convex clustering
 def convex_cluster_dual(XT, UT):
     dual = 0.5 * (np.sum(XT**2) - np.sum(UT**2))
     return dual
+
 
 # Compute primal objective with fusion penalty
 def convex_cluster_primal(XT, UT, VT, Phi, w):
@@ -68,6 +74,7 @@ def convex_cluster_primal(XT, UT, VT, Phi, w):
     VT[:] = spmm(Phi, UT)
     penalty = np.sum(w * np.sqrt(np.sum(VT**2, axis=1)))
     return primal + penalty
+
 
 # Compute biclustering primal with row and column fusion penalties
 def convex_bicluster_primal(
@@ -79,6 +86,7 @@ def convex_bicluster_primal(
     penalty_row = np.sum(w_row * np.sqrt(np.sum(VT_row**2, axis=1)))
     penalty_col = np.sum(w_col * np.sqrt(np.sum(VT_col**2, axis=1)))
     return primal + penalty_row + penalty_col
+
 
 # Proximal operator for L2 norm (group lasso)
 def prox_L2(X, tau):
@@ -93,6 +101,7 @@ def prox_L2(X, tau):
             Y[i, :] = factor * X[i, :]
     return Y
 
+
 # Projection onto L2 ball
 def proj_L2(X, tau):
     m, n = X.shape
@@ -106,22 +115,26 @@ def proj_L2(X, tau):
         Y[i, :] = factor * X[i, :]
     return Y
 
+
 # Update U from dual variables
 def update_UT(XT, LambdaT, Phi):
     UT = spmtm(Phi, LambdaT)
     UT = XT - UT
     return UT
 
+
 # Compute gradient of dual variables
 def grad_LambdaT(UT, Phi):
     gLambdaT = spmm(Phi, UT)
     return -gLambdaT
+
 
 # Update dual variables with gradient step
 def update_LambdaT2(LambdaT, gLambdaT, nu, w):
     LambdaT_temp = LambdaT - nu * gLambdaT
     new_LambdaT = proj_L2(LambdaT_temp, w)
     return new_LambdaT
+
 
 # Alternative update for dual variables
 def update_LambdaT(LambdaT, UT, Phi, nu, w):
@@ -130,12 +143,14 @@ def update_LambdaT(LambdaT, UT, Phi, nu, w):
     new_LambdaT = proj_L2(LambdaT_temp, w)
     return new_LambdaT
 
+
 # Update row fusion variables
 def update_VT_row(U, LambdaT, Phi, w, nu):
     tau = w / nu
     VT_temp = spmm(Phi, U) - (1 / nu) * LambdaT
     VT_row = prox_L2(VT_temp, tau)
     return VT_row
+
 
 # Update column fusion variables
 def update_VT_col(UT, LambdaT, Phi, w, nu):
@@ -144,9 +159,11 @@ def update_VT_col(UT, LambdaT, Phi, w, nu):
     VT_col = prox_L2(VT_temp, tau)
     return VT_col
 
+
 # Convert triangular indices to linear index
 def tri2vec(i, j, n):
     return n * (i - 1) - (i * (i - 1)) // 2 + j - i
+
 
 # Convert linear index to triangular indices
 def vec2tri(k, n):
@@ -156,6 +173,7 @@ def vec2tri(k, n):
     )
     j = k - n * (i - 1) + (i * (i - 1)) // 2 + i
     return np.column_stack((i, j))
+
 
 # Compute graph weights using k-nearest neighbors
 def gkn_weights(X, phi=0.5, k_row=5, k_col=5):
@@ -182,6 +200,7 @@ def gkn_weights(X, phi=0.5, k_row=5, k_col=5):
         "nRowComp": nRowComp,
         "nColComp": nColComp,
     }
+
 
 # Keep only k-nearest neighbor weights
 def knn_weights(w, k, n):
@@ -210,6 +229,7 @@ def knn_weights(w, k, n):
     new_w[mask] = 0
     return csc_matrix(new_w.reshape(-1, 1))
 
+
 # Create edge incidence matrix from weights
 def create_edge_incidence(w, n):
     P = vec2tri(w.indices + 1, n)
@@ -219,6 +239,7 @@ def create_edge_incidence(w, n):
     data = np.concatenate((np.ones(nEdges), -np.ones(nEdges)))
     E = coo_matrix((data, (row, col)), shape=(nEdges, n)).tocsc()
     return E
+
 
 # Create adjacency matrix from fusion variables
 def create_adjacency(V, Phi):
@@ -244,6 +265,7 @@ def create_adjacency(V, Phi):
         A = csc_matrix((n, n))
     return A
 
+
 # Find connected components in graph
 def find_clusters(A):
     G = nx.from_scipy_sparse_array(A, create_using=nx.Graph)
@@ -256,6 +278,7 @@ def find_clusters(A):
     sizes = np.array([len(comp) for comp in clusters], dtype=int)
     return {"cluster": cluster, "size": sizes}
 
+
 # Create adjacency matrix from weight indices
 def weights_graph(w, n):
     P = vec2tri(w.indices + 1, n)
@@ -266,6 +289,7 @@ def weights_graph(w, n):
     A = coo_matrix((data, (row, col)), shape=(n, n)).tocsc()
     return A
 
+
 # Update missing values via majorization
 def update_majorization(MT, UT, Theta, nMissing):
     MT = np.asfortranarray(MT)
@@ -273,6 +297,7 @@ def update_majorization(MT, UT, Theta, nMissing):
     for idx in Theta[:nMissing]:
         MT.ravel(order="F")[idx] = UT.ravel(order="F")[idx]
     return MT
+
 
 # Compute mean values for each bicluster block
 def get_subgroup_means_full(X, clusters_row, clusters_col):
@@ -295,6 +320,7 @@ def get_subgroup_means_full(X, clusters_row, clusters_col):
                     M[i, j] = np.nanmean(submat)
     return M
 
+
 # Get subgroup means with missing values excluded
 def get_subgroup_means(X, Theta, clusters_row, clusters_col):
     Y = X.copy()
@@ -303,9 +329,11 @@ def get_subgroup_means(X, Theta, clusters_row, clusters_col):
         Y_values = Y_values.copy()
     Y_flat = Y_values.ravel(order="F")
     Y_flat[Theta] = np.nan
-    Y = pd.DataFrame(Y_flat.reshape(Y.shape, order="F"), 
-                     index=Y.index, columns=Y.columns)
+    Y = pd.DataFrame(
+        Y_flat.reshape(Y.shape, order="F"), index=Y.index, columns=Y.columns
+    )
     return get_subgroup_means_full(Y, clusters_row, clusters_col)
+
 
 # Generate random validation set indices
 def get_validation(p, n, fraction=0.1, seed=123):
@@ -319,6 +347,7 @@ def get_validation(p, n, fraction=0.1, seed=123):
     ThetaM = np.column_stack((rows, cols))
     ThetaV = ix1
     return {"ThetaM": ThetaM, "ThetaV": ThetaV}
+
 
 # FASTA solver for convex clustering with Nesterov acceleration
 def convex_cluster_fasta(
@@ -394,6 +423,7 @@ def convex_cluster_fasta(
         if fp - dual_temp < tol:
             break
     return nu, its, primal_hist, dual_hist
+
 
 # ADMM-style solver for convex biclustering
 def convex_bicluster_dlpa(
@@ -511,6 +541,7 @@ def convex_bicluster_dlpa(
         "iter": its,
     }
 
+
 # Majorization-minimization for biclustering with missing values
 def convex_bicluster_impute(
     MT,
@@ -609,6 +640,7 @@ def convex_bicluster_impute(
         res["nu_col"],
     )
 
+
 # Wrapper for convex biclustering with imputation
 def test_convex_bicluster_impute(
     mt,
@@ -686,6 +718,7 @@ def test_convex_bicluster_impute(
         max_iter_inner,
         tol_inner,
     )
+
 
 # Main COBRA solver (Convex Biclustering)
 def cobra_pod(
@@ -779,6 +812,7 @@ def cobra_pod(
         "iter": iter_count,
     }
 
+
 # Cross-validation for gamma parameter selection
 def cobra_validate(
     X,
@@ -845,10 +879,7 @@ def cobra_validate(
             XT_values = XT_values.copy()
         XT_flat = XT_values.ravel(order="F")
         for i in range(ThetaM.shape[0]):
-            errors[i] = (
-                MM[ixi[i] - 1, ixj[i] - 1]
-                - XT_flat[ThetaV[i] - 1]
-            )
+            errors[i] = MM[ixi[i] - 1, ixj[i] - 1] - XT_flat[ThetaV[i] - 1]
         validation_error[ig] = math.sqrt(np.sum(errors**2))
         print(f"***** Completed gamma = {ig+1} *****")
     return {
@@ -861,6 +892,7 @@ def cobra_validate(
         "groups_col": groups_col,
         "validation_error": validation_error,
     }
+
 
 # Smooth data matrix using bicluster means
 def biclust_smooth(X, clusters_row, clusters_col):

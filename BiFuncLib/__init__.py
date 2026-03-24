@@ -41,7 +41,6 @@ from .sas_main_func import sasfclust_Mstep, sasfclust_Estep, classify
 from .local_main_func import calculate_gcv, calculate_bic, local_admm
 from .lbm_main_func import lbm_main_func
 
-
 __all__ = [
     "pf_sim_data",
     "local_sim_data",

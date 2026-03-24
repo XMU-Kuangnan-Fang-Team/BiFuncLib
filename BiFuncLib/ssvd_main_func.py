@@ -7,6 +7,7 @@ import gc
 
 from BiFuncLib.BiclustResult import BiclustResult
 
+
 # Thresholding operator for sparse estimation
 def thresh(z, delta, thredtype=1, a=3.7):
     z = np.asarray(z)
@@ -32,6 +33,7 @@ def thresh(z, delta, thredtype=1, a=3.7):
         term3 = z * ((np.abs(z) > a * delta).astype(float))
         return term1 + term2 + term3
 
+
 # Compute initial SVD for sparse SVD algorithm
 def initial_svd(X, nu=1, nv=1):
     n, d = X.shape
@@ -41,6 +43,7 @@ def initial_svd(X, nu=1, nv=1):
     else:
         u, s, vt = svds(X, k=1, which="LM")
         return u, vt.T
+
 
 # Compute Jaccard similarity matrix between biclustering results
 def jaccardmat(res1, res2, mode=None):
@@ -98,6 +101,7 @@ def jaccardmat(res1, res2, mode=None):
             return pd.DataFrame(mat, index=rownames, columns=colnames)
         else:
             return pd.DataFrame([[0]])
+
 
 # Sparse SVD with adaptive Lasso penalty
 def ssvd(
@@ -186,6 +190,7 @@ def ssvd(
         v0 = v1
     return {"u": u1, "v": v1, "iter": iteration, "stop": stop}
 
+
 # Sparse SVD-based biclustering (SSVD)
 def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     X = deepcopy(X)
@@ -233,6 +238,7 @@ def ssvd_bc(X, K=10, threu=1, threv=1, gamu=0, gamv=0, merr=1e-4, niter=100):
     info = {"res": res}
     return BiclustResult(params, RowxNumber, NumberxCol.T, Number, info)
 
+
 # Adaptive Lasso with non-concave penalty
 def adalasso_nc(X, b, lam, steps, size, gamm=0):
     n = len(b)
@@ -255,6 +261,7 @@ def adalassosteps_nc(index, subsets, X, b, lam, gamm):
     )
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
+
 
 # Adaptive Lasso with subsampling
 def adalasso(X, b, lam, steps, size, gamm=0):
@@ -285,6 +292,7 @@ def adalassosteps(index, subsets, X, b, lam, gamm):
     )
     ols_thresholded = np.nan_to_num(ols_thresholded)
     return ols_thresholded
+
 
 # Update column loadings with stability selection
 def update_v(
@@ -364,6 +372,7 @@ def update_v(
             "l": ls_index,
             "delta": delta,
         }
+
 
 # Update row loadings with stability selection
 def update_u(
@@ -453,6 +462,7 @@ def update_u(
             "l": ls_index,
             "delta": delta,
         }
+
 
 # Pointwise update for column loadings
 def update_v_pw(
@@ -618,6 +628,7 @@ def update_v_pw(
         "delta": delta,
     }
 
+
 # Pointwise update for row loadings
 def update_u_pw(
     X,
@@ -779,6 +790,7 @@ def update_u_pw(
         "l": ls_index,
         "delta": delta,
     }
+
 
 # Sparse SVD with stability selection (S4VD) for biclustering
 def s4vd(

@@ -6,6 +6,7 @@ from scipy.sparse import csr_matrix
 
 from GENetLib.BsplineFunc import BsplineFunc
 
+
 # Estimate noise variance sigma
 def get_sigma(x, curve, time, S, piigivej, gcov, n_i, gamma, mu):
     N = piigivej.shape[0]
@@ -30,6 +31,7 @@ def get_sigma(x, curve, time, S, piigivej, gcov, n_i, gamma, mu):
             trace_term = np.trace(np.dot(Si, np.dot(gcov_slice, Si.T)))
             sigma_val += piigivej[i, j] * (dot_term + trace_term)
     return np.array(sigma_val)
+
 
 # Compute numerator and denominator for mu update
 def get_numden(x, curve, time, S, piigivej, gcov, n_i, gamma):
@@ -66,6 +68,7 @@ def get_numden(x, curve, time, S, piigivej, gcov, n_i, gamma):
         matp = np.diag(pii_vec)
         sum_den = sum_den + matp @ (Si_mat.T @ Si_mat)
     return sum_num, sum_den
+
 
 # E-step: update posterior probabilities and random effects
 def get_Estep(par, data, vars_, S, hard, n_i):
@@ -121,6 +124,7 @@ def get_Estep(par, data, vars_, S, hard, n_i):
         gprod[:, i * q : (i + 1) * q] = gprodi
         gcov[:, i * q : (i + 1) * q] = Cgamma
     return gamma, piigivej, gprod, gcov
+
 
 # Compute log-likelihood with optional penalties
 def loglik(
@@ -243,6 +247,7 @@ def loglik(
     else:
         out = loglk
     return out
+
 
 # Algorithm init
 def sasfclust_init(
@@ -494,6 +499,7 @@ def sasfclust_init(
         "basis": basis,
     }
 
+
 # M-step: update parameters given posterior probabilities
 def sasfclust_Mstep(
     parameters,
@@ -600,6 +606,7 @@ def sasfclust_Mstep(
     parameters["sigma"] = sigma
     return parameters
 
+
 # Wrapper for E-step computation
 def sasfclust_Estep(parameters, data, vars_, S, hard):
     unique_curves = np.unique(data["curve"])
@@ -610,6 +617,7 @@ def sasfclust_Estep(parameters, data, vars_, S, hard):
     vars_["gprod"] = aa[2]
     vars_["gcov"] = aa[3]
     return vars_
+
 
 # Assign curves to clusters based on posterior probabilities
 def classify(mod, data_new=None):
@@ -658,6 +666,7 @@ def classify(mod, data_new=None):
         po_pr = vars_["piigivej"]
     classes = np.argmax(po_pr, axis=1)
     return {"classes": classes, "po_pr": po_pr}
+
 
 # Multi-stage decision rule for parameter selection
 def get_msdrule(par, sds, comb_list, m1, m2, m3):
@@ -731,6 +740,7 @@ def get_msdrule(par, sds, comb_list, m1, m2, m3):
     lambda_s_opt = new_comb_list3[1]
     lambda_l_opt = new_comb_list3[2]
     return (num_clusters_opt, lambda_s_opt, lambda_l_opt)
+
 
 # Compute fraction of zero differences (sparsity measure)
 def get_zero(mod, mu_fd=None):

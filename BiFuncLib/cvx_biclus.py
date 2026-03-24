@@ -5,7 +5,6 @@ import warnings
 
 from BiFuncLib.cvx_main_func import cobra_validate, cobra_pod, biclust_smooth
 
-
 warnings.filterwarnings(
     "ignore", category=RuntimeWarning, message="Mean of empty slice"
 )
