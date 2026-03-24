@@ -147,8 +147,27 @@ def pf_sim_data(n, T, nknots, order, seed=123):
                     ]
                 )
 
-
-    # 修改部分：从这里开始替换
+    # Generate censored sample list
+    censored_sample_list = []
+    merged_Y_list = []
+    for Y in Y_list:
+        merged_Y_list.append([item for sublist in Y for item in sublist])
+    for df, merged_Y in zip(sample_list, merged_Y_list):
+        df_censored = df[df["y"].isin(merged_Y)]
+        censored_sample_list.append(df_censored)
+    
+    # Generate censored sample matrix
+    censored_none_list = []
+    for i in range(len(censored_sample_list)):
+        result_df = pd.DataFrame()
+        for j in range(q):
+            df = censored_sample_list[i][censored_sample_list[i]["id"] == j]
+            df = df.set_index("time").reindex(timerange).reset_index()
+            df["y"] = df["y"].apply(lambda x: x if not pd.isnull(x) else None)
+            df["id"] = j
+            result_df = pd.concat([result_df, df], ignore_index=True)
+        censored_none_list.append(result_df)
+    
     censored_sample_matrix = pd.DataFrame()
     for i in range(len(censored_none_list)):
         pivot_df = censored_none_list[i].pivot(
@@ -163,15 +182,6 @@ def pf_sim_data(n, T, nknots, order, seed=123):
             axis=0,
             ignore_index=True
         )
-    
-    # Generate censored sample list
-    censored_sample_list = []
-    merged_Y_list = []
-    for Y in Y_list:
-        merged_Y_list.append([item for sublist in Y for item in sublist])
-    for df, merged_Y in zip(sample_list, merged_Y_list):
-        df_censored = df[df["y"].isin(merged_Y)]
-        censored_sample_list.append(df_censored)
 
     # Order and return result
     censored_sample_matrix = censored_sample_matrix.sort_values(
@@ -200,6 +210,7 @@ def pf_sim_data(n, T, nknots, order, seed=123):
             set(range(int(n / 3 * 2), n)),
         ],
     }
+    print(censored_sample_matrix)
 
 # FunLocal
 def local_sim_data(n, T, sigma, seed=123):
