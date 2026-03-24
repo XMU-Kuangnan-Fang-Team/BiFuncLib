@@ -2,7 +2,6 @@ import numpy as np
 import math
 from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import linkage, fcluster
-from sklearn_extra.cluster import KMedoids
 
 
 # Classification error rate function
@@ -53,16 +52,13 @@ def GetOptimalClusters(data, K, w, method="kmea"):
     if method == "kmea":
         kmeans = KMeans(n_clusters=K)
         clusters = kmeans.fit_predict(weighted_data)
-    elif method == "pam":
-        kmedoids = KMedoids(n_clusters=K, random_state=0)
-        clusters = kmedoids.fit_predict(weighted_data)
     elif method == "hier":
         Z = linkage(weighted_data, method="ward")
         clusters = fcluster(Z, t=K, criterion="maxclust")
         clusters = clusters - 1
     else:
         raise ValueError(
-            "Unknown method. Choose one of 'kmea', 'pam', or 'hier'."
+            "Unknown method. Choose one of 'kmea' or 'hier'."
         )
     return clusters
 
@@ -75,16 +71,12 @@ def FKMSparseClustering(data, x, K, m, method="kmea", maxiter=50):
     # Initial clustering based on the chosen method
     if method == "kmea":
         initial_clusters = KMeans(n_clusters=K).fit_predict(data)
-    elif method == "pam":
-        initial_clusters = KMedoids(n_clusters=K, random_state=0).fit_predict(
-            data
-        )
     elif method == "hier":
         Z = linkage(data, method="ward")
         initial_clusters = fcluster(Z, t=K, criterion="maxclust") - 1
     else:
         raise ValueError(
-            "Unknown method. Choose one of 'kmea', 'pam', or 'hier'."
+            "Unknown method. Choose one of 'kmea' or 'hier'."
         )
     b_old = GetWCSS(data, initial_clusters)["bcss.perfeature"]
     perc = m / mu
