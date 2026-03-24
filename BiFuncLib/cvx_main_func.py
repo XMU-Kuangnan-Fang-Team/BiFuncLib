@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from math import exp, sqrt
 from scipy.sparse import csc_matrix, coo_matrix
 import networkx as nx
