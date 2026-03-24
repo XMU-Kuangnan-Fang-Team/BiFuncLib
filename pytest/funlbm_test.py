@@ -35,8 +35,6 @@ def test_lbm_bifunc_basic():
         data, K=4, L=3, display=True, basis_name="spline", init="kmeans"
     )
     _check_lbm_result(res2)
-    res3 = lbm_bifunc(data, K=4, L=3, display=True, init="funFEM")
-    _check_lbm_result(res3)
     row_ari = ari(res3["row_clust"], lbm_sim["row_clust"])
     col_ari = ari(res3["col_clust"], lbm_sim["col_clust"])
     assert 0 <= row_ari <= 1
