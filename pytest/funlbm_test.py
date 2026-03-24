@@ -28,14 +28,14 @@ def test_lbm_bifunc_basic():
     lbm_sim = lbm_sim_data(n=100, p=100, t=30, seed=1)
     data = lbm_sim["data"]
     res1 = lbm_bifunc(
-        data, K=2, L=2, display=False, basis_name="spline", init="funFEM"
+        data, K=4, L=3, display=False, init="funFEM"
     )
     _check_lbm_result(res1)
     res2 = lbm_bifunc(
-        data, K=2, L=2, display=True, basis_name="spline", init="kmeans"
+        data, K=4, L=3, display=True, basis_name="spline", init="kmeans"
     )
     _check_lbm_result(res2)
-    res3 = lbm_bifunc(data, K=2, L=2, display=True, init="funFEM")
+    res3 = lbm_bifunc(data, K=4, L=3, display=True, init="funFEM")
     _check_lbm_result(res3)
     row_ari = ari(res3["row_clust"], lbm_sim["row_clust"])
     col_ari = ari(res3["col_clust"], lbm_sim["col_clust"])
@@ -46,7 +46,7 @@ def test_lbm_bifunc_basic():
 def test_lbm_bifunc_grid():
     lbm_sim = lbm_sim_data(n=50, p=50, t=15, bivariate=True, seed=456)
     data = [lbm_sim["data1"], lbm_sim["data2"]]
-    res = lbm_bifunc(data, K=[2, 3], L=[2, 3], display=True, init="kmeans")
+    res = lbm_bifunc(data, K=[3, 4], L=[2, 3], display=True, init="kmeans")
     FDPlot(res).lbm_fdplot("proportions")
     FDPlot(res).lbm_fdplot("evolution")
     FDPlot(res).lbm_fdplot("likelihood")
