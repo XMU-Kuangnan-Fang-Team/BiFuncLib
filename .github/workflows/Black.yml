@@ -6,18 +6,20 @@ on:
       - main
     paths:
       - "**/*.py"
-  workflow_dispatch:
 
 jobs:
   format:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: main
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,27 +32,10 @@ jobs:
       - name: Run Black
         run: black . --line-length 80
 
-      - name: Check for changes
-        id: check_changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          if git diff --quiet; then
-            echo "changes_detected=false" >> $GITHUB_OUTPUT
-            echo "No changes detected"
-          else
-            echo "changes_detected=true" >> $GITHUB_OUTPUT
-            echo "Detected changes:"
-            git status
-            git diff --stat
-          fi
-
-      - name: Create Pull Request with formatted code
-        if: steps.check_changes.outputs.changes_detected == 'true'
+      - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: ":art: Format Python code with Black"
           title: "Auto-format Python code with Black"
           body: |
