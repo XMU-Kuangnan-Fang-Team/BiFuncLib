@@ -16,7 +16,7 @@ on:
 jobs:
   codecovPy:
     name: Codecov workflow
-    runs-on: windows-latest
+    runs-on: ubuntu-24.04
     env:
       PYTHON: "3.12"
     steps:
