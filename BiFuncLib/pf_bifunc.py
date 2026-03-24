@@ -21,7 +21,9 @@ def pf_bifunc(
     eps_abs=1e-3,
     eps_rel=1e-3,
 ):
-
+    print('看这里')
+    print(data)
+    
     # Data process
     if min(data.iloc[:, 1]) == 1:
         data.iloc[:, 1] = data.iloc[:, 1] - 1
@@ -58,7 +60,10 @@ def pf_bifunc(
                 [reformed_dataframe, temp_df], ignore_index=True
             ).dropna()
         reformed_data.append(reformed_dataframe)
-
+    
+    print("看这里2")
+    print(reformed_data)
+    
     # Generate second order difference matrix
     C = np.zeros((nknots + order - 2, nknots + order))
     for j in range(nknots + order - 2):
