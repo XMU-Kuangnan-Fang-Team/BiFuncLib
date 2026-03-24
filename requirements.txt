@@ -1,7 +1,7 @@
 genetlib==1.2.6
 matplotlib
 networkx
-numpy
+numpy>=1.26.0,<2
 pandas
 scikit-learn
 scikit-learn-extra
