@@ -40,7 +40,4 @@ jobs:
           pytest --cov=BiFuncLib -v --cov-report=xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./pytest/coverage.xml
-          verbose: true
+
