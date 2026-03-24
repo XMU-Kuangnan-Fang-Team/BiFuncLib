@@ -298,7 +298,13 @@ def get_subgroup_means_full(X, clusters_row, clusters_col):
 # Get subgroup means with missing values excluded
 def get_subgroup_means(X, Theta, clusters_row, clusters_col):
     Y = X.copy()
-    Y.to_numpy().ravel(order="F")[Theta] = np.nan
+    Y_values = Y.to_numpy()
+    if not Y_values.flags.writeable:
+        Y_values = Y_values.copy()
+    Y_flat = Y_values.ravel(order="F")
+    Y_flat[Theta] = np.nan
+    Y = pd.DataFrame(Y_flat.reshape(Y.shape, order="F"), 
+                     index=Y.index, columns=Y.columns)
     return get_subgroup_means_full(Y, clusters_row, clusters_col)
 
 # Generate random validation set indices
@@ -834,10 +840,14 @@ def cobra_validate(
         ixi = clusters_row["cluster"][ThetaM[:, 0] - 1]
         ixj = clusters_col["cluster"][ThetaM[:, 1] - 1]
         errors = np.zeros(ThetaM.shape[0])
+        XT_values = XT.to_numpy()
+        if not XT_values.flags.writeable:
+            XT_values = XT_values.copy()
+        XT_flat = XT_values.ravel(order="F")
         for i in range(ThetaM.shape[0]):
             errors[i] = (
                 MM[ixi[i] - 1, ixj[i] - 1]
-                - XT.to_numpy().ravel(order="F")[ThetaV[i] - 1]
+                - XT_flat[ThetaV[i] - 1]
             )
         validation_error[ig] = math.sqrt(np.sum(errors**2))
         print(f"***** Completed gamma = {ig+1} *****")
