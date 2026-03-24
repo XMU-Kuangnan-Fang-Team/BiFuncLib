@@ -23,7 +23,6 @@ setup(
         "scipy",
         "GENetLib==1.2.6",
         "scikit-learn",
-        "scikit-learn-extra",
         "seaborn",
         "networkx",
     ],
