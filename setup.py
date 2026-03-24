@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="BiFuncLib",
-    version="1.0.4",
+    version="1.0.5",
     description="A Python library for biclustering with functional data",
     author="Yuhao Zhong",
     author_email="Barry57@163.com",
@@ -17,13 +17,13 @@ setup(
         "BiFuncLib": ["simulation_data/*"],
     },
     install_requires=[
-        "numpy==1.24.3",
+        "numpy",
         "pandas",
         "matplotlib",
         "scipy",
         "GENetLib==1.2.6",
-        "scikit-learn==1.2.2",
-        "scikit-learn-extra==0.3.0",
+        "scikit-learn",
+        "scikit-learn-extra",
         "seaborn",
         "networkx",
     ],
