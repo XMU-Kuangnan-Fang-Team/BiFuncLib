@@ -4,7 +4,6 @@ networkx
 numpy>=1.26.0,<2
 pandas
 scikit-learn
-scikit-learn-extra
 scipy
 seaborn
 setuptools
