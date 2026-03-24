@@ -23,8 +23,8 @@ def pf_bifunc(
 ):
 
     # Data process
-    data.iloc[:, 0] = data.iloc[:, 0].astype("int64")
-    data.iloc[:, 1] = data.iloc[:, 1].astype("int64")
+    data.iloc[:, 0] = data.iloc[:, 0].astype("Int64")
+    data.iloc[:, 1] = data.iloc[:, 1].astype("Int64")
     if min(data.iloc[:, 1]) == 1:
         data.iloc[:, 1] = data.iloc[:, 1] - 1
     n = max(data.iloc[:, 1]) + 1
