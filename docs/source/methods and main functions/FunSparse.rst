@@ -120,7 +120,7 @@ Parameter
    * - **k**
      - integer, the number of clusters to form.
    * - **method**
-     - str, the clustering method to use, 'pam', 'hier' or 'kmea'. Default is 'kmea'.
+     - str, the clustering method to use, 'hier' or 'kmea'. Default is 'kmea'.
    * - **true_clus**
      - numeric or None, The true cluster labels. If known, the Classification Error Rate (CER) will be calculated to evaluate the clustering performance.
 
