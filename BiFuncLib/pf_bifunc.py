@@ -33,8 +33,8 @@ def pf_bifunc(
     data_list = []
 
     def time_mapping(time):
-        min_time = data["time"].min()
-        max_time = data["time"].max()
+        min_time = time.min()
+        max_time = time.max()
         return (time - min_time) / (max_time - min_time)
 
     for measurement in data["measurement"].unique():
