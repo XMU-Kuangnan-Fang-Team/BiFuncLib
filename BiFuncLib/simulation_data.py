@@ -89,7 +89,7 @@ def pf_sim_data(n, T, nknots, order, seed=123):
         sample_list.append(df)
 
     # Generate a design matrix for sample basis
-    timerange = np.linspace(0, 1, num=T)
+    timerange = np.arange(T)
     auxfunc_1 = AuxFunc(n=n, m=nknots, x=timerange)
     spline_list = []
     for i, sample in enumerate(sample_list):
