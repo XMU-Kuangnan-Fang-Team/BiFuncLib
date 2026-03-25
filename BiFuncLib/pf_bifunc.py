@@ -21,6 +21,11 @@ def pf_bifunc(
     eps_abs=1e-3,
     eps_rel=1e-3,
 ):
+
+    print('看这里')
+    print(data)
+    data.iloc[:, 0] = data.iloc[:, 0].astype('int')
+    data.iloc[:, 1] = data.iloc[:, 1].astype('int')
     
     # Data process
     if min(data.iloc[:, 1]) == 1:
