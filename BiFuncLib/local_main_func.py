@@ -647,7 +647,4 @@ def calculate_bic(
                 "bic_val": bic_val,
             }
             z += 1
-            progress = 100 * z / total_num
-            if progress % 10 == 0:
-                print(f"Finishing: {progress:.1f}%")
     return funlc_mat_lst
