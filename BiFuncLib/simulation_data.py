@@ -185,17 +185,10 @@ def pf_sim_data(n, T, nknots, order, seed=123):
 
     # Order and return result
     censored_sample_matrix = censored_sample_matrix.sort_values(
-        by="time", ascending=True
-    )
+        by=["time", "measurement"], 
+        ascending=[True, True]
+    ).reset_index(drop=True)
 
-    def sort_measurement(group):
-        return group.sort_values(by="measurement", ascending=True)
-
-    censored_sample_matrix = (
-        censored_sample_matrix.groupby("time", group_keys=False)
-        .apply(sort_measurement)
-        .reset_index(drop=True)
-    )
     return {
         "data": censored_sample_matrix,
         "location": t,
@@ -210,7 +203,7 @@ def pf_sim_data(n, T, nknots, order, seed=123):
             set(range(int(n / 3 * 2), n)),
         ],
     }
-    print(censored_sample_matrix)
+
 
 # FunLocal
 def local_sim_data(n, T, sigma, seed=123):
