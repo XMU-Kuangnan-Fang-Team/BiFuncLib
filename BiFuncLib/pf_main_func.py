@@ -1,5 +1,7 @@
 import numpy as np
-from scipy.linalg import block_diag
+from scipy.sparse import block_diag as sparse_block_diag
+from scipy.sparse import kron, eye, csr_matrix
+from scipy.sparse.linalg import cg
 from itertools import combinations
 
 
@@ -28,23 +30,22 @@ def inv_uty_cal(oridata_list, Y_list, D_d, n, q, p, gamma1, theta):
         for j in range(q):
             UTU_list.append(np.dot(oridata_list[i][j].T, oridata_list[i][j]))
             UTY_list.append(np.dot(oridata_list[i][j].T, Y_list[i][j]))
-    UTU_mat = block_diag(*UTU_list)
-    UTY_vec = np.array(np.concatenate(UTY_list)).flatten()
-    diagM = np.kron(np.eye(n * q), D_d)
-    term1 = np.eye(n) * n - np.ones((n, n))
-    A1TA1 = np.kron(term1, np.eye(p * q))
-    term2 = np.eye(q) * q - np.ones((q, q))
-    A2TA2 = np.kron(np.eye(n), np.kron(term2, np.eye(p)))
-    inv = np.linalg.inv(
-        UTU_mat + gamma1 * diagM + theta * A1TA1 + theta * A2TA2
-    )
-    return {"inv": inv, "UTY": UTY_vec}
+    # Use sparse block diagonal matrix
+    UTU_mat = sparse_block_diag(UTU_list, format='csr')
+    UTY_vec = np.concatenate([arr.flatten() for arr in UTY_list])
+    diagM = kron(eye(n * q), csr_matrix(D_d), format='csr')
+    term1 = csr_matrix(n * np.eye(n) - np.ones((n, n)))
+    A1TA1 = kron(term1, eye(p * q), format='csr')
+    term2 = csr_matrix(q * np.eye(q) - np.ones((q, q)))
+    A2TA2 = kron(eye(n), kron(term2, eye(p), format='csr'), format='csr')
+    matrix = UTU_mat + gamma1 * diagM + theta * A1TA1 + theta * A2TA2
+    
+    return {"matrix": matrix, "UTY": UTY_vec}
 
 
 # Update the corresponding terms in ADMM algorithm
-def update_beta(
-    inv, UTY, index1, index2, V1, V2, Lambda1, Lambda2, n, q, p, theta
-):
+def update_beta(inv, UTY, index1, index2, V1, V2, Lambda1, Lambda2, n, q, p, theta):
+    # Compute A1^T * (V1 + Lambda1/theta)
     V1_tilde = V1 + Lambda1 / theta
     A1TV1 = np.zeros((p * q, n))
     A1TV1[:, 0] = np.sum(V1_tilde[:, index1[:, 0] == 0], axis=1)
@@ -54,6 +55,8 @@ def update_beta(
         )
     A1TV1[:, n - 1] = -np.sum(V1_tilde[:, index1[:, 1] == n - 1], axis=1)
     A1TV1_vec = A1TV1.T.flatten()
+    
+    # Compute A2^T * (V2 + Lambda2/theta)
     V2_tilde = V2 + Lambda2 / theta
     A2TV2_list = []
     for i in range(n):
@@ -72,7 +75,11 @@ def update_beta(
         )
         A2TV2_list.append(A2TV2_i.T.flatten())
     A2TV2_vec = np.concatenate(A2TV2_list)
-    Beta = np.dot(inv, (UTY + theta * A1TV1_vec + theta * A2TV2_vec))
+    
+    # Use iterative solver instead of direct inverse
+    modified_rhs = UTY + theta * A1TV1_vec + theta * A2TV2_vec
+    Beta, exit_code = cg(inv, modified_rhs, rtol=1e-6, maxiter=1000)
+    
     return Beta
 
 
@@ -132,12 +139,9 @@ def update_Lambda1(Beta, V1, Lambda1_old, index1, theta, p, q, n):
     Beta_mat = Beta.reshape((n, p * q)).T
     m1 = index1.shape[0]
     Lambda1 = np.zeros((p * q, m1))
-    for l in range(m1):
-        i = index1[l, 0]
-        j = index1[l, 1]
-        Lambda1[:, l] = Lambda1_old[:, l] + theta * (
-            V1[:, l] - Beta_mat[:, i] + Beta_mat[:, j]
-        )
+    # Vectorized computation
+    diff = Beta_mat[:, index1[:, 0]] - Beta_mat[:, index1[:, 1]]
+    Lambda1 = Lambda1_old + theta * (V1 - diff)
     return Lambda1
 
 
@@ -150,12 +154,9 @@ def update_Lambda2(Beta, V2, Lambda2_old, index2, theta, p, q, n):
         Beta_newmat[:, j] = Beta_mat[start_index:end_index, :].T.flatten()
     m2 = index2.shape[0]
     Lambda2 = np.zeros((p * n, m2))
-    for l in range(m2):
-        i = index2[l, 0]
-        j = index2[l, 1]
-        Lambda2[:, l] = Lambda2_old[:, l] + theta * (
-            V2[:, l] - Beta_newmat[:, i] + Beta_newmat[:, j]
-        )
+    # Vectorized computation
+    diff = Beta_newmat[:, index2[:, 0]] - Beta_newmat[:, index2[:, 1]]
+    Lambda2 = Lambda2_old + theta * (V2 - diff)
     return Lambda2
 
 
@@ -197,30 +198,18 @@ def biclustr_admm(
         V2_old[:, l] = Beta_old_mat2[:, i] - Beta_old_mat2[:, j]
     Lambda1_old = np.zeros((p * q, m1))
     Lambda2_old = np.zeros((p * n, m2))
-    inv = inv_UTY_result["inv"]
+    
+    # Get matrix and RHS from inv_UTY_result (now contains matrix instead of inverse)
+    matrix = inv_UTY_result["matrix"]
     UTY = inv_UTY_result["UTY"]
-    (
-        iters,
-        pri_resi1,
-        pri_resi2,
-        dual_resi1,
-        dual_resi2,
-        pri_tol1,
-        pri_tol2,
-        dual_tol1,
-        dual_tol2,
-    ) = [1, 1, 1, 1, 1, 0, 0, 0, 0]
-    stop_con = (
-        (pri_resi1 > pri_tol1)
-        or (pri_resi2 > pri_tol2)
-        or (dual_resi1 > dual_tol1)
-        or (dual_resi2 > dual_tol2)
-    )
+    
+    iters = 1
+    stop_con = True
 
     # Iteration
     while stop_con and iters <= max_iter:
         Beta_new = update_beta(
-            inv,
+            matrix,  # Pass matrix instead of inv
             UTY,
             index1,
             index2,
@@ -245,115 +234,99 @@ def biclustr_admm(
         Lambda2_new = update_Lambda2(
             Beta_new, V2_new, Lambda2_old, index2, theta, p, q, n
         )
-        Beta_new_mat1 = np.matrix(Beta_new).reshape(n, p * q).T
+        
+        Beta_new_mat1 = Beta_new.reshape(n, p * q).T
         Beta_new_mat2 = np.zeros((p * n, q))
         for j in range(q):
             Beta_new_mat2[:, j] = Beta_new_mat1[
                 j * p : (j + 1) * p :,
             ].T.flatten()
-        pri_resi1_mat = np.zeros((p * q, m1))
-        pri_tol1_mat = np.zeros((p * q, m1))
+        
+        # Compute residuals efficiently (avoid large matrices)
+        # Primal residual 1
+        pri_resi1_sq = 0
+        pri_tol1_max1 = 0
+        pri_tol1_max2 = 0
         for l in range(m1):
             i, j = index1[l, 0], index1[l, 1]
-            pri_resi1_mat[:, l] = (
-                Beta_new_mat1[:, i] - Beta_new_mat1[:, j]
-            ).flatten() - V1_new[:, l]
-            pri_tol1_mat[:, l] = (
-                Beta_new_mat1[:, i] - Beta_new_mat1[:, j]
-            ).flatten()
-        pri_resi1 = np.sqrt(np.sum(pri_resi1_mat**2))
+            diff = Beta_new_mat1[:, i] - Beta_new_mat1[:, j]
+            residual = diff - V1_new[:, l]
+            pri_resi1_sq += np.sum(residual ** 2)
+            pri_tol1_max1 = max(pri_tol1_max1, np.sum(diff ** 2))
+            pri_tol1_max2 = max(pri_tol1_max2, np.sum(V1_new[:, l] ** 2))
+        pri_resi1 = np.sqrt(pri_resi1_sq)
         pri_tol1 = np.sqrt(m1 * p * q) * eps_abs + eps_rel * max(
-            np.sqrt(np.sum(pri_tol1_mat**2)), np.sqrt(np.sum(V1_new**2))
+            np.sqrt(pri_tol1_max1), np.sqrt(pri_tol1_max2)
         )
-        pri_resi2_mat = np.zeros((p * n, m2))
-        pri_tol2_mat = np.zeros((p * n, m2))
+        
+        # Primal residual 2
+        pri_resi2_sq = 0
+        pri_tol2_max1 = 0
+        pri_tol2_max2 = 0
         for l in range(m2):
             i, j = index2[l, 0], index2[l, 1]
-            pri_resi2_mat[:, l] = (
-                Beta_new_mat2[:, i] - Beta_new_mat2[:, j]
-            ).flatten() - V2_new[:, l]
-            pri_tol2_mat[:, l] = (
-                Beta_new_mat2[:, i] - Beta_new_mat2[:, j]
-            ).flatten()
-        pri_resi2 = np.sqrt(np.sum(pri_resi2_mat**2))
+            diff = Beta_new_mat2[:, i] - Beta_new_mat2[:, j]
+            residual = diff - V2_new[:, l]
+            pri_resi2_sq += np.sum(residual ** 2)
+            pri_tol2_max1 = max(pri_tol2_max1, np.sum(diff ** 2))
+            pri_tol2_max2 = max(pri_tol2_max2, np.sum(V2_new[:, l] ** 2))
+        pri_resi2 = np.sqrt(pri_resi2_sq)
         pri_tol2 = np.sqrt(m2 * p * n) * eps_abs + eps_rel * max(
-            np.sqrt(np.sum(pri_tol2_mat**2)), np.sqrt(np.sum(V2_new**2))
+            np.sqrt(pri_tol2_max1), np.sqrt(pri_tol2_max2)
         )
-        dual_resi1_mat = np.zeros((p * q, n))
-        dual_tol1_mat = np.zeros((p * q, n))
-        dual_resi1_mat[:, 0] = np.sum(
-            V1_new[:, index1[:, 0] == 0], axis=1
-        ) - np.sum(V1_old[:, index1[:, 0] == 0], axis=1)
-        dual_tol1_mat[:, 0] = np.sum(Lambda1_new[:, index1[:, 0] == 0], axis=1)
+        
+        # Dual residual 1
+        dual_resi1_sq = 0
+        dual_tol1_sq = 0
+        # k = 0
+        diff0 = np.sum(V1_new[:, index1[:, 0] == 0], axis=1) - np.sum(V1_old[:, index1[:, 0] == 0], axis=1)
+        dual_resi1_sq += np.sum(diff0 ** 2)
+        dual_tol1_sq += np.sum(np.sum(Lambda1_new[:, index1[:, 0] == 0], axis=1) ** 2)
+        # k = 1 to n-2
         for k in range(1, n - 1):
-            dual_resi1_mat[:, k] = (
-                np.sum(V1_new[:, index1[:, 0] == k], axis=1)
-                - np.sum(V1_new[:, index1[:, 1] == k], axis=1)
-                - np.sum(V1_old[:, index1[:, 0] == k], axis=1)
-                + np.sum(V1_old[:, index1[:, 1] == k], axis=1)
-            )
-            dual_tol1_mat[:, k] = np.sum(
-                Lambda1_new[:, index1[:, 0] == k], axis=1
-            ) - np.sum(Lambda1_new[:, index1[:, 1] == k], axis=1)
-        dual_resi1_mat[:, n - 1] = -np.sum(
-            V1_new[:, index1[:, 1] == n - 1], axis=1
-        ) + np.sum(V1_old[:, index1[:, 1] == n - 1], axis=1)
-        dual_tol1_mat[:, n - 1] = -np.sum(
-            Lambda1_new[:, index1[:, 1] == n - 1], axis=1
-        )
-        dual_resi1 = np.sqrt(np.sum(dual_resi1_mat**2))
-        dual_tol1 = np.sqrt(n * p * q) * eps_abs + eps_rel * np.sqrt(
-            np.sum(dual_tol1_mat**2)
-        )
-        dual_resi2_list = [np.zeros((p, q)) for _ in range(n)]
-        dual_tol2_list = [np.zeros((p, q)) for _ in range(n)]
+            diff_k = (np.sum(V1_new[:, index1[:, 0] == k], axis=1) - 
+                     np.sum(V1_new[:, index1[:, 1] == k], axis=1) -
+                     np.sum(V1_old[:, index1[:, 0] == k], axis=1) + 
+                     np.sum(V1_old[:, index1[:, 1] == k], axis=1))
+            dual_resi1_sq += np.sum(diff_k ** 2)
+            lambda_diff = (np.sum(Lambda1_new[:, index1[:, 0] == k], axis=1) - 
+                          np.sum(Lambda1_new[:, index1[:, 1] == k], axis=1))
+            dual_tol1_sq += np.sum(lambda_diff ** 2)
+        # k = n-1
+        diff_last = -np.sum(V1_new[:, index1[:, 1] == n - 1], axis=1) + np.sum(V1_old[:, index1[:, 1] == n - 1], axis=1)
+        dual_resi1_sq += np.sum(diff_last ** 2)
+        dual_tol1_sq += np.sum(np.sum(Lambda1_new[:, index1[:, 1] == n - 1], axis=1) ** 2)
+        dual_resi1 = np.sqrt(dual_resi1_sq)
+        dual_tol1 = np.sqrt(n * p * q) * eps_abs + eps_rel * np.sqrt(dual_tol1_sq)
+        
+        # Dual residual 2
+        dual_resi2_sq = 0
+        dual_tol2_sq = 0
         for i in range(n):
-            dual_resi2_list[i][:, 0] = np.sum(
-                V2_new[(i * p) : (i * p + p), index2[:, 0] == 0], axis=1
-            ) - np.sum(V2_old[(i * p) : (i * p + p), index2[:, 0] == 0], axis=1)
-            dual_tol2_list[i][:, 0] = np.sum(
-                Lambda2_new[(i * p) : (i * p + p), index2[:, 0] == 0], axis=1
-            )
+            # k = 0
+            diff0_2 = (np.sum(V2_new[(i * p):(i * p + p), index2[:, 0] == 0], axis=1) - 
+                      np.sum(V2_old[(i * p):(i * p + p), index2[:, 0] == 0], axis=1))
+            dual_resi2_sq += np.sum(diff0_2 ** 2)
+            dual_tol2_sq += np.sum(np.sum(Lambda2_new[(i * p):(i * p + p), index2[:, 0] == 0], axis=1) ** 2)
+            # k = 1 to q-2
             for k in range(1, q - 1):
-                dual_resi2_list[i][:, k] = (
-                    np.sum(
-                        V2_new[(i * p) : (i * p + p), index2[:, 0] == k], axis=1
-                    )
-                    - np.sum(
-                        V2_new[(i * p) : (i * p + p), index2[:, 1] == k], axis=1
-                    )
-                    - np.sum(
-                        V2_old[(i * p) : (i * p + p), index2[:, 0] == k], axis=1
-                    )
-                    + np.sum(
-                        V2_old[(i * p) : (i * p + p), index2[:, 1] == k], axis=1
-                    )
-                )
-                dual_tol2_list[i][:, k] = np.sum(
-                    Lambda2_new[(i * p) : (i * p + p), index2[:, 0] == k],
-                    axis=1,
-                ) - np.sum(
-                    Lambda2_new[(i * p) : (i * p + p), index2[:, 1] == k],
-                    axis=1,
-                )
-            dual_resi2_list[i][:, q - 1] = -np.sum(
-                V2_new[(i * p) : (i * p + p), index2[:, 1] == q - 1], axis=1
-            ) + np.sum(
-                V2_old[(i * p) : (i * p + p), index2[:, 1] == q - 1], axis=1
-            )
-            dual_tol2_list[i][:, q - 1] = -np.sum(
-                Lambda2_new[(i * p) : (i * p + p), index2[:, 1] == q - 1],
-                axis=1,
-            )
-            dual_resi2_list[i] = dual_resi2_list[i].T.flatten()
-            dual_tol2_list[i] = dual_tol2_list[i].T.flatten()
-
-        dual_resi2_vec = np.concatenate(dual_resi2_list)
-        dual_tol2_vec = np.concatenate(dual_tol2_list)
-        dual_resi2 = np.sqrt(np.sum(dual_resi2_vec**2))
-        dual_tol2 = np.sqrt(n * p * q) * eps_abs + eps_rel * np.sqrt(
-            np.sum(dual_tol2_vec**2)
-        )
+                diff_k_2 = (np.sum(V2_new[(i * p):(i * p + p), index2[:, 0] == k], axis=1) -
+                           np.sum(V2_new[(i * p):(i * p + p), index2[:, 1] == k], axis=1) -
+                           np.sum(V2_old[(i * p):(i * p + p), index2[:, 0] == k], axis=1) +
+                           np.sum(V2_old[(i * p):(i * p + p), index2[:, 1] == k], axis=1))
+                dual_resi2_sq += np.sum(diff_k_2 ** 2)
+                lambda_diff_2 = (np.sum(Lambda2_new[(i * p):(i * p + p), index2[:, 0] == k], axis=1) -
+                                np.sum(Lambda2_new[(i * p):(i * p + p), index2[:, 1] == k], axis=1))
+                dual_tol2_sq += np.sum(lambda_diff_2 ** 2)
+            # k = q-1
+            diff_last_2 = (-np.sum(V2_new[(i * p):(i * p + p), index2[:, 1] == q - 1], axis=1) + 
+                          np.sum(V2_old[(i * p):(i * p + p), index2[:, 1] == q - 1], axis=1))
+            dual_resi2_sq += np.sum(diff_last_2 ** 2)
+            dual_tol2_sq += np.sum(np.sum(Lambda2_new[(i * p):(i * p + p), index2[:, 1] == q - 1], axis=1) ** 2)
+        
+        dual_resi2 = np.sqrt(dual_resi2_sq)
+        dual_tol2 = np.sqrt(n * p * q) * eps_abs + eps_rel * np.sqrt(dual_tol2_sq)
+        
         stop_con = (
             (pri_resi1 > pri_tol1)
             or (pri_resi2 > pri_tol2)
