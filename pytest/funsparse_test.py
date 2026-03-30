@@ -21,7 +21,8 @@ def test_sparse_sim_data():
 
 
 def test_sparse_bifunc_smoke():
-    n, K = 100, 2
+    n = 100
+    K = [2,3]
     x = np.linspace(0, 1, 1000)
     sim = sparse_sim_data(n, x, 0.7, plot=False)
     res = sparse_bifunc(sim["data"], x, K, true_clus=sim["cluster"])
