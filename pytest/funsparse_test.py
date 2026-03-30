@@ -27,7 +27,7 @@ def test_sparse_bifunc_smoke():
     sim = sparse_sim_data(n, x, 0.7, plot=False)
     res = sparse_bifunc(sim["data"], x, K, true_clus=sim["cluster"])
     _check_sparse_result(res)
-    FDPlot(res).sparse_fdplot(x, sim["data"])
+    FDPlot(res['best_result']).sparse_fdplot(x, sim["data"])
 
 
 def test_sparse_bifunc_hier():
