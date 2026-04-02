@@ -774,7 +774,7 @@ class FDPlot:
         spec = gridspec.GridSpec(
             ncols=2, nrows=2, figure=fig, height_ratios=[1, 1]
         )
-        ax1 = fig.add_subplot(spec[0, :])  # 第一行横跨两列
+        ax1 = fig.add_subplot(spec[0, :])
         ax2 = fig.add_subplot(spec[1, 0])
         ax3 = fig.add_subplot(spec[1, 1])
         n_candidates = comb_list_i.shape[0]
