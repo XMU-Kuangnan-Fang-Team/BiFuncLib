@@ -3,4 +3,5 @@ include BiFuncLib/LICENSE.txt
 include BiFuncLib/requirements.txt
 include BiFuncLib/README.md
 include BiFuncLib/simulation_data/*
+include BiFuncLib/real_data/*
 global-exclude __pycache__
