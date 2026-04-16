@@ -14,8 +14,11 @@ setup(
     license="MIT",
     packages=find_packages(),
     package_data={
-        "BiFuncLib": ["simulation_data/*"],
-    },
+        "BiFuncLib": [
+            "simulation_data/*",
+            "real_data/*",
+        ],
+    }
     install_requires=[
         "numpy>=1.26.0,<2",
         "pandas",
