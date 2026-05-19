@@ -198,10 +198,10 @@ def pf_bifunc(
             )
 
             # Clustering
-            Ad_final_sam = AuxFunc(n=n, V=result["V1"]).create_adjacency()
+            Ad_final_sam = AuxFunc(n=n, V=result["V1"]).create_adjacency(plot = False)
             G_final_sam = nx.from_numpy_array(Ad_final_sam)
             cls_final_sam = list(nx.connected_components(G_final_sam))
-            Ad_final_fea = AuxFunc(n=q, V=result["V2"]).create_adjacency()
+            Ad_final_fea = AuxFunc(n=q, V=result["V2"]).create_adjacency(plot = False)
             G_final_fea = nx.from_numpy_array(Ad_final_fea)
             cls_final_fea = list(nx.connected_components(G_final_fea))
             vstacked_data = [
@@ -266,10 +266,10 @@ def pf_bifunc(
             eps_abs=eps_abs,
             eps_rel=eps_rel,
         )
-        Ad_final_sam = AuxFunc(n=n, V=result["V1"]).create_adjacency()
+        Ad_final_sam = AuxFunc(n=n, V=result["V1"]).create_adjacency(plot = False)
         G_final_sam = nx.from_numpy_array(Ad_final_sam)
         cls_final_sam = list(nx.connected_components(G_final_sam))
-        Ad_final_fea = AuxFunc(n=q, V=result["V2"]).create_adjacency()
+        Ad_final_fea = AuxFunc(n=q, V=result["V2"]).create_adjacency(plot = False)
         G_final_fea = nx.from_numpy_array(Ad_final_fea)
         cls_final_fea = list(nx.connected_components(G_final_fea))
         result.update(

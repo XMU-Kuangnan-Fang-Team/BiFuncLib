@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 from matplotlib import gridspec
 from GENetLib.fda_func import bspline_mat
 from GENetLib.fda_func import eval_basis, eval_fd
@@ -23,32 +24,36 @@ class FDPlot:
         self.result = result
 
     # Plot functions in pf_bifunc
-    def pf_fdplot(self):
-        plot_t = np.linspace(0, 1, 1000)
-        spline_mat = bspline_mat(
-            plot_t,
-            AuxFunc(
-                n=self.result["sample number"],
-                m=self.result["nknots"],
-                x=plot_t,
-            ).knots_eq(),
-            norder=self.result["order"],
-        )
-        for i in self.result["sample cluster"]:
-            for j in self.result["feature cluster"]:
-                total_sum = np.zeros(
-                    (self.result["nknots"] + self.result["order"])
-                )
-                count = 0
-                for m in list(i):
-                    for n in list(j):
-                        element = self.result["Beta"][m][n]
-                        total_sum += element
-                        count += 1
-                mean_beta = total_sum / count
-                # plt.ylim(-5, 5)
-                plt.plot(spline_mat @ mean_beta)
-                plt.show()
+    def pf_fdplot(self, plot_type = 'curve'):
+        if plot_type == 'lattice':
+            AuxFunc(n=self.result["sample number"], V=self.result["V1"]).create_adjacency(plot=True)
+            AuxFunc(n=self.result["feature number"], V=self.result["V2"]).create_adjacency(plot=True)
+        else:
+            plot_t = np.linspace(0, 1, 1000)
+            spline_mat = bspline_mat(
+                plot_t,
+                AuxFunc(
+                    n=self.result["sample number"],
+                    m=self.result["nknots"],
+                    x=plot_t,
+                ).knots_eq(),
+                norder=self.result["order"],
+            )
+            for i in self.result["sample cluster"]:
+                for j in self.result["feature cluster"]:
+                    total_sum = np.zeros(
+                        (self.result["nknots"] + self.result["order"])
+                    )
+                    count = 0
+                    for m in list(i):
+                        for n in list(j):
+                            element = self.result["Beta"][m][n]
+                            total_sum += element
+                            count += 1
+                    mean_beta = total_sum / count
+                    plt.figure()
+                    plt.plot(spline_mat @ mean_beta)
+                    plt.show()
 
     # Plot classified curves functions in local_bifunc
     def local_individuals_fdplot(self):
@@ -63,28 +68,19 @@ class FDPlot:
         unique_classes = np.unique(cls_mem)
         colors = sns.color_palette("tab10", len(unique_classes))
         color_map = {cls: colors[i] for i, cls in enumerate(unique_classes)}
-        linestyles = [
-            "-",
-            "--",
-            ":",
-            "-.",
-            (0, (3, 10, 1, 10)),
-            (0, (3, 1, 1, 1, 1, 1)),
-        ]
-        linestyle_map = {
-            cls: linestyles[i % len(linestyles)]
-            for i, cls in enumerate(unique_classes)
-        }
-        fig, ax = plt.subplots(figsize=(8, 6))
+        plt.figure()
+        added_labels = set()
         for k in range(n):
             cls = cls_mem[k]
             color = color_map[cls]
-            linestyle = linestyle_map[cls]
-            ax.plot(
-                Times, y_center_hat_mat[:, k], color=color, linestyle=linestyle
-            )
-        ax.set_xlabel("Time", fontsize=15)
-        ax.set_ylabel("Value", fontsize=15)
+            if cls not in added_labels:
+                label = f"Cluster {cls + 1}"
+                added_labels.add(cls)
+            else:
+                label = None
+            plt.plot(Times, y_center_hat_mat[:, k], color=color, label=label)  
+        plt.title("Classified observations")
+        plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
         plt.show()
 
     # Plot estimated cluster mean in local_bifunc
@@ -98,13 +94,10 @@ class FDPlot:
         y_center_hat_mat = np.zeros((n0, K_hat))
         for k in range(K_hat):
             y_center_hat_mat[:, k] = np.dot(Z1, Alpha[:, k])
-        plt.figure(figsize=(8, 6))
+        plt.figure()
         for k in range(K_hat):
             plt.plot(Times, y_center_hat_mat[:, k], label=f"Cluster {k + 1}")
-        plt.xlabel("Time", fontsize=15)
-        plt.ylabel("", fontsize=15)
-        plt.xticks(fontsize=10)
-        plt.yticks(fontsize=10)
+        plt.title("Cluster means")
         plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
         plt.show()
 
@@ -737,20 +730,17 @@ class FDPlot:
         rng = mod["mean_fd"]["basis"]["rangeval"]
         grid_eval = np.linspace(rng[0], rng[1], 500)
         eval_mu = eval_fd(list(grid_eval), mod["mean_fd"])
-        fig, axs = plt.subplots(1, 2, figsize=(12, 6))
+        # Figure 1
         for i in range(G):
-            axs[0].plot(grid_eval, eval_mu[:, i], label=f"Cluster {i+1}")
-        axs[0].axhline(0, color="grey", alpha=0.6)
-        axs[0].set_title("Cluster means")
-        axs[0].set_xlim(rng)
+            plt.plot(grid_eval, eval_mu[:, i], label=f"Cluster {i+1}")
+        plt.title("Cluster means")
         x_vals = mod["mod"]["data"]["x"]
-        axs[0].set_ylim(np.min(x_vals), np.max(x_vals))
-        axs[0].legend(loc="upper right")
-        axs[1].set_title("Classified observations")
-        axs[1].set_xlim(rng)
-        axs[1].set_xlabel("")
-        axs[1].set_ylabel("")
-        axs[1].set_ylim(np.min(x_vals), np.max(x_vals))
+        plt.ylim(np.min(x_vals), np.max(x_vals))
+        plt.legend(loc="upper right")
+        plt.show()
+        # Figure 2
+        plt.figure()
+        plt.title("Classified observations")
         unique_curves = np.unique(mod["mod"]["data"]["curve"])
         cmap = plt.get_cmap("tab10")
         for ii in unique_curves:
@@ -759,8 +749,9 @@ class FDPlot:
             x_plot = np.array(mod["mod"]["grid"])[t_inds - 1]
             y_plot = mod["mod"]["data"]["x"][inds]
             cluster = mod["clus"]["classes"][int(ii) - 1]
-            axs[1].plot(x_plot, y_plot, color=cmap(cluster % 10), linestyle="-")
-        axs[1].legend([f"Cluster {i+1}" for i in range(G)], loc="upper right")
+            plt.plot(x_plot, y_plot, color=cmap(cluster % 10), linestyle="-")
+        legend_handles = [Line2D([0], [0], color=cmap(i % 10), linewidth=2, label=f"Cluster {i+1}") for i in range(G)]
+        plt.legend(handles=legend_handles, loc="upper right")
         plt.show()
 
     # Plot cv results in sas_bifunc
@@ -934,12 +925,14 @@ class FDPlot:
         else:
             clusters = self.result["result"]["cluster"]
             w = self.result["result"]["w"]
+        plt.figure()
         for i in range(data.shape[1]):
             plt.plot(
                 x, data.T[i, :], label=f"Cluster {clusters[i] + 1}", linewidth=1
             )
         plt.title("Sparse functional K-means")
         plt.show()
+        plt.figure()
         plt.plot(x, w, linestyle="-", linewidth=2, label="Weighting function")
         plt.title("Weighting function")
         plt.show()

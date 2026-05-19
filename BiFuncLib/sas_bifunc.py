@@ -43,6 +43,7 @@ def sas_bifunc(
     hard = False
     perc_rankpapp = None
     pert = None
+    G = int(G)
     if G == 1:
         lambda_l = 0
     # Process input data format
