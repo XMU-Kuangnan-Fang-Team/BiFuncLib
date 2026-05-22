@@ -7,7 +7,6 @@ from GENetLib.fda_func import bspline_mat
 from GENetLib.fda_func import eval_basis, eval_fd
 from GENetLib.fda_func import create_bspline_basis, create_fourier_basis
 from GENetLib.plot_gene import plot_fd
-import seaborn as sns
 import warnings
 
 from BiFuncLib.AuxFunc import AuxFunc
@@ -65,14 +64,12 @@ class FDPlot:
         Times = np.linspace(0, 1, n0)
         Z1 = eval_basis(Times, basis_fd)
         y_center_hat_mat = np.dot(Z1, Beta_ini)
-        unique_classes = np.unique(cls_mem)
-        colors = sns.color_palette("tab10", len(unique_classes))
-        color_map = {cls: colors[i] for i, cls in enumerate(unique_classes)}
+        cmap = plt.get_cmap("tab10")
         plt.figure()
         added_labels = set()
         for k in range(n):
             cls = cls_mem[k]
-            color = color_map[cls]
+            color = cmap(cls % 10)
             if cls not in added_labels:
                 label = f"Cluster {cls + 1}"
                 added_labels.add(cls)
@@ -82,8 +79,7 @@ class FDPlot:
         plt.title("Classified observations")
         plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
         plt.show()
-
-    # Plot estimated cluster mean in local_bifunc
+    
     def local_center_fdplot(self):
         Alpha = self.result["centers"]
         basis_fd = self.result["basisobj"]
@@ -94,9 +90,11 @@ class FDPlot:
         y_center_hat_mat = np.zeros((n0, K_hat))
         for k in range(K_hat):
             y_center_hat_mat[:, k] = np.dot(Z1, Alpha[:, k])
+        cmap = plt.get_cmap("tab10")
         plt.figure()
         for k in range(K_hat):
-            plt.plot(Times, y_center_hat_mat[:, k], label=f"Cluster {k + 1}")
+            color = cmap(k % 10)
+            plt.plot(Times, y_center_hat_mat[:, k], color=color, label=f"Cluster {k + 1}")
         plt.title("Cluster means")
         plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
         plt.show()
@@ -730,9 +728,12 @@ class FDPlot:
         rng = mod["mean_fd"]["basis"]["rangeval"]
         grid_eval = np.linspace(rng[0], rng[1], 500)
         eval_mu = eval_fd(list(grid_eval), mod["mean_fd"])
+        cmap = plt.get_cmap("tab10")
         # Figure 1
         for i in range(G):
-            plt.plot(grid_eval, eval_mu[:, i], label=f"Cluster {i+1}")
+            cluster_id = i
+            color = cmap(cluster_id % 10)
+            plt.plot(grid_eval, eval_mu[:, i], color=color, label=f"Cluster {cluster_id}")
         plt.title("Cluster means")
         x_vals = mod["mod"]["data"]["x"]
         plt.ylim(np.min(x_vals), np.max(x_vals))
@@ -742,7 +743,6 @@ class FDPlot:
         plt.figure()
         plt.title("Classified observations")
         unique_curves = np.unique(mod["mod"]["data"]["curve"])
-        cmap = plt.get_cmap("tab10")
         for ii in unique_curves:
             inds = np.where(mod["mod"]["data"]["curve"] == ii)[0]
             t_inds = mod["mod"]["data"]["timeindex"][inds]
