@@ -77,7 +77,7 @@ class FDPlot:
                 label = None
             plt.plot(Times, y_center_hat_mat[:, k], color=color, label=label)  
         plt.title("Classified observations")
-        plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
+        plt.legend(loc="upper right")
         plt.show()
     
     def local_center_fdplot(self):
@@ -96,7 +96,7 @@ class FDPlot:
             color = cmap(k % 10)
             plt.plot(Times, y_center_hat_mat[:, k], color=color, label=f"Cluster {k + 1}")
         plt.title("Cluster means")
-        plt.legend(title="Clusters", title_fontsize=12, fontsize=10)
+        plt.legend(loc="upper right")
         plt.show()
 
     # Plot functions in cc_bifunc
@@ -733,7 +733,7 @@ class FDPlot:
         for i in range(G):
             cluster_id = i
             color = cmap(cluster_id % 10)
-            plt.plot(grid_eval, eval_mu[:, i], color=color, label=f"Cluster {cluster_id}")
+            plt.plot(grid_eval, eval_mu[:, i], color=color, label=f"Cluster {cluster_id + 1}")
         plt.title("Cluster means")
         x_vals = mod["mod"]["data"]["x"]
         plt.ylim(np.min(x_vals), np.max(x_vals))
