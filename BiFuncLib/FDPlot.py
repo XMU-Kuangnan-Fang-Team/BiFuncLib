@@ -735,8 +735,6 @@ class FDPlot:
             color = cmap(cluster_id % 10)
             plt.plot(grid_eval, eval_mu[:, i], color=color, label=f"Cluster {cluster_id + 1}")
         plt.title("Cluster means")
-        x_vals = mod["mod"]["data"]["x"]
-        plt.ylim(np.min(x_vals), np.max(x_vals))
         plt.legend(loc="upper right")
         plt.show()
         # Figure 2
