@@ -171,7 +171,7 @@ class FDPlot:
                     sub_obs["value"],
                     color=cluster_color,
                     alpha=0.6,
-                    linewidth=1,
+                    linewidth=2,
                     label="_nolegend_",
                 )
             if overlay_df is not None:
@@ -917,20 +917,28 @@ class FDPlot:
 
     # Plot functions in sparse_bifunc
     def sparse_fdplot(self, x, data):
+        # Figure 1
         if len(self.result) == 4:
             clusters = self.result["cluster"]
             w = self.result["w"]
         else:
             clusters = self.result["result"]["cluster"]
             w = self.result["result"]["w"]
+        G = len(np.unique(clusters))
+        cmap = plt.get_cmap("tab10")
         plt.figure()
-        for i in range(data.shape[1]):
-            plt.plot(
-                x, data.T[i, :], label=f"Cluster {clusters[i] + 1}", linewidth=1
-            )
+        for g in range(G):
+            mask = clusters == g
+            cluster_curves = data.T[mask, :]
+            for idx, curve in enumerate(cluster_curves):
+                label = f"Cluster {g + 1}" if idx == 0 else None
+                plt.plot(x, curve, color=cmap(g % 10), 
+                        label=label)
         plt.title("Sparse functional K-means")
+        plt.legend(loc="upper right")
         plt.show()
+        # Figure 2
         plt.figure()
-        plt.plot(x, w, linestyle="-", linewidth=2, label="Weighting function")
+        plt.plot(x, w, linestyle="-", label="Weighting function")
         plt.title("Weighting function")
         plt.show()
