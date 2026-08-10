@@ -1,4 +1,4 @@
-genetlib==1.2.6
+genetlib>=1.2.6
 matplotlib
 networkx
 numpy>=1.26.0,<2
